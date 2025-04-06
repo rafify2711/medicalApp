@@ -1,4 +1,4 @@
-import 'package:graduation_medical_app/features/auth/data/models/user_model/patient_model.dart';
+import 'package:graduation_medical_app/core/models/user_model/user_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'register_user_response.g.dart';
@@ -7,7 +7,7 @@ part 'register_user_response.g.dart';
 @JsonSerializable()
 class RegisterUserResponse {
   String message;
-  PatientModel user;
+  UserModel user;
 
   RegisterUserResponse(this.message,
       this.user,);

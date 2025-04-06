@@ -10,7 +10,7 @@ RegisterUserResponse _$RegisterUserResponseFromJson(
   Map<String, dynamic> json,
 ) => RegisterUserResponse(
   json['message'] as String,
-  PatientModel.fromJson(json['user'] as Map<String, dynamic>),
+  UserModel.fromJson(json['user'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$RegisterUserResponseToJson(

@@ -1,17 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/di/di.dart';
+import '../../../../core/models/user_model/user_model.dart';
 import '../../data/data_source/auth_local_data_source.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../domain/use_cases/log_in_use_case.dart';
 import '../../domain/use_cases/signup_use_case.dart';
 import '../../data/models/sign_in_model/sign_in_model.dart';
 import '../../data/models/signup_model/signup_user_model.dart';
-import '../../data/models/user_model/user_model.dart';
 import 'dart:convert'; // تأكد من استيراد هذا
 
 part 'auth_state.dart';
@@ -50,7 +51,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (user.role == null) {
         emit(AuthSignupSuccessDoctor(user));
       } else if (user.role == "User") {
-        emit(AuthSignupSuccessPatient(user));
+        emit(AuthSignupSuccessDoctor(user));
       } else {
         emit(AuthFailure("Invalid role"));
       }
@@ -72,7 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
       final user = await signupUseCase.call(signupModel);
 
       if (user.role == "Doctor") {
-        emit(AuthSignupSuccessDoctor(user));
+        emit(AuthSignupSuccessPatient(user));
       } else if (user.role == "User") {
         emit(AuthSignupSuccessPatient(user));
       } else {

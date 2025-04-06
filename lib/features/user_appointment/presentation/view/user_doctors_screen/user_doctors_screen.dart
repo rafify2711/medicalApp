@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/models/doctor_model/doctor_model.dart';
 import '../../../../auth/presentation/view/widgets/my_app_par.dart';
-import 'doc_model.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   final DoctorModel doctor;
@@ -12,7 +12,7 @@ class DoctorDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppPar(title: '${doctor.name}'),
+      appBar: MyAppPar(title: '${doctor.username}'),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Expanded(
@@ -21,12 +21,12 @@ class DoctorDetailsScreen extends StatelessWidget {
           
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage(doctor.imageUrl),
+                backgroundImage: AssetImage(doctor.profilePhoto??""),
                 radius: 60,
               ),
               const SizedBox(height: 20),
               Text(
-                doctor.name,
+                doctor.username,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Text(doctor.specialty, style: TextStyle(fontSize: 16)),

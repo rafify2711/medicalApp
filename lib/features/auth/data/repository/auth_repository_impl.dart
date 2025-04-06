@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/models/doctor_model/doctor_model.dart';
+import '../../../../core/models/user_model/user_model.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../data_source/auth_local_data_source.dart';
 import '../data_source/auth_remote_data_source__impl.dart';
 import '../models/sign_in_model/sign_in_model.dart';
 import '../models/signup_model/signup_user_model.dart';
-import '../models/user_model/doctor_model.dart';
-import '../models/user_model/user_model.dart';
+
 import 'package:dio/dio.dart';
 
 // Custom Exception

@@ -167,12 +167,12 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<List<Doctor>> getAllDoctors() async {
+  Future<List<DoctorModel>> getAllDoctors() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<Doctor>>(
+    final _options = _setStreamType<List<DoctorModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -183,11 +183,13 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<Doctor> _value;
+    late List<DoctorModel> _value;
     try {
       _value =
           _result.data!
-              .map((dynamic i) => Doctor.fromJson(i as Map<String, dynamic>))
+              .map(
+                (dynamic i) => DoctorModel.fromJson(i as Map<String, dynamic>),
+              )
               .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

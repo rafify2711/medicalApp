@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_doctor_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_user_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
-import 'package:graduation_medical_app/features/auth/data/models/user_model/doctor_model.dart';
+
 import 'package:graduation_medical_app/features/drug_conflict/data/models/drug_interaction_response.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
@@ -17,11 +17,11 @@ import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
 
-import '../../features/auth/data/models/user_model/doctors_model.dart';
-import '../../features/auth/data/models/user_model/patient_model.dart';
-import '../../features/auth/data/models/user_model/user_model.dart';
+
+
 import '../../features/edit_profile/data/models/updated_user_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
+import '../models/doctor_model/doctor_model.dart';
 
 
 
@@ -56,7 +56,7 @@ abstract class ApiClient {
   ;
 
   @GET("doctor/")
-  Future<List<Doctor>> getAllDoctors();
+  Future<List<DoctorModel>> getAllDoctors();
 
   // 1. Drug Interaction Check
   @GET("api/drug-interactions/check")

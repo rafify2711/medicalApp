@@ -22,7 +22,7 @@ class AuthLoginSuccess extends AuthState {
 
 // 🔹 Role-Specific States for Signup
 class AuthSignupSuccessDoctor extends AuthState {
-  final UserModel doctor;
+  final DoctorModel doctor;
   AuthSignupSuccessDoctor(this.doctor);
 
   @override

@@ -1,7 +1,8 @@
-import 'package:graduation_medical_app/features/auth/data/models/user_model/patient_model.dart';
+
 import 'package:json_annotation/json_annotation.dart';
 
-import '../user_model/doctor_model.dart';
+import '../../../../../core/models/doctor_model/doctor_model.dart';
+
 
 part 'register_doctor_response.g.dart';
 

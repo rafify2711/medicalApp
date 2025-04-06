@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_medical_app/features/Profile/presentation/view/profile_screen.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/sign_up_screen.dart';
+import 'package:graduation_medical_app/features/layout/presentation/lay_out.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
-import '../../../../Profile/presentation/view/user_profile_screen.dart';
 import '../../../data/models/sign_in_model/sign_in_model.dart';
 import '../../view_model/auth_cubit.dart';
 
@@ -105,7 +106,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Login Successful!")),
                           );
-                          Navigator.pushReplacementNamed(context, UserProfileScreen.routeName);
+                          Navigator.pushReplacementNamed(context, UserLayOut.routeName);
                         } else if (state is AuthFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(state.message)),

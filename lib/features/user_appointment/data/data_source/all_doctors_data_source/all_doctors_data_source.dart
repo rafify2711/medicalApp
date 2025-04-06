@@ -1,8 +1,8 @@
+import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dart';
 import 'package:graduation_medical_app/core/network/api_client.dart';
-import 'package:graduation_medical_app/features/auth/data/models/user_model/doctor_model.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../auth/data/models/user_model/doctors_model.dart';
+
 
 @lazySingleton
 class DoctorDataSource {
@@ -10,7 +10,7 @@ class DoctorDataSource {
 
   DoctorDataSource({required this.apiManager});
 
-  Future<List<Doctor>> getDoctors() async {
+  Future<List<DoctorModel>> getDoctors() async {
     try {
       final response = await apiManager.getAllDoctors();
       return response;

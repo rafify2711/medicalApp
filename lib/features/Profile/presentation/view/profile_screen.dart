@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
-import 'package:graduation_medical_app/features/Profile/presentation/view/user_profile_screen.dart';
+
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/edit_profile/presentation/view/update_user_profile_screen.dart';
 
@@ -58,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                userData.username, // Use the loaded user's name
+                                userData.username!, // Use the loaded user's name
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w400,
@@ -76,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                userData.email, // Use the loaded email
+                                userData.email!, // Use the loaded email
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[400],

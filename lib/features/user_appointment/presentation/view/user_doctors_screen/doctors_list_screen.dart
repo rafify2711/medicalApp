@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_doctors_screen/user_doctors_screen.dart';
 
 import '../../../../../core/di/di.dart';
 import '../../../../../core/utils/app_colors.dart';
-import '../../../../auth/data/models/user_model/doctor_model.dart';
-import '../../../../auth/data/models/user_model/doctors_model.dart';
+
 import '../../../data/repository/all_doctor_repo_impl.dart';
 
 class DoctorListScreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class DoctorListScreen extends StatefulWidget {
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
   final doctorRepository = getIt<DoctorRepository>();
-  late Future<List<Doctor>> doctors;
+  late Future<List<DoctorModel>> doctors;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     doctors = fetchDoctors(); // استدعاء دالة جلب البيانات عند بداية الواجهة
   }
 
-  Future<List<Doctor>> fetchDoctors() async {
+  Future<List<DoctorModel>> fetchDoctors() async {
     try {
       return await doctorRepository.getAllDoctors(); // جلب الأطباء من الـ repository
     } catch (e) {
@@ -69,7 +69,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: FutureBuilder<List<Doctor>>(
+              child: FutureBuilder<List<DoctorModel>>(
                 future: doctors,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -93,7 +93,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                             backgroundImage:  AssetImage('assets/doctor_placeholder.png') as ImageProvider, // صورة افتراضية
                             radius: 30,
                           ),
-                          title: Text(doctor.name, style: TextStyle(color: AppColors.primary)),
+                          title: Text(doctor.username, style: TextStyle(color: AppColors.primary)),
                           subtitle: Text(doctor.specialty!, style: TextStyle(color: AppColors.primary)),
                           trailing: ElevatedButton(
                             onPressed:(){}

@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_medical_app/features/Profile/presentation/view/user_profile_screen.dart';
+import 'package:graduation_medical_app/features/Profile/presentation/view/profile_screen.dart';
+import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_appointment_screen.dart';
+
 
 import '../../../core/utils/app_colors.dart';
 import '../../doctor_home/presentation/doctor_home_screen.dart';
+import '../../user_home/presentation/view/user_home_screen.dart';
 
-class BottomNavBar extends StatefulWidget {
+class UserLayOut extends StatefulWidget {
+  static const routeName='lay_out.dart';
   @override
-  _BottomNavBarState createState() => _BottomNavBarState();
+  _UserLayOutState createState() => _UserLayOutState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _UserLayOutState extends State<UserLayOut> {
   int _selectedIndex = 0;
 
   static  final List<Widget> _screens = <Widget>[
-    DoctorHomeScreen(),
-    Scaffold(),
-    Scaffold()
+    UserHomeScreen(),
+    UserAppointmentScreen(),
+    ProfileScreen(token: '', userId: '')
 
   ];
 
@@ -37,8 +41,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), label: 'schedule'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
+
         ],
       ),
     );
