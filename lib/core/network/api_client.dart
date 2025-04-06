@@ -5,15 +5,18 @@ import 'package:dio/dio.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_doctor_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_user_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
+import 'package:graduation_medical_app/features/auth/data/models/user_model/doctor_model.dart';
+import 'package:graduation_medical_app/features/drug_conflict/data/models/drug_interaction_response.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
-import 'package:retrofit/retrofit.dart' show Body, Field, GET, Header, MultiPart, POST, PUT, Part, Path, RestApi;
+import 'package:retrofit/retrofit.dart' show Body, Field, GET, Header, MultiPart, POST, PUT, Part, Path, Query, RestApi;
 
 import '../../features/Profile/data/models/user_profile_response.dart';
 import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
 
+import '../../features/auth/data/models/user_model/doctors_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
 
 
@@ -40,6 +43,23 @@ abstract class ApiClient {
       @Header("Authorization") String  token,
       @Path("userId") String userId,
       );
+
+  @GET("doctor/")
+  Future<List<Doctor>> getAllDoctors();
+
+  // 1. Drug Interaction Check
+  @GET("api/drug-interactions/check")
+  Future<DrugInteractionResponse> checkDrugInteraction(
+      @Query("drug1") String drug1, @Query("drug2") String drug2);
+
+  // 2. Get Drug Substitutions
+  @GET("api/drug-interactions/substitutions")
+  Future<DrugInteractionResponse> getDrugSubstitutions(@Query("drug") String drug);
+
+  // 3. Disease Check for Drug Interaction
+  @GET("api/drug-interactions/disease-check")
+  Future<DrugInteractionResponse> checkDiseaseDrugInteraction(
+      @Query("drug") String drug, @Query("disease") String disease);
 
 }
 

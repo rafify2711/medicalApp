@@ -3,6 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/log_in_screen.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/sign_up_screen.dart';
 import 'package:graduation_medical_app/features/chat_bot/presentation/view/chatbot_screen.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view/check_drug_interaction_screen.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view/disease_drug_interaction_screen.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view/drug_subsitiutions_screen.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view/drug_tabs.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/check_drug_interaction_cubit.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/disease_drug_interaction_cubit.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/drug_substitutions_cubit.dart';
 import 'package:graduation_medical_app/features/medical_dignosis/presentation/view/disease_prediction_list_screen.dart';
 import 'package:graduation_medical_app/features/reservation/presentation/view/add_doctor_scadule.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_appointment_screen.dart';
@@ -23,10 +30,15 @@ import 'features/user_appointment/presentation/view/user_doctors_screen/doctors_
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+
   configureDependencies();
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider<CheckDrugInteractionCubit>(create: (context) => getIt<CheckDrugInteractionCubit>(),),
+        BlocProvider<DiseaseDrugInteractionCubit>(create: (context) => getIt<DiseaseDrugInteractionCubit>(),),
+        BlocProvider<DrugSubstitutionsCubit>(create: (context) => getIt<DrugSubstitutionsCubit>(),),
         BlocProvider<AuthCubit>(create: (context) => getIt<AuthCubit>()),
         BlocProvider<PredictionCubit>(create: (context) => getIt<PredictionCubit>()),
         BlocProvider<UserProfileCubit>(create: (context) => getIt<UserProfileCubit>()),
@@ -56,6 +68,10 @@ class MyApp extends StatelessWidget {
         UserAppointmentScreen.routeName:(_) => UserAppointmentScreen(),
         DoctorScheduleScreen.routeName:(_)=> DoctorScheduleScreen(),
         DoctorListScreen.routeName:(_)=> DoctorListScreen(),
+        CheckDrugInteractionScreen.routeName:(_)=> CheckDrugInteractionScreen(),
+        DiseaseDrugInteractionScreen.routeName:(_)=> DiseaseDrugInteractionScreen(),
+        DrugSubstitutionScreen.routeName:(_)=> DrugSubstitutionScreen(),
+        DrugTabsScreen.routeName:(_)=> DrugTabsScreen(),
       },
       home:UserHomeScreen(),
     );

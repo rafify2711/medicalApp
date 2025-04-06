@@ -23,6 +23,20 @@ import '../../features/auth/domain/repository/auth_repository.dart' as _i961;
 import '../../features/auth/domain/use_cases/log_in_use_case.dart' as _i957;
 import '../../features/auth/domain/use_cases/signup_use_case.dart' as _i571;
 import '../../features/auth/presentation/view_model/auth_cubit.dart' as _i208;
+import '../../features/drug_conflict/data/data_source/drug_interaction_data_source.dart'
+    as _i727;
+import '../../features/drug_conflict/data/repository/drug_interaction_repository_impl.dart'
+    as _i33;
+import '../../features/drug_conflict/domain/repository/drug_iteraction_repository.dart'
+    as _i729;
+import '../../features/drug_conflict/domain/use_cases/drug_interaction_use_case.dart'
+    as _i917;
+import '../../features/drug_conflict/presentation/view_model/check_drug_interaction_cubit.dart'
+    as _i525;
+import '../../features/drug_conflict/presentation/view_model/disease_drug_interaction_cubit.dart'
+    as _i607;
+import '../../features/drug_conflict/presentation/view_model/drug_substitutions_cubit.dart'
+    as _i994;
 import '../../features/medical_dignosis/data/data_source/prediction_data_source.dart'
     as _i352;
 import '../../features/medical_dignosis/data/repository/prediction_repository_impl.dart'
@@ -41,6 +55,10 @@ import '../../features/Profile/domain/use_cases/user/user_profile_usecase.dart'
     as _i575;
 import '../../features/Profile/presentation/view_model/user_profile_cubit.dart'
     as _i396;
+import '../../features/user_appointment/data/data_source/all_doctors_data_source/all_doctors_data_source.dart'
+    as _i1040;
+import '../../features/user_appointment/data/repository/all_doctor_repo_impl.dart'
+    as _i596;
 import '../network/api_client.dart' as _i557;
 import '../network/network_module.dart' as _i200;
 import '../utils/shared_prefs.dart' as _i397;
@@ -82,8 +100,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i456.AuthRemoteDataSource>(
       () => _i456.AuthRemoteDataSourceImpl(apiClient: gh<_i557.ApiClient>()),
     );
+    gh.lazySingleton<_i1040.DoctorDataSource>(
+      () => _i1040.DoctorDataSource(apiManager: gh<_i557.ApiClient>()),
+    );
     gh.factory<_i529.PredictionRepository>(
       () => _i60.PredictionRepoImpl(gh<_i352.PredictionDataSource>()),
+    );
+    gh.lazySingleton<_i727.DrugInteractionsRemoteDataSource>(
+      () => _i727.DrugInteractionsRemoteDataSource(
+        apiClient: gh<_i557.ApiClient>(),
+      ),
     );
     gh.lazySingleton<_i575.GetUserProfile>(
       () => _i575.GetUserProfile(gh<_i237.UserRepository>()),
@@ -91,11 +117,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i396.UserProfileCubit>(
       () => _i396.UserProfileCubit(gh<_i237.UserRepository>()),
     );
+    gh.factory<_i729.DrugInteractionsRepository>(
+      () => _i33.DrugInteractionsRepositoryImpl(
+        remoteDataSource: gh<_i727.DrugInteractionsRemoteDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i961.AuthRepository>(
       () => _i409.AuthRepositoryImpl(
         gh<_i460.SharedPreferences>(),
         remoteDataSource: gh<_i456.AuthRemoteDataSource>(),
         localDataSource: gh<_i280.AuthLocalDataSource>(),
+      ),
+    );
+    gh.factory<_i596.DoctorRepository>(
+      () => _i596.DoctorRepository(
+        doctorDataSource: gh<_i1040.DoctorDataSource>(),
       ),
     );
     gh.lazySingleton<_i640.PredictionUseCase>(
@@ -107,8 +143,25 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i571.SignupUseCase>(
       () => _i571.SignupUseCase(gh<_i961.AuthRepository>()),
     );
+    gh.factory<_i917.DrugInteractionsUseCase>(
+      () => _i917.DrugInteractionsUseCase(
+        repository: gh<_i729.DrugInteractionsRepository>(),
+      ),
+    );
     gh.factory<_i501.PredictionCubit>(
       () => _i501.PredictionCubit(gh<_i640.PredictionUseCase>()),
+    );
+    gh.factory<_i525.CheckDrugInteractionCubit>(
+      () =>
+          _i525.CheckDrugInteractionCubit(gh<_i917.DrugInteractionsUseCase>()),
+    );
+    gh.factory<_i607.DiseaseDrugInteractionCubit>(
+      () => _i607.DiseaseDrugInteractionCubit(
+        gh<_i917.DrugInteractionsUseCase>(),
+      ),
+    );
+    gh.factory<_i994.DrugSubstitutionsCubit>(
+      () => _i994.DrugSubstitutionsCubit(gh<_i917.DrugInteractionsUseCase>()),
     );
     gh.factory<_i208.AuthCubit>(
       () =>

@@ -5,6 +5,8 @@ import 'package:graduation_medical_app/core/extentions/extentions.dart';
 import 'package:graduation_medical_app/core/utils/widgets/feature_widget/features.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/chat_bot/presentation/view/chatbot_screen.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view/check_drug_interaction_screen.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view/drug_tabs.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_appointment_screen.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_doctors_screen/doctors_list_screen.dart';
 
@@ -62,7 +64,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           shrinkWrap: true,
           children: [ FeatureCard(icon:  Icons.medical_services, label: 'Diagnosis', routeName: DiseasePredictionListScreen.routeName,),
             FeatureCard(icon: Icons.people, label: 'Doctors', routeName: DoctorListScreen.routeName),
-            FeatureCard(icon: Icons.insert_chart, label: 'Report', routeName: ''),
+            FeatureCard(icon: Icons.insert_chart, label: 'Drugs', routeName: DrugTabsScreen.routeName),
             FeatureCard(icon: Icons.calendar_today, label: 'Schedule', routeName: UserAppointmentScreen.routeName),
             FeatureCard(icon: Icons.chat, label: 'Chat Bot', routeName: ChatbotScreen.routeName),
             FeatureCard(icon: Icons.chrome_reader_mode_outlined, label: 'Perception', routeName: ''),],
