@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/disease_drug_interaction_cubit.dart';
 import '../../../../core/utils/app_style.dart';
 import 'check_drug_interaction_screen.dart';  // استيراد شاشة تفاعل الأدوية
@@ -29,8 +30,12 @@ class _DrugTabsScreenState extends State<DrugTabsScreen> with SingleTickerProvid
         decoration:  BoxDecoration(
         gradient: AppStyle.gradient,
         ),),
-        title: const Text('Drug Interaction'),
+        title: const Text('Drug Interaction',style: TextStyle(fontSize: 20,color: AppColors.white,fontWeight: FontWeight.bold),),
         bottom: TabBar(
+          dividerColor: AppColors.white,
+          labelColor: AppColors.white,
+          indicatorColor: AppColors.white,
+          unselectedLabelColor: AppColors.white,
           controller: _tabController,
           tabs: const [
             Tab(text: 'Drug Interaction'),
@@ -42,9 +47,9 @@ class _DrugTabsScreenState extends State<DrugTabsScreen> with SingleTickerProvid
       body: TabBarView(
         controller: _tabController,
         children: const [
-          CheckDrugInteractionScreen(),  // شاشة تفاعل الأدوية
-          DiseaseDrugInteractionScreen(),  // شاشة تفاعل الأدوية مع الأمراض
-          DrugSubstitutionScreen(),  // شاشة البدائل
+          CheckDrugInteractionScreen(),
+          DiseaseDrugInteractionScreen(),
+          DrugSubstitutionScreen(),
         ],
       ),
     );

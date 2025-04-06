@@ -9,6 +9,7 @@ import 'package:graduation_medical_app/features/auth/data/models/user_model/doct
 import 'package:graduation_medical_app/features/drug_conflict/data/models/drug_interaction_response.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
+import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart' show Body, Field, GET, Header, MultiPart, POST, PUT, Part, Path, Query, RestApi;
 
 import '../../features/Profile/data/models/user_profile_response.dart';
@@ -17,6 +18,9 @@ import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
 
 import '../../features/auth/data/models/user_model/doctors_model.dart';
+import '../../features/auth/data/models/user_model/patient_model.dart';
+import '../../features/auth/data/models/user_model/user_model.dart';
+import '../../features/edit_profile/data/models/updated_user_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
 
 
@@ -44,6 +48,13 @@ abstract class ApiClient {
       @Path("userId") String userId,
       );
 
+  @PATCH('user/profile')
+  Future<UserProfileResponse> updateUserProfile(
+      @Header("Authorization") String  token,
+      @Body() UpdateUserModel user
+      )
+  ;
+
   @GET("doctor/")
   Future<List<Doctor>> getAllDoctors();
 
@@ -60,6 +71,8 @@ abstract class ApiClient {
   @GET("api/drug-interactions/disease-check")
   Future<DrugInteractionResponse> checkDiseaseDrugInteraction(
       @Query("drug") String drug, @Query("disease") String disease);
+
+
 
 }
 

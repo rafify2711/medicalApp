@@ -69,17 +69,6 @@ class DoctorsScreen extends StatelessWidget {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('profile')),
-      body: Center(child: Text('Profile Screen')),
-    );
-  }
-}
 
 class CleanerScreen extends StatelessWidget {
   const CleanerScreen({super.key});

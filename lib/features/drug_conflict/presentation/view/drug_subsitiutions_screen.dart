@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/drug_constants.dart';
 import '../../../../core/utils/app_style.dart';
+import '../../../auth/presentation/view/widgets/button.dart';
 import '../view_model/drug_substitutions_cubit.dart';
 
 class DrugSubstitutionScreen extends StatefulWidget {
@@ -45,15 +46,13 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                   }).toList(),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: selectedDrug == null
-                      ? null  // لا يمكن الضغط إذا لم يتم اختيار دواء
-                      : () {
+                Button(
+                  onClick: () {
                     context.read<DrugSubstitutionsCubit>().getDrugSubstitutions(
                       selectedDrug!, // إرسال الدواء المحدد
                     );
                   },
-                  child: const Text('Get Substitutions'),
+                  text: 'Get Substitutions',
                 ),
                 const SizedBox(height: 20),
                 BlocBuilder<DrugSubstitutionsCubit, DrugSubstitutionsState>(

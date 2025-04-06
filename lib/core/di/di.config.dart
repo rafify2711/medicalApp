@@ -37,6 +37,14 @@ import '../../features/drug_conflict/presentation/view_model/disease_drug_intera
     as _i607;
 import '../../features/drug_conflict/presentation/view_model/drug_substitutions_cubit.dart'
     as _i994;
+import '../../features/edit_profile/data/repository/update_user_profile_repository.dart'
+    as _i440;
+import '../../features/edit_profile/domain/repository/updateUser_profile_repository.dart'
+    as _i440;
+import '../../features/edit_profile/domain/use_cases/update_user_profile_usecase.dart'
+    as _i401;
+import '../../features/edit_profile/presentation/view_model/update_user_Profile_cubit.dart'
+    as _i584;
 import '../../features/medical_dignosis/data/data_source/prediction_data_source.dart'
     as _i352;
 import '../../features/medical_dignosis/data/repository/prediction_repository_impl.dart'
@@ -97,6 +105,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i352.PredictionDataSource>(
       () => _i352.PredictionDataSourceImpl(gh<_i557.ApiClientPrediction>()),
     );
+    gh.factory<_i440.UpdateUserProfileRepository>(
+      () => _i440.UpdateUserProfileRepositoryImpl(
+        gh<_i557.ApiClient>(),
+        gh<_i397.SharedPrefs>(),
+      ),
+    );
     gh.lazySingleton<_i456.AuthRemoteDataSource>(
       () => _i456.AuthRemoteDataSourceImpl(apiClient: gh<_i557.ApiClient>()),
     );
@@ -114,6 +128,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i575.GetUserProfile>(
       () => _i575.GetUserProfile(gh<_i237.UserRepository>()),
     );
+    gh.singleton<_i401.UpdateUserProfileUseCase>(
+      () => _i401.UpdateUserProfileUseCase(
+        gh<_i440.UpdateUserProfileRepository>(),
+      ),
+    );
     gh.factory<_i396.UserProfileCubit>(
       () => _i396.UserProfileCubit(gh<_i237.UserRepository>()),
     );
@@ -128,6 +147,9 @@ extension GetItInjectableX on _i174.GetIt {
         remoteDataSource: gh<_i456.AuthRemoteDataSource>(),
         localDataSource: gh<_i280.AuthLocalDataSource>(),
       ),
+    );
+    gh.factory<_i584.UpdateUserProfileCubit>(
+      () => _i584.UpdateUserProfileCubit(gh<_i401.UpdateUserProfileUseCase>()),
     );
     gh.factory<_i596.DoctorRepository>(
       () => _i596.DoctorRepository(

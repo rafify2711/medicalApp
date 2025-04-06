@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/drug_constants.dart';
+import '../../../auth/presentation/view/widgets/button.dart';
 import '../view_model/disease_drug_interaction_cubit.dart';
 
 class DiseaseDrugInteractionScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
             child: Column(
               children: [
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: selectedDrug,
                   decoration: const InputDecoration(labelText: 'Select Drug'),
                   items: drugs.map((drug) {
@@ -50,6 +52,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: selectedDisease,
                   decoration: const InputDecoration(labelText: 'Select Disease'),
                   items: diseases.map((disease) {
@@ -71,8 +74,8 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                   },
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
+                Button(
+                  onClick: () {
                     if (selectedDrug != null && selectedDisease != null) {
                       context.read<DiseaseDrugInteractionCubit>().checkDiseaseDrugInteraction(
                           selectedDrug!, selectedDisease!
@@ -83,7 +86,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                       );
                     }
                   },
-                  child: const Text('Check Interaction'),
+                  text: 'Check Interaction',
                 ),
                 const SizedBox(height: 20),
                 BlocBuilder<DiseaseDrugInteractionCubit, DiseaseDrugInteractionState>(

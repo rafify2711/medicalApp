@@ -32,7 +32,7 @@ class UserProfileScreen extends StatelessWidget {
                       radius: 50,
                       backgroundImage: userData.profilePhoto!.isNotEmpty?
                            NetworkImage(userData.profilePhoto!)
-                          : AssetImage("assets/default_avatar.png") as ImageProvider,
+                          : AssetImage("lib/assets/img/default_avatar.png") as ImageProvider,
                     ),
                     SizedBox(height: 16),
                     buildTextField("Full Name", userData.username),

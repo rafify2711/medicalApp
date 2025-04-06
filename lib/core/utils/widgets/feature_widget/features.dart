@@ -4,28 +4,43 @@ import '../../app_colors.dart';
 import '../../app_style.dart';
 
 class FeatureCard extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final String? image;  // الصورة
   final String label;
-  final String  routeName;
-  const FeatureCard({Key? key, required this.icon, required this.label, required this.routeName})
-    : super(key: key);
+  final String routeName;
+
+  const FeatureCard({
+    Key? key,
+    this.icon,
+    required this.label,
+    required this.routeName,
+    this.image,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: ()=>Navigator.pushNamed(context, routeName),
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, routeName),
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.all(Radius.circular(25)),
           gradient: AppStyle.gradient,
         ),
-
         child: Padding(
           padding: const EdgeInsets.all(2),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 25, color: AppColors.white),
+              // If image is provided, use Image.asset
+              if (image != null)
+                Image.asset(color: AppColors.white,
+                  image!,
+                  width: 30,
+                  height: 30,
+                )
+              else if (icon != null)
+                Icon(icon, size: 25, color: AppColors.white),
               const SizedBox(height: 10),
               Text(
                 label,
@@ -43,6 +58,7 @@ class FeatureCard extends StatelessWidget {
     );
   }
 }
+
 
 class FeaturesGrid extends StatelessWidget {
   final List<Map<String, dynamic>> features;

@@ -5,11 +5,9 @@ import 'package:graduation_medical_app/core/extentions/extentions.dart';
 import 'package:graduation_medical_app/core/utils/widgets/feature_widget/features.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/chat_bot/presentation/view/chatbot_screen.dart';
-import 'package:graduation_medical_app/features/drug_conflict/presentation/view/check_drug_interaction_screen.dart';
 import 'package:graduation_medical_app/features/drug_conflict/presentation/view/drug_tabs.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_appointment_screen.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_doctors_screen/doctors_list_screen.dart';
-
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../medical_dignosis/presentation/view/disease_prediction_list_screen.dart';
@@ -62,12 +60,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               const SizedBox(height: 16),
               GridView( physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          children: [ FeatureCard(icon:  Icons.medical_services, label: 'Diagnosis', routeName: DiseasePredictionListScreen.routeName,),
-            FeatureCard(icon: Icons.people, label: 'Doctors', routeName: DoctorListScreen.routeName),
-            FeatureCard(icon: Icons.insert_chart, label: 'Drugs', routeName: DrugTabsScreen.routeName),
-            FeatureCard(icon: Icons.calendar_today, label: 'Schedule', routeName: UserAppointmentScreen.routeName),
-            FeatureCard(icon: Icons.chat, label: 'Chat Bot', routeName: ChatbotScreen.routeName),
-            FeatureCard(icon: Icons.chrome_reader_mode_outlined, label: 'Perception', routeName: ''),],
 
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
@@ -75,7 +67,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             crossAxisSpacing: 10,
             mainAxisSpacing: 5,
 
-          ),),
+          ),
+          children: [ FeatureCard(icon:  Icons.medical_services, label: 'Diagnosis', routeName: DiseasePredictionListScreen.routeName,),
+            FeatureCard(icon: Icons.people, label: 'Doctors', routeName: DoctorListScreen.routeName),
+            FeatureCard(image: 'lib/assets/icon/medicine.png', label: 'Drugs', routeName: DrugTabsScreen.routeName),
+            FeatureCard(icon: Icons.calendar_today, label: 'Schedule', routeName: UserAppointmentScreen.routeName),
+            FeatureCard(icon: Icons.chat, label: 'Chat Bot', routeName: ChatbotScreen.routeName),
+            FeatureCard(icon: Icons.chrome_reader_mode_outlined, label: 'Perception', routeName: ''),],),
 
 
               //   {'text': '', 'icon': I},
