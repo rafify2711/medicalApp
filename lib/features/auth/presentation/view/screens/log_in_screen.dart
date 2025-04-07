@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graduation_medical_app/features/Profile/presentation/view/profile_screen.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/sign_up_screen.dart';
+import 'package:graduation_medical_app/features/doctor_profile/presentation/view/doctor_screen.dart';
 import 'package:graduation_medical_app/features/layout/presentation/lay_out.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
+import '../../../../layout/presentation/doctor_lay_out.dart';
 import '../../../data/models/sign_in_model/sign_in_model.dart';
 import '../../view_model/auth_cubit.dart';
 
@@ -101,18 +102,24 @@ class _LogInScreenState extends State<LogInScreen> {
                     const SizedBox(height: 24),
                     // Log-In Button with BlocConsumer
                     BlocConsumer<AuthCubit, AuthState>(
-                      listener: (context, state) {
-                        if (state is AuthLoginSuccess) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Login Successful!")),
-                          );
-                          Navigator.pushReplacementNamed(context, UserLayOut.routeName);
-                        } else if (state is AuthFailure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
-                          );
-                        }
-                      },
+                       listener: (context, state) {
+              if (state is AuthLoginSuccess) {
+              final role = state.role;
+              print(role);
+              ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Login Successful!")),
+              );
+              if (role == 'User') {
+              Navigator.pushReplacementNamed(context, UserLayOut.routeName);
+              } else if (role == 'Doctor'){
+              Navigator.pushReplacementNamed(context, DoctorLayOut.routeName);
+              }
+              } else if (state is AuthFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+              );
+              }
+              },
                       builder: (context, state) {
                         if (state is AuthLoading) {
                           return const Center(child: CircularProgressIndicator());

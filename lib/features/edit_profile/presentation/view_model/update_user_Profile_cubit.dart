@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
-import '../../../Profile/data/models/user_profile_response.dart';
-
+import '../../../user_profile/data/models/user_profile_response.dart';
 import '../../data/models/updated_user_model.dart';
 import '../../domain/use_cases/update_user_profile_usecase.dart';
 

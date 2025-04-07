@@ -17,7 +17,7 @@ import 'dart:convert'; // تأكد من استيراد هذا
 
 part 'auth_state.dart';
 
-@injectable
+@lazySingleton
 class AuthCubit extends Cubit<AuthState> {
   final LogInUseCase logInUseCase;
   final SignupUseCase signupUseCase;
@@ -30,19 +30,22 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final token = await logInUseCase(signInModel);
 
-      // ✅ استرجاع معرف المستخدم بعد تسجيل الدخول
       final userId = await getIt<AuthRepository>().getUserId();
-
       if (userId == null || userId.isEmpty) {
         throw Exception("User ID is missing after login");
       }
 
-      emit(AuthLoginSuccess(token, userId));
-    } catch (e) {
-      emit(AuthFailure(e is Exception ? e.toString().replaceFirst('Exception: ', '') : 'Unknown error'));
+      final role = await getIt<AuthRepository>().getRole();
 
+      emit(AuthLoginSuccess(token, userId, role));
+    } catch (e) {
+      print("error: $e");
+      emit(AuthFailure(_handleError(e)));
+      print("${_handleError(e)}");
     }
   }
+
+
   Future<void> signUpDoctor(SignupDoctorModel signupModel) async {
     emit(AuthLoading());
     try {

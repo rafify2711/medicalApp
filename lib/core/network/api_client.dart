@@ -12,15 +12,15 @@ import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart' show Body, Field, GET, Header, MultiPart, POST, PUT, Part, Path, Query, RestApi;
 
-import '../../features/Profile/data/models/user_profile_response.dart';
 import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
 
-
-
 import '../../features/edit_profile/data/models/updated_user_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
+import '../../features/user_appointment/data/models/user_get_reservation_response_model.dart';
+import '../../features/user_profile/data/models/user_profile_response.dart';
+import '../models/appointment_model/appointment_model.dart';
 import '../models/doctor_model/doctor_model.dart';
 
 
@@ -48,6 +48,20 @@ abstract class ApiClient {
       @Path("userId") String userId,
       );
 
+  @GET("doctor/{doctorId}")
+  Future<DoctorModel> getDoctorProfile(
+      @Path("doctorId") String userId,
+      );
+
+  @GET("/user/{userId}/reservations")
+  Future<UserGetReservationResponseModel> getUserAppointments(@Path("userId") String userId,
+      @Header("Authorization") String  token,);
+
+  @GET("/doctor/{doctorId}/available-slots/{date}")
+  Future<List<String>> getAvailableSlots(
+      @Path("doctorId") String doctorId,
+      @Path("date") DateTime date,
+      );
   @PATCH('user/profile')
   Future<UserProfileResponse> updateUserProfile(
       @Header("Authorization") String  token,

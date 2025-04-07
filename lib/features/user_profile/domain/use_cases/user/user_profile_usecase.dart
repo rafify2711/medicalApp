@@ -1,5 +1,5 @@
-import 'package:graduation_medical_app/features/Profile/data/models/user_profile_response.dart';
 import 'package:injectable/injectable.dart';
+import '../../../data/models/user_profile_response.dart';
 import '../../repository/user_profile_repository.dart';
 
 

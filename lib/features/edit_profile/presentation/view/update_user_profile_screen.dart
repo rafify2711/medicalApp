@@ -22,7 +22,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Update Profile")),
+      appBar: AppBar(title: Text("Update user_profile")),
       body: BlocConsumer<UpdateUserProfileCubit, UpdateUserProfileState>(
         listener: (context, state) {
           if (state.errorMessage != null) {
@@ -33,7 +33,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
           if (state.userProfile != null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Profile updated successfully!")),
+              SnackBar(content: Text("user_profile updated successfully!")),
             );
           }
         },
@@ -117,7 +117,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
 
                     },
-                    text: "Update Profile",
+                    text: "Update user_profile",
                   ),
                 ],
               ),

@@ -2,38 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
-
-import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
-import 'package:graduation_medical_app/features/edit_profile/presentation/view/update_user_profile_screen.dart';
-
 import '../../../../core/di/di.dart';
-import '../view_model/user_profile_cubit.dart'; // Import your cubit file
+import '../../../auth/presentation/view/widgets/my_app_par.dart';
+import '../../../edit_profile/presentation/view/update_user_profile_screen.dart';
+import '../view_model/doctor_profile_cubit.dart';
 
+class DoctorProfileScreen extends StatelessWidget {
+  static const routeName = 'doctor_screen';
 
-class ProfileScreen extends StatelessWidget {
-  static const routeName = 'profile_screen';
-  final String token;
   final String userId;
 
-  const ProfileScreen({required this.token, required this.userId});
+  const DoctorProfileScreen({ required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create:
           (context) =>
-              getIt<UserProfileCubit>()..fetchUserProfile(
-                token,
+              getIt<DoctorProfileCubit>()..fetchDoctorProfile(
                 userId,
               ), // Using getIt for dependency injection
-      child: BlocBuilder<UserProfileCubit, UserProfileState>(
+      child: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
         builder: (context, state) {
-          if (state is UserProfileLoading) {
+          if (state is DoctorProfileLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (state is UserProfileLoaded) {
-            final userData = state.profile.user;
+          } else if (state is DoctorProfileLoaded) {
+            final userData = state.profile;
             return Scaffold(
-              appBar: MyAppPar(title: 'Hello ${state.profile.user.username}'),
+              appBar: MyAppPar(title: 'Hello ${userData.username}'),
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -58,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                userData.username!, // Use the loaded user's name
+                                userData.username, // Use the loaded user's name
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w400,
@@ -67,8 +63,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                userData.phone ??
-                                    "N/A", // Use the loaded phone number
+                                userData.specialty ,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[400],
@@ -76,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                userData.email!, // Use the loaded email
+                                userData.email, // Use the loaded email
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[400],
@@ -93,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
                     _buildMenuItem(
                       context,
                       Icons.person,
-                      'Profile',
+                      'user_profile',
                       UpdateProfileScreen.routeName,
                     ),
 
@@ -141,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             );
-          } else if (state is UserProfileError) {
+          } else if (state is DoctorProfileError) {
             return Center(child: Text("Error: ${state.message}"));
           }
           return Center(child: Text("No data available"));

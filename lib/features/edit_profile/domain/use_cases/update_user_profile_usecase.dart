@@ -1,7 +1,6 @@
 import 'package:graduation_medical_app/features/edit_profile/domain/repository/updateUser_profile_repository.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../../Profile/data/models/user_profile_response.dart';
+import '../../../user_profile/data/models/user_profile_response.dart';
 import '../../data/models/updated_user_model.dart';
 
 @singleton

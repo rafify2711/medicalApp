@@ -13,5 +13,6 @@ abstract class AuthRepository {
   Future<String> login(SignInModel signInModel);
   Future<String?> getToken();
   Future<String?> getUserId();
+  Future<String?> getRole();
   Future<void> logout();
 }

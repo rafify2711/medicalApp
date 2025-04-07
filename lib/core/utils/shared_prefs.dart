@@ -15,13 +15,17 @@ class SharedPrefs {
     return _prefs.getString('token') ?? "";
   }
 
+  String getRole(){
+    return _prefs.getString('role')?? "";
+  }
   Future<void> logout() async {
     await _prefs.clear();
   }
 
-  Future<void> saveUserData(String? token, String userId) async {
+  Future<void> saveUserData(String? token, String userId,String role) async {
     await _prefs.setString('token', token ?? '');
     await _prefs.setString('userId', userId);
+    await _prefs.setString('role', role);
   }
 }
 

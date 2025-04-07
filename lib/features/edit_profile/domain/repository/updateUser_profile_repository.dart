@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import '../../../Profile/data/models/user_profile_response.dart';
 
+import '../../../user_profile/data/models/user_profile_response.dart';
 import '../../data/models/updated_user_model.dart';
 
 abstract class UpdateUserProfileRepository {

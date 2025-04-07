@@ -25,7 +25,6 @@ abstract class NetworkModule {
     ));
     return dio;
   }
-
   @lazySingleton
   ApiClientPrediction apiClientPrediction(Dio dio) =>
       ApiClientPrediction(dio);
@@ -34,6 +33,7 @@ abstract class NetworkModule {
 
   @preResolve
   Future<SharedPreferences> get prefs async => await SharedPreferences.getInstance();
+
 }
 
 

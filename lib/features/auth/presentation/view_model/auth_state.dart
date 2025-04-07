@@ -10,11 +10,13 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthLoginSuccess extends AuthState {
+  final String? role;
   final String token;
   final String userId;
 
 
-  AuthLoginSuccess(this.token, this.userId);
+
+  AuthLoginSuccess(this.token, this.userId,this.role);
 
   @override
   List<Object> get props => [token];

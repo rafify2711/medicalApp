@@ -23,6 +23,14 @@ import '../../features/auth/domain/repository/auth_repository.dart' as _i961;
 import '../../features/auth/domain/use_cases/log_in_use_case.dart' as _i957;
 import '../../features/auth/domain/use_cases/signup_use_case.dart' as _i571;
 import '../../features/auth/presentation/view_model/auth_cubit.dart' as _i208;
+import '../../features/doctor_profile/data/repository/doctor_profile_repository_impl.dart'
+    as _i289;
+import '../../features/doctor_profile/domain/repository/doctor_profile_repository.dart'
+    as _i478;
+import '../../features/doctor_profile/domain/use_cases/user/doctor_profile_usecase.dart'
+    as _i444;
+import '../../features/doctor_profile/presentation/view_model/doctor_profile_cubit.dart'
+    as _i64;
 import '../../features/drug_conflict/data/data_source/drug_interaction_data_source.dart'
     as _i727;
 import '../../features/drug_conflict/data/repository/drug_interaction_repository_impl.dart'
@@ -55,18 +63,36 @@ import '../../features/medical_dignosis/domain/use_cases/prediction_usecase.dart
     as _i640;
 import '../../features/medical_dignosis/presentation/view_model/prediction_cubit.dart'
     as _i501;
-import '../../features/Profile/data/repository/user_profile_repository_impl.dart'
-    as _i195;
-import '../../features/Profile/domain/repository/user_profile_repository.dart'
-    as _i237;
-import '../../features/Profile/domain/use_cases/user/user_profile_usecase.dart'
-    as _i575;
-import '../../features/Profile/presentation/view_model/user_profile_cubit.dart'
-    as _i396;
 import '../../features/user_appointment/data/data_source/all_doctors_data_source/all_doctors_data_source.dart'
     as _i1040;
+import '../../features/user_appointment/data/data_source/available_slot_data_source/available_slot_data_source.dart'
+    as _i394;
 import '../../features/user_appointment/data/repository/all_doctor_repo_impl.dart'
     as _i596;
+import '../../features/user_appointment/data/repository/available_slots_repository_impl.dart'
+    as _i957;
+import '../../features/user_appointment/data/repository/user_appointment_repository_impl.dart'
+    as _i990;
+import '../../features/user_appointment/domain/repository/available_slot_repository.dart'
+    as _i402;
+import '../../features/user_appointment/domain/repository/user_appointmet_repository.dart'
+    as _i985;
+import '../../features/user_appointment/domain/use_cases/get_available_slots_use_case.dart'
+    as _i753;
+import '../../features/user_appointment/domain/use_cases/get_user_appointment_use_case.dart'
+    as _i363;
+import '../../features/user_appointment/presentation/view_model/available_slots_cubit.dart'
+    as _i987;
+import '../../features/user_appointment/presentation/view_model/user_appointment_cubit.dart'
+    as _i624;
+import '../../features/user_profile/data/repository/user_profile_repository_impl.dart'
+    as _i638;
+import '../../features/user_profile/domain/repository/user_profile_repository.dart'
+    as _i544;
+import '../../features/user_profile/domain/use_cases/user/user_profile_usecase.dart'
+    as _i1000;
+import '../../features/user_profile/presentation/view_model/user_profile_cubit.dart'
+    as _i631;
 import '../network/api_client.dart' as _i557;
 import '../network/network_module.dart' as _i200;
 import '../utils/shared_prefs.dart' as _i397;
@@ -96,8 +122,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i280.AuthLocalDataSource>(
       () => _i280.AuthLocalDataSourceImpl(gh<_i397.SharedPrefs>()),
     );
-    gh.lazySingleton<_i237.UserRepository>(
-      () => _i195.UserRepositoryImpl(
+    gh.lazySingleton<_i544.UserRepository>(
+      () => _i638.UserRepositoryImpl(
         gh<_i557.ApiClient>(),
         gh<_i397.SharedPrefs>(),
       ),
@@ -111,34 +137,59 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i397.SharedPrefs>(),
       ),
     );
+    gh.factory<_i631.UserProfileCubit>(
+      () => _i631.UserProfileCubit(gh<_i544.UserRepository>()),
+    );
+    gh.lazySingleton<_i478.DoctorProfileRepository>(
+      () => _i289.DoctorProfileRepositoryImpl(
+        gh<_i557.ApiClient>(),
+        gh<_i397.SharedPrefs>(),
+      ),
+    );
+    gh.lazySingleton<_i444.GetUserProfile>(
+      () => _i444.GetUserProfile(gh<_i478.DoctorProfileRepository>()),
+    );
+    gh.factory<_i985.UserAppointmentRepository>(
+      () => _i990.UserAppointmentRepositoryImpl(gh<_i557.ApiClient>()),
+    );
     gh.lazySingleton<_i456.AuthRemoteDataSource>(
       () => _i456.AuthRemoteDataSourceImpl(apiClient: gh<_i557.ApiClient>()),
     );
     gh.lazySingleton<_i1040.DoctorDataSource>(
       () => _i1040.DoctorDataSource(apiManager: gh<_i557.ApiClient>()),
     );
+    gh.lazySingleton<_i394.AvailableSlotDataSource>(
+      () => _i394.AvailableSlotDataSource(apiManager: gh<_i557.ApiClient>()),
+    );
     gh.factory<_i529.PredictionRepository>(
       () => _i60.PredictionRepoImpl(gh<_i352.PredictionDataSource>()),
+    );
+    gh.singleton<_i363.GetUserAppointmentsUseCase>(
+      () => _i363.GetUserAppointmentsUseCase(
+        gh<_i985.UserAppointmentRepository>(),
+      ),
     );
     gh.lazySingleton<_i727.DrugInteractionsRemoteDataSource>(
       () => _i727.DrugInteractionsRemoteDataSource(
         apiClient: gh<_i557.ApiClient>(),
       ),
     );
-    gh.lazySingleton<_i575.GetUserProfile>(
-      () => _i575.GetUserProfile(gh<_i237.UserRepository>()),
-    );
     gh.singleton<_i401.UpdateUserProfileUseCase>(
       () => _i401.UpdateUserProfileUseCase(
         gh<_i440.UpdateUserProfileRepository>(),
       ),
     );
-    gh.factory<_i396.UserProfileCubit>(
-      () => _i396.UserProfileCubit(gh<_i237.UserRepository>()),
+    gh.lazySingleton<_i1000.GetUserProfile>(
+      () => _i1000.GetUserProfile(gh<_i544.UserRepository>()),
     );
     gh.factory<_i729.DrugInteractionsRepository>(
       () => _i33.DrugInteractionsRepositoryImpl(
         remoteDataSource: gh<_i727.DrugInteractionsRemoteDataSource>(),
+      ),
+    );
+    gh.singleton<_i402.AvailableSlotsRepository>(
+      () => _i957.AvailableSlotsRepositoryImpl(
+        gh<_i394.AvailableSlotDataSource>(),
       ),
     );
     gh.lazySingleton<_i961.AuthRepository>(
@@ -151,6 +202,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i584.UpdateUserProfileCubit>(
       () => _i584.UpdateUserProfileCubit(gh<_i401.UpdateUserProfileUseCase>()),
     );
+    gh.factory<_i64.DoctorProfileCubit>(
+      () => _i64.DoctorProfileCubit(gh<_i478.DoctorProfileRepository>()),
+    );
     gh.factory<_i596.DoctorRepository>(
       () => _i596.DoctorRepository(
         doctorDataSource: gh<_i1040.DoctorDataSource>(),
@@ -159,11 +213,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i640.PredictionUseCase>(
       () => _i640.PredictionUseCase(gh<_i529.PredictionRepository>()),
     );
+    gh.factory<_i624.UserAppointmentCubit>(
+      () => _i624.UserAppointmentCubit(gh<_i363.GetUserAppointmentsUseCase>()),
+    );
     gh.lazySingleton<_i957.LogInUseCase>(
       () => _i957.LogInUseCase(gh<_i961.AuthRepository>()),
     );
     gh.lazySingleton<_i571.SignupUseCase>(
       () => _i571.SignupUseCase(gh<_i961.AuthRepository>()),
+    );
+    gh.factory<_i753.GetAvailableSlotsUseCase>(
+      () =>
+          _i753.GetAvailableSlotsUseCase(gh<_i402.AvailableSlotsRepository>()),
     );
     gh.factory<_i917.DrugInteractionsUseCase>(
       () => _i917.DrugInteractionsUseCase(
@@ -185,9 +246,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i994.DrugSubstitutionsCubit>(
       () => _i994.DrugSubstitutionsCubit(gh<_i917.DrugInteractionsUseCase>()),
     );
-    gh.factory<_i208.AuthCubit>(
+    gh.lazySingleton<_i208.AuthCubit>(
       () =>
           _i208.AuthCubit(gh<_i957.LogInUseCase>(), gh<_i571.SignupUseCase>()),
+    );
+    gh.factory<_i987.AvailableSlotsCubit>(
+      () => _i987.AvailableSlotsCubit(gh<_i753.GetAvailableSlotsUseCase>()),
     );
     return this;
   }

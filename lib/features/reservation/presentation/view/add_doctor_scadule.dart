@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 
@@ -53,6 +54,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
       selectedTime.hour,
       selectedTime.minute,
     );
+
 
     final formatted = '${_formatDate(combinedDateTime)} at ${_formatTime(combinedDateTime)}';
 

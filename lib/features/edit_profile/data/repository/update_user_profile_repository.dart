@@ -4,7 +4,7 @@ import 'package:graduation_medical_app/features/edit_profile/domain/repository/u
 import 'package:injectable/injectable.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/shared_prefs.dart';
-import '../../../Profile/data/models/user_profile_response.dart';
+import '../../../user_profile/data/models/user_profile_response.dart';
 
 
 @Injectable(as: UpdateUserProfileRepository)

@@ -58,11 +58,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
 
         final signupDoctorModel = SignupDoctorModel(
-          username: _usernameController.text.trim(),
+          username: 'DR${_usernameController.text.trim()}',
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
           confirmationPassword: _confirmPasswordController.text.trim(),
-          specialty: _selectedSpecialty!, // 🔹 تمرير التخصص المختار
+          specialty: _selectedSpecialty!,
           role: _role,
         );
         context.read<AuthCubit>().signUpDoctor(signupDoctorModel);

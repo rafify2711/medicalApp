@@ -58,8 +58,13 @@ class AuthRepositoryImpl implements AuthRepository {
     // ✅ تخزين البيانات في SharedPreferences بعد تسجيل الدخول
     await prefs.setString('token', loginResponse.token!);
     await prefs.setString('userId', loginResponse.userId!);
-
+    await prefs.setString('role',loginResponse.role! );
     return loginResponse.token!;
+  }
+
+  @override
+  Future<String?> getRole() async{
+      return prefs.getString('role');
   }
 
   @override
@@ -107,5 +112,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return "Something went wrong. Please check your connection.";
     }
   }
+
+
 }
 
