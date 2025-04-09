@@ -20,4 +20,21 @@ class UserProfileCubit extends Cubit<UserProfileState> {
       emit(UserProfileError(e.toString()));
     }
   }
+  // Add logout functionality to the cubit
+  Future<void> logout() async {
+    try {
+      // Emit loading state before performing logout
+      emit(UserProfileLoading());
+
+      // Call the logout function from the repository
+      await _userRepository.logout();
+
+      // After successful logout, you can emit a success state or reset the app state
+      emit(UserProfileLoggedOut());
+    } catch (e) {
+      // Emit error if logout fails
+      emit(UserProfileError("Failed to logout: ${e.toString()}"));
+    }
+  }
 }
+

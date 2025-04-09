@@ -31,6 +31,22 @@ class UserRepositoryImpl implements UserRepository {
       throw Exception("Failed to fetch user profile: ${e.toString()}");
     }
   }
+  @override
+  Future<void> logout() async {
+    try {
 
 
+      // مسح البيانات المخزنة في SharedPrefs مثل التوكن ومعرف المستخدم
+      await _sharedPrefs.logout();
+      print("token:${_sharedPrefs.getToken()}");
+      print("user logged out");
+
+
+
+    } catch (e) {
+      throw Exception("Failed to logout: ${e.toString()}");
+    }
+  }
 }
+
+

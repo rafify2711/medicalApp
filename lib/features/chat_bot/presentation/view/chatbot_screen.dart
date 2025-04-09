@@ -1,71 +1,139 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
-
+import '../../../../core/models/chat_message.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../view_model/chat_cubit.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
-  static const  routeName="chatbot_screen.dart";
+  static const routeName = "chatbot_screen.dart";
 
   @override
   State<ChatbotScreen> createState() => _ChatbotScreenState();
 }
 
-class _ChatbotScreenState extends State<ChatbotScreen> {
+class _ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
-  final List<_ChatMessage> _messages = [];
+  final ScrollController _scrollController = ScrollController();
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ChatCubit>().loadChatHistory("");
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+  }
 
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
 
-    setState(() {
-      _messages.add(_ChatMessage(text: text, isUser: true));
-    });
-
+    context.read<ChatCubit>().sendNewMessage('user', text);
     _controller.clear();
+  }
 
-    // Simulated bot response after delay
-    Future.delayed(const Duration(milliseconds: 500), () {
-      final reply = _getBotReply(text);
-      setState(() {
-        _messages.add(_ChatMessage(text: reply, isUser: false));
-      });
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
     });
   }
 
-  String _getBotReply(String userInput) {
-    final input = userInput.toLowerCase();
+  void _clearChat() {
+    // Calls the method to delete all chat messages
+    context.read<ChatCubit>().deleteUserChat();
+  }
 
-    if (input.contains("hello") || input.contains("hi")) {
-      return "Hey there! 👋 How can I assist you today?";
-    } else if (input.contains("how are you")) {
-      return "I'm just code, but I'm running smoothly 😄";
-    } else if (input.contains("help")) {
-      return "Sure! You can ask me anything like time, joke, or just chat.";
-    } else if (input.contains("joke")) {
-      return "Why don’t scientists trust atoms? Because they make up everything!";
-    } else if (input.contains("time")) {
-      final now = TimeOfDay.now();
-      return "It's ${now.format(context)} 🕒";
-    } else {
-      return "I'm a simple demo bot 🤖. Try saying 'hello', 'help', or 'joke'.";
-    }
+  @override
+  void dispose() {
+    _controller.dispose();
+    _scrollController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppPar(title: 'ChatBot'),
+      appBar: MyAppPar(
+        title: 'ChatBot',
+        action: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.white),
+            onPressed: _clearChat, // This will trigger the deletion of all chat
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return _MessageBubble(message: message);
+            child: BlocConsumer<ChatCubit, ChatState>(
+              listener: (context, state) {
+                if (state is ChatError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("❌ Error: ${state.error}")),
+                  );
+                } else if (state is ChatSent || state is ChatDeleted) {
+                  context.read<ChatCubit>().loadChatHistory("");
+                }
+
+                // Scroll عند وصول رسالة جديدة
+                if (state is ChatLoaded || state is ChatSending) {
+                  _scrollToBottom();
+                }
+              },
+              builder: (context, state) {
+                if (state is ChatLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is ChatLoaded || state is ChatSending) {
+                  final rawMessages = state is ChatLoaded
+                      ? state.messages
+                      : (state as ChatSending).messages;
+
+                  final allMessages = rawMessages
+                      .map((msg) => _ChatMessage(
+                    text: msg.message,
+                    isUser: msg.user != 'chatbot',
+                  ))
+                      .toList();
+
+                  if (state is ChatSending) {
+                    allMessages.add(_ChatMessage(text: "Typing...", isUser: false));
+                  }
+
+                  if (allMessages.isEmpty) {
+                    return const Center(child: Text("No messages yet."));
+                  }
+
+                  return ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    itemCount: allMessages.length,
+                    itemBuilder: (context, index) {
+                      final message = allMessages[index];
+                      return FadeTransition(
+                        opacity: Tween<double>(begin: 0, end: 1)
+                            .animate(CurvedAnimation(
+                            parent: _animationController..forward(),
+                            curve: Curves.easeIn)),
+                        child: _MessageBubble(message: message),
+                      );
+                    },
+                  );
+                } else if (state is ChatError) {
+                  return Center(child: Text("Error: ${state.error}"));
+                } else {
+                  return const Center(child: Text("Start the conversation!"));
+                }
               },
             ),
           ),

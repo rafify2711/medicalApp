@@ -24,7 +24,7 @@ class LogInUseCase {
 
       return token;
     } catch (e) {
-      throw LogInFailure(e.toString());
+      throw LogInFailure(e.toString()).message;
     }
   }
 }

@@ -48,12 +48,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 
-  Exception _handleDioError(DioException e) {
+  String _handleDioError(DioException e) {
     if (e.response != null && e.response!.data != null) {
       final message = e.response!.data['message'] ?? 'An unknown error occurred';
-      return Exception(message);
+      return message;
     } else {
-      return Exception("Something went wrong. Please check your connection.");
+      return "Something went wrong. Please check your connection.";
     }
   }
 }

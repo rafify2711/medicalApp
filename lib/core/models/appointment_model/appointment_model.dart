@@ -11,6 +11,7 @@ class AppointmentModel {
   final String status;
   final Doctor doctor;
   final User user;
+  final String? timeSlot;
 
   AppointmentModel({
     required this.id,
@@ -18,6 +19,7 @@ class AppointmentModel {
     required this.status,
     required this.doctor,
     required this.user,
+    this.timeSlot
   });
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) =>

@@ -15,6 +15,8 @@ class DiseasePredictionListScreen extends StatelessWidget {
     "skin-cancer",
     "tuberculosis",
     "bone-fracture",
+    "alzheimer",
+    "eye-diseases"
   ];
 
   @override

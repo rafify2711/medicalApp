@@ -7,17 +7,18 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/di/di.dart';
 import '../../../../core/models/user_model/user_model.dart';
-import '../../data/data_source/auth_local_data_source.dart';
+
 import '../../domain/repository/auth_repository.dart';
 import '../../domain/use_cases/log_in_use_case.dart';
 import '../../domain/use_cases/signup_use_case.dart';
 import '../../data/models/sign_in_model/sign_in_model.dart';
 import '../../data/models/signup_model/signup_user_model.dart';
-import 'dart:convert'; // تأكد من استيراد هذا
+
 
 part 'auth_state.dart';
 
-@lazySingleton
+@injectable
+
 class AuthCubit extends Cubit<AuthState> {
   final LogInUseCase logInUseCase;
   final SignupUseCase signupUseCase;
@@ -39,9 +40,10 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(AuthLoginSuccess(token, userId, role));
     } catch (e) {
-      print("error: $e");
+      print("error:$e");
       emit(AuthFailure(_handleError(e)));
       print("${_handleError(e)}");
+
     }
   }
 
@@ -51,7 +53,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final user = await signupUseCase.callDoctor(signupModel);
 
-      if (user.role == null) {
+      if (user.role == "Doctor") {
         emit(AuthSignupSuccessDoctor(user));
       } else if (user.role == "User") {
         emit(AuthSignupSuccessDoctor(user));

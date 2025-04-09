@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:graduation_medical_app/features/prescription/data/models/prescription_response.dart';
 
 
 import 'package:injectable/injectable.dart';
@@ -30,6 +31,8 @@ abstract class NetworkModule {
       ApiClientPrediction(dio);
   @lazySingleton
   ApiClient apiClient(Dio dio) => ApiClient(dio);
+  @lazySingleton
+  ReadPerceptionClint prescriptionClient(Dio dio) => ReadPerceptionClint(dio);
 
   @preResolve
   Future<SharedPreferences> get prefs async => await SharedPreferences.getInstance();

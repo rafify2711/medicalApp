@@ -58,13 +58,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
 
         final signupDoctorModel = SignupDoctorModel(
-          username: 'DR${_usernameController.text.trim()}',
+          username: 'DR-${_usernameController.text.trim()}',
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
           confirmationPassword: _confirmPasswordController.text.trim(),
           specialty: _selectedSpecialty!,
           role: _role,
         );
+        print(signupDoctorModel.username);
         context.read<AuthCubit>().signUpDoctor(signupDoctorModel);
       }
     }
@@ -213,6 +214,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     );
                   },
+                ),
+                SizedBox(height: 10,),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
+                    },
+                    child: Text(
+                      "Do you have an account? Login",
+                      style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 15),
+                    ),
+                  ),
                 ),
               ],
             ),

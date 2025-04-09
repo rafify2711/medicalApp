@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:graduation_medical_app/core/models/chat_message.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_doctor_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_user_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
@@ -16,18 +17,22 @@ import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
 
+import '../../features/chat_bot/data/models/chat_response.dart';
 import '../../features/edit_profile/data/models/updated_user_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
+import '../../features/prescription/data/models/prescription_response.dart';
+import '../../features/reservation/data/models/add_update_schedule_response.dart';
 import '../../features/user_appointment/data/models/user_get_reservation_response_model.dart';
 import '../../features/user_profile/data/models/user_profile_response.dart';
 import '../models/appointment_model/appointment_model.dart';
 import '../models/doctor_model/doctor_model.dart';
+import '../models/api_message_response.dart';
 
 
 
 part 'api_client.g.dart';
 
-@RestApi(baseUrl: "http://localhost:3000/")
+@RestApi(baseUrl: "http://192.168.1.12:3000/")
 abstract class ApiClient {
 
   @factoryMethod
@@ -54,7 +59,8 @@ abstract class ApiClient {
       );
 
   @GET("/user/{userId}/reservations")
-  Future<UserGetReservationResponseModel> getUserAppointments(@Path("userId") String userId,
+  Future<UserGetReservationResponseModel> getUserAppointments(
+      @Path("userId") String userId,
       @Header("Authorization") String  token,);
 
   @GET("/doctor/{doctorId}/available-slots/{date}")
@@ -62,6 +68,14 @@ abstract class ApiClient {
       @Path("doctorId") String doctorId,
       @Path("date") DateTime date,
       );
+
+  @PUT("doctor/{doctorId}/schedule/add")
+  Future<List<ScheduleModel>> addUpdateSchedule(
+      @Path("doctorId") String doctorId,
+      @Header("Authorization") String token,
+      @Body() AddUpdateScheduleData data ,
+      );
+
   @PATCH('user/profile')
   Future<UserProfileResponse> updateUserProfile(
       @Header("Authorization") String  token,
@@ -86,6 +100,14 @@ abstract class ApiClient {
   Future<DrugInteractionResponse> checkDiseaseDrugInteraction(
       @Query("drug") String drug, @Query("disease") String disease);
 
+  @GET("api/chat/chat-history/")
+  Future<List<ChatMessage>> fetchChatHistory(@Query('email') String email);
+
+  @POST("api/chat/send-message")
+  Future<ChatResponse> sendMessage(@Body() SendMessageData message);
+
+  @DELETE("api/chat/delete-chat")
+  Future<ApiMessageResponse> deleteChat(@Query('email') String userId);
 
 
 }
@@ -104,6 +126,7 @@ abstract class ApiClientPrediction {
   @MultiPart()
   Future<PredictionResponse> predictCovid19(@Part(name: "file") File? imagePath);
 
+
   @POST("/brain-tumor/predict?")
   Future<PredictionResponse> predictBrainTumor(@Part(name: "file") File? imagePath);
 
@@ -119,5 +142,21 @@ abstract class ApiClientPrediction {
   @POST("/bone-fracture/predict")
   Future<PredictionResponse> predictBoneFracture(@Part(name: "file") File? imagePath);
 
+  @POST("/eye-diseases/predict")
+  Future<PredictionResponse> predictEyeDiseases(@Part(name: "file") File? imagePath);
+  @POST("/alzheimer/predict")
+  Future<PredictionResponse> predictAlzheimer(@Part(name: "file") File? imagePath);
 
 }
+@RestApi(baseUrl: "http://127.0.0.1:8000/predict")
+
+
+abstract class ReadPerceptionClint {
+
+  factory ReadPerceptionClint(Dio dio, {String baseUrl}) = _ReadPerceptionClint;
+
+  @POST("/prescription/")
+  Future<PrescriptionResponse> readPrescription(@Part(name: "file") File? imagePath);
+
+}
+

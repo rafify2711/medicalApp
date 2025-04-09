@@ -24,6 +24,17 @@ class _PredictionScreenState extends State<PredictionScreen> {
   File? _imageFile;
   Uint8List? _webImage;
 
+  @override
+  void dispose() {
+    // Clean up resources when the screen is popped
+    _imageFile = null;
+    _webImage = null;
+
+
+    // Call the superclass dispose method to ensure proper cleanup
+    super.dispose();
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
@@ -68,7 +79,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // عرض الصورة المختارة
+            // Display selected image
             if (_imageFile == null && _webImage == null)
               Column(
                 children: [
@@ -91,30 +102,30 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child:
-                      kIsWeb && _webImage != null
-                          ? Image.memory(_webImage!, fit: BoxFit.cover)
-                          : Image.file(_imageFile!, fit: BoxFit.cover),
+                  kIsWeb && _webImage != null
+                      ? Image.memory(_webImage!, fit: BoxFit.cover)
+                      : Image.file(_imageFile!, fit: BoxFit.cover),
                 ),
               ),
 
             SizedBox(height: 20),
 
-            // أزرار اختيار الصورة
+            // Image selection buttons
             Wrap(
               spacing: 20,
               alignment: WrapAlignment.center,
               children: [
                 ElevatedButton.icon(
                   style: ButtonStyle(
-                    shape: WidgetStateProperty.all(
+                    shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         side: BorderSide(color: AppColors.primary),
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    backgroundColor: WidgetStateProperty.all(AppColors.white),
-                    padding: WidgetStateProperty.all(EdgeInsets.all(8)),
-                    elevation: WidgetStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(AppColors.white),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(8)),
+                    elevation: MaterialStateProperty.all(0),
                   ),
                   onPressed: () => _pickImage(ImageSource.gallery),
                   icon: Icon(Icons.upload, color: AppColors.primary),
@@ -131,12 +142,11 @@ class _PredictionScreenState extends State<PredictionScreen> {
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    backgroundColor: WidgetStateProperty.all(AppColors.white),
-                    padding: WidgetStateProperty.all(EdgeInsets.all(8)),
-                    elevation: WidgetStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(AppColors.white),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(8)),
+                    elevation: MaterialStateProperty.all(0),
                   ),
                   onPressed: () => _pickImage(ImageSource.camera),
-
                   icon: Icon(Icons.camera_alt, color: AppColors.primary),
                   label: Text(
                     'Take a Photo',
@@ -146,10 +156,10 @@ class _PredictionScreenState extends State<PredictionScreen> {
               ],
             ),
             SizedBox(height: 20),
-            // زر التنبؤ
+            // Prediction button
             Button(onClick: _predictDisease, text: 'Predict Disease'),
             SizedBox(height: 20),
-            // عرض الاستجابة
+            // Display response
             BlocBuilder<PredictionCubit, PredictionState>(
               builder: (context, state) {
                 if (state is PredictionLoading) {
@@ -234,3 +244,5 @@ class _PredictionScreenState extends State<PredictionScreen> {
     );
   }
 }
+
+

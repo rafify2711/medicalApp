@@ -24,9 +24,10 @@ class DoctorModel {
   @JsonKey(name: 'reservations')
   final List<String>? reservations;
   @JsonKey(name: 'schedule')
-  final List<Schedule>? schedule;
+  final List<ScheduleModel>? schedule;
   @JsonKey(name: '__v')
   final int? version;
+
 
   DoctorModel({
     required this.id,
@@ -80,20 +81,19 @@ class Reservation {
 }
 
 @JsonSerializable()
-class Schedule {
-  @JsonKey(name: '_id')
-  final String? id;
+class ScheduleModel {
   final DateTime? date;
   final List<String>? timeSlots;
+  final String? id;
 
-  Schedule({
-     this.id,
+  ScheduleModel({
      this.date,
      this.timeSlots,
+     this.id,
   });
 
-  factory Schedule.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleFromJson(json);
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ScheduleToJson(this);
+  Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
 }

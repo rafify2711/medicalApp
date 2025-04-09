@@ -49,40 +49,26 @@ class AuthRepositoryImpl implements AuthRepository {
 
 
   Future<String> login(SignInModel signInModel) async {
-    final loginResponse = await remoteDataSource.login(signInModel);
+    try{
+      final loginResponse = await remoteDataSource.login(signInModel);
 
-    if (loginResponse.token == null || loginResponse.userId == null) {
-      throw Exception("Invalid login response: token or userId is null");
+      if (loginResponse.token == null || loginResponse.userId == null) {
+        throw Exception("Invalid login response: token or userId is null");
+      }
+
+      // ✅ تخزين البيانات في SharedPreferences بعد تسجيل الدخول
+      await prefs.setString('token', loginResponse.token!);
+      await prefs.setString('userId', loginResponse.userId!);
+      await prefs.setString('role', loginResponse.role!);
+      return loginResponse.token!;
+    } on DioException catch (e) {
+      throw AuthException(_handleDioError(e)).message; // ✅ الآن يُمرر نص وليس Exception
+    } catch (e) {
+      print("error");
+      throw AuthException("$e").message;
     }
-
-    // ✅ تخزين البيانات في SharedPreferences بعد تسجيل الدخول
-    await prefs.setString('token', loginResponse.token!);
-    await prefs.setString('userId', loginResponse.userId!);
-    await prefs.setString('role',loginResponse.role! );
-    return loginResponse.token!;
   }
 
-  @override
-  Future<String?> getRole() async{
-      return prefs.getString('role');
-  }
-
-  @override
-  Future<String?> getToken() async {
-    return prefs.getString('token');
-  }
-
-  @override
-  Future<String?> getUserId() async {
-    return prefs.getString('userId');
-  }
-
-  @override
-  Future<void> logout() async {
-    await prefs.clear();
-  }
-
-  @override
   @override
   Future<DoctorModel> signupDoctor(SignupDoctorModel signupDoctorModel) async {
     try {
@@ -93,7 +79,7 @@ class AuthRepositoryImpl implements AuthRepository {
       throw AuthException(_handleDioError(e)).message; // ✅ الآن يُمرر نص وليس Exception
     } catch (e) {
       print("error");
-      throw AuthException("An unexpected error occurred: $e").message;
+      throw AuthException("$e").message;
     }
   }
 
@@ -112,6 +98,27 @@ class AuthRepositoryImpl implements AuthRepository {
       return "Something went wrong. Please check your connection.";
     }
   }
+
+  @override
+  Future<String?> getRole() async{
+    return prefs.getString('role');
+  }
+
+  @override
+  Future<String?> getToken() async {
+    return prefs.getString('token');
+  }
+
+  @override
+  Future<String?> getUserId() async {
+    return prefs.getString('userId');
+  }
+
+  @override
+  Future<void> logout() async {
+    await prefs.clear();
+  }
+
 
 
 }

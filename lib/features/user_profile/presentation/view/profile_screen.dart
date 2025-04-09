@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
+import 'package:graduation_medical_app/features/auth/presentation/view/screens/log_in_screen.dart';
 
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/edit_profile/presentation/view/update_user_profile_screen.dart';
@@ -135,7 +136,10 @@ class ProfileScreen extends StatelessWidget {
                         Icons.chevron_right,
                         color: Colors.grey[600],
                       ),
-                      onTap: () {},
+                      onTap: ()async {
+                       await context.read<UserProfileCubit>().logout();
+                        Navigator.popAndPushNamed(context, LogInScreen.routeName);
+                      },
                     ),
                   ],
                 ),

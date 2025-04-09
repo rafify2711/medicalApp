@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:graduation_medical_app/core/extentions/extentions.dart';
+import 'package:graduation_medical_app/features/prescription/presentation/view/read_prescription_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/models/appointment_model/appointment_model.dart';
@@ -94,7 +95,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   FeatureCard(
                       icon: Icons.chrome_reader_mode_outlined,
                       label: 'Perception',
-                      routeName: ''),
+                      routeName: ReadPrescriptionScreen.routeName),
                 ],
               ),
             ],
@@ -289,7 +290,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               children: [
                 Icon(Icons.access_time, color: AppColors.white, size: 16),
                 const SizedBox(width: 4),
+                Text(
+                  appointment.timeSlot ?? '00:00',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                  ),
+                ),
               ],
+
             ),
             const SizedBox(height: 4),
             Divider(height: 1, color: Colors.white),

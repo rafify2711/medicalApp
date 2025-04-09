@@ -16,11 +16,7 @@ class PredictionDataSourceImpl implements PredictionDataSource {
 
   @override
   Future<PredictionResponse> predictDisease(String disease, File imageFile) async {
-    // Convert File to MultipartFile before calling the API
-    MultipartFile multipartFile = await MultipartFile.fromFile(
-      imageFile.path,
-      filename: imageFile.path.split('/').last,
-    );
+
 
     return _predictByDisease(disease, imageFile);
   }
@@ -39,6 +35,12 @@ class PredictionDataSourceImpl implements PredictionDataSource {
         return apiClientPrediction.predictTuberculosis(imagePath);
       case "bone-fracture":
         return apiClientPrediction.predictBoneFracture(imagePath);
+      case "eye-diseases":
+        return apiClientPrediction.predictEyeDiseases(imagePath);
+
+      case "alzheimer":
+        return apiClientPrediction.predictAlzheimer(imagePath);
+
       default:
         throw Exception("Unknown disease type: $disease");
     }
