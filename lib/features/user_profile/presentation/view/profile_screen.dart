@@ -7,12 +7,12 @@ import 'package:graduation_medical_app/features/auth/presentation/view/screens/l
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/edit_profile/presentation/view/update_user_profile_screen.dart';
 
+import '../../../../core/config/route_names.dart';
 import '../../../../core/di/di.dart';
 import '../view_model/user_profile_cubit.dart'; // Import your cubit file
 
 
 class ProfileScreen extends StatelessWidget {
-  static const routeName = 'profile_screen';
   final String token;
   final String userId;
 
@@ -95,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
                       context,
                       Icons.person,
                       'user_profile',
-                      UpdateProfileScreen.routeName,
+                      RouteNames.updateProfile,
                     ),
 
 
@@ -138,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       onTap: ()async {
                        await context.read<UserProfileCubit>().logout();
-                        Navigator.popAndPushNamed(context, LogInScreen.routeName);
+                        Navigator.popAndPushNamed(context, RouteNames.login);
                       },
                     ),
                   ],

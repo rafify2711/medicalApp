@@ -12,7 +12,7 @@ import '../../../../auth/presentation/view/widgets/button.dart';
 import '../../../data/repository/all_doctor_repo_impl.dart';
 
 class DoctorListScreen extends StatefulWidget {
-  static const routeName = 'doctors_list_screen.dart';
+
 
   const DoctorListScreen({super.key});
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MakeReservationScreen extends StatefulWidget {
-  static const String routeName = 'make_reservation_screen.dart';
+
   final String doctorName;
   final String doctorSpecialty;
   final DateTime selectedDate;

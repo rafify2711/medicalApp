@@ -11,7 +11,7 @@ import '../../../auth/presentation/view/widgets/my_app_par.dart';
 
 
 class ReadPrescriptionScreen extends StatefulWidget {
-  static const routeName = 'read_prescription_screen.dart';
+
 
 
   const ReadPrescriptionScreen({Key? key,}) : super(key: key);

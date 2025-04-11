@@ -7,7 +7,6 @@ import '../view_model/drug_substitutions_cubit.dart';
 
 class DrugSubstitutionScreen extends StatefulWidget {
   const DrugSubstitutionScreen({super.key});
-  static const routeName = 'drug_substitution_screen';
 
   @override
   State<DrugSubstitutionScreen> createState() => _DrugSubstitutionScreenState();

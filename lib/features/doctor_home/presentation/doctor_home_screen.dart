@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/extentions/extentions.dart';
 import 'package:graduation_medical_app/core/utils/widgets/feature_widget/features.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
@@ -14,7 +15,6 @@ import '../../user_appointment/presentation/view/user_appointment_screen.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
   DoctorHomeScreen({super.key});
-  static const String routeName = 'doctor_home_screen';
 
   @override
   State<DoctorHomeScreen> createState() => _DoctorHomeScreenState();
@@ -65,11 +65,11 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 mainAxisSpacing: 5,),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                children: [ FeatureCard(icon:  Icons.medical_services, label: 'Diagnosis', routeName: DiseasePredictionListScreen.routeName,),
+                children: [ FeatureCard(icon:  Icons.medical_services, label: 'Diagnosis', routeName: RouteNames.diseasePredictionList,),
                   FeatureCard(icon: Icons.people, label: 'Doctors', routeName: ''),
                   FeatureCard(icon: Icons.insert_chart, label: 'Report', routeName: ''),
-                  FeatureCard(icon: Icons.calendar_today, label: 'Schedule', routeName: DoctorScheduleScreen.routeName),
-                  FeatureCard(icon: Icons.chat, label: 'Chat Bot', routeName: ChatbotScreen.routeName),
+                  FeatureCard(icon: Icons.calendar_today, label: 'Schedule', routeName: RouteNames.doctorSchedule),
+                  FeatureCard(icon: Icons.chat, label: 'Chat Bot', routeName: RouteNames.chatbot),
                   FeatureCard(icon: Icons.chrome_reader_mode_outlined, label: 'Perception', routeName: ''),],
               ),
 

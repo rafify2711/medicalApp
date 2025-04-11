@@ -6,7 +6,7 @@ import '../../../auth/presentation/view/widgets/my_text_field.dart';
 import '../../data/models/updated_user_model.dart';
 import '../view_model/update_user_Profile_cubit.dart';
 class UpdateProfileScreen extends StatefulWidget {
-  static const String routeName = 'update_profile_screen.dart';
+
   @override
   _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
 }

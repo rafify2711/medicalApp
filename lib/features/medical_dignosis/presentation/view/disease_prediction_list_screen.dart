@@ -6,7 +6,6 @@ import 'package:graduation_medical_app/features/medical_dignosis/presentation/vi
 class DiseasePredictionListScreen extends StatelessWidget {
   DiseasePredictionListScreen({super.key});
 
-  static const routeName = "disease_prediction_list_screen.dart";
 
   final List<String> diseases = [
     "covid19",

@@ -6,7 +6,7 @@ import '../view_model/disease_drug_interaction_cubit.dart';
 
 class DiseaseDrugInteractionScreen extends StatefulWidget {
   const DiseaseDrugInteractionScreen({super.key});
-  static const routeName = 'disease_drug_interaction_screen.dart';
+
 
   @override
   State<DiseaseDrugInteractionScreen> createState() => _DiseaseDrugInteractionScreenState();

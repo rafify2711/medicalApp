@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_doctors_screen/make_reservation_screen.dart';
 import 'package:table_calendar/table_calendar.dart';  // Import table_calendar package
+import '../../../../../core/config/route_names.dart';
 import '../../../../../core/models/doctor_model/doctor_model.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../auth/presentation/view/widgets/button.dart';
 import '../../../../auth/presentation/view/widgets/my_app_par.dart';
 
 class DoctorDetailsScreen extends StatefulWidget {
-  static const String routeName = 'user_doctors_screen.dart';
   final DoctorModel doctor;
 
   const DoctorDetailsScreen({super.key, required this.doctor});
@@ -86,7 +86,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                     // Navigate to the reservation screen and pass the selected date
                     Navigator.pushNamed(
                       context,
-                      MakeReservationScreen.routeName, // The route name of the reservation screen
+                      RouteNames.makeReservation, // The route name of the reservation screen
                       arguments: _selectedDay, // Passing the selected date
                     );
                   },

@@ -10,7 +10,7 @@ import '../../user_home/presentation/view/user_home_screen.dart';
 import '../../user_profile/presentation/view/profile_screen.dart';
 
 class DoctorLayOut extends StatefulWidget {
-  static const routeName='doctor_lay_out.dart';
+
   @override
   _DoctorLayOutState createState() => _DoctorLayOutState();
 }

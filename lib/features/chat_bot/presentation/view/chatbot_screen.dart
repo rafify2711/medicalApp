@@ -7,7 +7,6 @@ import '../view_model/chat_cubit.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
-  static const routeName = "chatbot_screen.dart";
 
   @override
   State<ChatbotScreen> createState() => _ChatbotScreenState();

@@ -4,6 +4,7 @@ import 'package:graduation_medical_app/features/auth/presentation/view/screens/s
 import 'package:graduation_medical_app/features/doctor_profile/presentation/view/doctor_screen.dart';
 import 'package:graduation_medical_app/features/layout/presentation/lay_out.dart';
 
+import '../../../../../core/config/route_names.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
 import '../../../../layout/presentation/doctor_lay_out.dart';
@@ -15,7 +16,7 @@ import '../widgets/my_text_field.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
-  static const String routeName = 'log_in.dart';
+
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -110,9 +111,9 @@ class _LogInScreenState extends State<LogInScreen> {
               SnackBar(content: Text("Login Successful!")),
               );
               if (role == 'User') {
-              Navigator.pushReplacementNamed(context, UserLayOut.routeName);
+              Navigator.pushReplacementNamed(context, RouteNames.userLayout);
               } else if (role == 'Doctor'){
-              Navigator.pushReplacementNamed(context, DoctorLayOut.routeName);
+              Navigator.pushReplacementNamed(context,  RouteNames.doctorLayout);
               }
               } else if (state is AuthFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -148,7 +149,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                          Navigator.pushReplacementNamed(context, RouteNames.signUp);
                         },
                         child: Text(
                           "Don't have an account? Sign up",

@@ -10,7 +10,6 @@ import '../../../auth/presentation/view/widgets/my_app_par.dart';
 import '../view_model/prediction_cubit.dart';
 
 class PredictionScreen extends StatefulWidget {
-  static const routeName = '/prediction_screen';
   final String disease;
 
   const PredictionScreen({Key? key, required this.disease}) : super(key: key);

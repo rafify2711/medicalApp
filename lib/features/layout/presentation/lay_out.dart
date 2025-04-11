@@ -8,7 +8,7 @@ import '../../user_home/presentation/view/user_home_screen.dart';
 import '../../user_profile/presentation/view/profile_screen.dart';
 
 class UserLayOut extends StatefulWidget {
-  static const routeName='lay_out.dart';
+
   @override
   _UserLayOutState createState() => _UserLayOutState();
 }

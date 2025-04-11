@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
 import '../../../../core/di/di.dart';
@@ -8,7 +9,7 @@ import '../../../edit_profile/presentation/view/update_user_profile_screen.dart'
 import '../view_model/doctor_profile_cubit.dart';
 
 class DoctorProfileScreen extends StatelessWidget {
-  static const routeName = 'doctor_screen';
+
 
   final String userId;
 
@@ -88,8 +89,8 @@ class DoctorProfileScreen extends StatelessWidget {
                     _buildMenuItem(
                       context,
                       Icons.person,
-                      'user_profile',
-                      UpdateProfileScreen.routeName,
+                      'User Profile',
+                      RouteNames.profile,
                     ),
 
 

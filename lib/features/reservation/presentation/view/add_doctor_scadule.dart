@@ -8,7 +8,7 @@ import '../view_model/add_update_schedule_cubit.dart';
 import '../view_model/add_update_schedule_state.dart';
 
 class DoctorScheduleScreen extends StatefulWidget {
-  static const routeName = 'add_doctor_schedule';
+
 
   @override
   _DoctorScheduleScreenState createState() => _DoctorScheduleScreenState();

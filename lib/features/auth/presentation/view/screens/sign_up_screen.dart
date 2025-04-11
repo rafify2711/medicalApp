@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/log_in_screen.dart';
 import 'package:graduation_medical_app/features/doctor_home/presentation/doctor_home_screen.dart';
 
@@ -13,8 +14,6 @@ import '../widgets/my_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
-  static const String routeName = 'sign_up.dart';
-
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -189,12 +188,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Welcome Dr. ${state.doctor.username}!')),
                       );
-                      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
+                      Navigator.pushReplacementNamed(context, RouteNames.login);
                     } else if (state is AuthSignupSuccessPatient) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Welcome ${state.patient.username}!')),
                       );
-                      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
+                      Navigator.pushReplacementNamed(context, RouteNames.login);
                     } else if (state is AuthFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(state.message.toString())),
@@ -219,7 +218,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Center(
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
+                      Navigator.pushReplacementNamed(context, RouteNames.login);
                     },
                     child: Text(
                       "Do you have an account? Login",

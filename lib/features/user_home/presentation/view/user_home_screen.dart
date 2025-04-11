@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/extentions/extentions.dart';
 import 'package:graduation_medical_app/features/prescription/presentation/view/read_prescription_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,7 @@ import '../../../user_appointment/presentation/view_model/user_appointment_state
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
-  static const String routeName = 'user_home_screen';
+
 
   @override
   State<UserHomeScreen> createState() => _UserHomeScreenState();
@@ -75,27 +76,27 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   FeatureCard(
                       icon: Icons.medical_services,
                       label: 'Diagnosis',
-                      routeName: DiseasePredictionListScreen.routeName),
+                      routeName: RouteNames.diseasePredictionList),
                   FeatureCard(
                       icon: Icons.people,
                       label: 'Doctors',
-                      routeName: DoctorListScreen.routeName),
+                      routeName: RouteNames.doctorList),
                   FeatureCard(
                       image: 'lib/assets/icon/medicine.png',
                       label: 'Drugs',
-                      routeName: DrugTabsScreen.routeName),
+                      routeName: RouteNames.drugTabs),
                   FeatureCard(
                       icon: Icons.calendar_today,
                       label: 'Schedule',
-                      routeName: UserAppointmentScreen.routeName),
+                      routeName: RouteNames.userAppointment),
                   FeatureCard(
                       icon: Icons.chat,
                       label: 'Chat Bot',
-                      routeName: ChatbotScreen.routeName),
+                      routeName: RouteNames.chatbot),
                   FeatureCard(
                       icon: Icons.chrome_reader_mode_outlined,
                       label: 'Perception',
-                      routeName: ReadPrescriptionScreen.routeName),
+                      routeName: RouteNames.readPrescription),
                 ],
               ),
             ],

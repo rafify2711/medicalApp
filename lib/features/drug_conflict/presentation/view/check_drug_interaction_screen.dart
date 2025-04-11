@@ -8,7 +8,7 @@ import '../view_model/check_drug_interaction_cubit.dart';
 
 class CheckDrugInteractionScreen extends StatefulWidget {
   const CheckDrugInteractionScreen({super.key});
-  static const routeName = 'check_drug_interaction_screen';
+
 
   @override
   State<CheckDrugInteractionScreen> createState() => _CheckDrugInteractionScreenState();

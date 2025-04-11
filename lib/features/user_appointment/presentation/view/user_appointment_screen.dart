@@ -10,7 +10,7 @@ import '../view_model/user_appointment_cubit.dart';
 import '../view_model/user_appointment_state.dart';
 
 class UserAppointmentScreen extends StatefulWidget {
-  static const routeName = 'user_appointment_screen.dart';
+
 
   @override
   _UserAppointmentScreenState createState() => _UserAppointmentScreenState();

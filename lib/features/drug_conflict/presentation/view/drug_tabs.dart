@@ -8,7 +8,7 @@ import 'drug_subsitiutions_screen.dart';  // استيراد شاشة البدا�
 
 class DrugTabsScreen extends StatefulWidget {
   const DrugTabsScreen({super.key});
-  static const routeName = 'drug_tabs';
+
 
   @override
   State<DrugTabsScreen> createState() => _DrugTabsScreenState();

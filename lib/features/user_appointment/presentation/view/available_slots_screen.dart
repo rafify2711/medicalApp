@@ -5,7 +5,7 @@ import '../../domain/use_cases/get_available_slots_use_case.dart';
 import '../view_model/available_slots_cubit.dart';
 import '../view_model/available_slots_state.dart';
 class AvailableSlotsScreen extends StatelessWidget {
-  static const routeName ='available_slots_screen.dart';
+
   final DateTime selectedDate;
   final String userId;
 
