@@ -1,5 +1,5 @@
 
-import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dart';
+import 'package:graduation_medical_app/features/user_appointment/data/models/doctor_model/doctor_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../data_source/all_doctors_data_source/all_doctors_data_source.dart';
@@ -11,7 +11,7 @@ class DoctorRepository {
 
 
 
-  Future<List<DoctorModel>> getAllDoctors() async {
+  Future<List<DoctorsModel>> getAllDoctors() async {
     try {
       final doctors = await doctorDataSource.getDoctors();
       return doctors;

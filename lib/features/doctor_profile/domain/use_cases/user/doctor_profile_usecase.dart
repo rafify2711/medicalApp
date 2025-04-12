@@ -12,7 +12,7 @@ class GetUserProfile {
 
   GetUserProfile(this.repository);
 
-  Future<DoctorModel> call(String token, String userId) {
+  Future<DoctorModel> call( String userId) {
     return repository.getDoctorProfile( userId);
   }
 }

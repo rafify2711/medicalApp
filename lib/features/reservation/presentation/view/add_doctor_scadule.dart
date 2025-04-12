@@ -129,14 +129,18 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Button(
-                      onClick: () => _selectDate(context),
-                      text: 'Pick Date',
+                    Expanded(
+                      child: Button(
+                        onClick: () => _selectDate(context),
+                        text: 'Pick Date',
+                      ),
                     ),
                     const SizedBox(width: 16),
-                    Button(
-                      onClick: () => _selectTime(context),
-                      text: 'Pick Time',
+                    Expanded(
+                      child: Button(
+                        onClick: () => _selectTime(context),
+                        text: 'Pick Time',
+                      ),
                     ),
                   ],
                 ),

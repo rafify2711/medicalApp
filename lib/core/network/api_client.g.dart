@@ -220,7 +220,7 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<List<ScheduleModel>> addUpdateSchedule(
+  Future<AddUpdateScheduleResponse> addUpdateSchedule(
     String doctorId,
     String token,
     AddUpdateScheduleData data,
@@ -231,7 +231,7 @@ class _ApiClient implements ApiClient {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
-    final _options = _setStreamType<List<ScheduleModel>>(
+    final _options = _setStreamType<AddUpdateScheduleResponse>(
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -241,16 +241,10 @@ class _ApiClient implements ApiClient {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<ScheduleModel> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AddUpdateScheduleResponse _value;
     try {
-      _value =
-          _result.data!
-              .map(
-                (dynamic i) =>
-                    ScheduleModel.fromJson(i as Map<String, dynamic>),
-              )
-              .toList();
+      _value = AddUpdateScheduleResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -291,12 +285,12 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<List<DoctorModel>> getAllDoctors() async {
+  Future<List<DoctorsModel>> getAllDoctors() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<DoctorModel>>(
+    final _options = _setStreamType<List<DoctorsModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -307,12 +301,12 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<DoctorModel> _value;
+    late List<DoctorsModel> _value;
     try {
       _value =
           _result.data!
               .map(
-                (dynamic i) => DoctorModel.fromJson(i as Map<String, dynamic>),
+                (dynamic i) => DoctorsModel.fromJson(i as Map<String, dynamic>),
               )
               .toList();
     } on Object catch (e, s) {
@@ -372,6 +366,36 @@ class _ApiClient implements ApiClient {
     late DrugInteractionResponse _value;
     try {
       _value = DrugInteractionResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<CreateReservationResponse> createReservation(
+    ReservationDataModel data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _options = _setStreamType<CreateReservationResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'reservation',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CreateReservationResponse _value;
+    try {
+      _value = CreateReservationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

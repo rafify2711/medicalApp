@@ -5,7 +5,6 @@ import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
 import '../../../../core/di/di.dart';
 import '../../../auth/presentation/view/widgets/my_app_par.dart';
-import '../../../edit_profile/presentation/view/update_user_profile_screen.dart';
 import '../view_model/doctor_profile_cubit.dart';
 
 class DoctorProfileScreen extends StatelessWidget {
@@ -13,7 +12,7 @@ class DoctorProfileScreen extends StatelessWidget {
 
   final String userId;
 
-  const DoctorProfileScreen({ required this.userId});
+  const DoctorProfileScreen({super.key,  required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +54,7 @@ class DoctorProfileScreen extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                userData.username, // Use the loaded user's name
+                                userData.username!, // Use the loaded user's name
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w400,
@@ -64,7 +63,7 @@ class DoctorProfileScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                userData.specialty ,
+                                userData.specialty! ,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[400],
@@ -72,7 +71,7 @@ class DoctorProfileScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                userData.email, // Use the loaded email
+                                userData.email!, // Use the loaded email
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[400],

@@ -89,6 +89,8 @@ import '../../features/reservation/domain/repository/reservation_repository.dart
     as _i771;
 import '../../features/reservation/domain/use_cases/add_update_schedule_use_case.dart'
     as _i410;
+import '../../features/reservation/domain/use_cases/create_reservation_usecase.dart'
+    as _i843;
 import '../../features/reservation/presentation/view_model/add_update_schedule_cubit.dart'
     as _i63;
 import '../../features/user_appointment/data/data_source/all_doctors_data_source/all_doctors_data_source.dart'
@@ -111,6 +113,8 @@ import '../../features/user_appointment/domain/use_cases/get_user_appointment_us
     as _i363;
 import '../../features/user_appointment/presentation/view_model/available_slots_cubit.dart'
     as _i987;
+import '../../features/user_appointment/presentation/view_model/make_reservation_cubit.dart'
+    as _i1049;
 import '../../features/user_appointment/presentation/view_model/user_appointment_cubit.dart'
     as _i624;
 import '../../features/user_profile/data/repository/user_profile_repository_impl.dart'
@@ -247,6 +251,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i410.AddUpdateScheduleUseCase>(
       () => _i410.AddUpdateScheduleUseCase(gh<_i771.ReservationRepository>()),
     );
+    gh.lazySingleton<_i843.CreateReservationUsecase>(
+      () => _i843.CreateReservationUsecase(gh<_i771.ReservationRepository>()),
+    );
     gh.singleton<_i401.UpdateUserProfileUseCase>(
       () => _i401.UpdateUserProfileUseCase(
         gh<_i440.UpdateUserProfileRepository>(),
@@ -255,11 +262,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i63.ScheduleCubit>(
       () => _i63.ScheduleCubit(gh<_i410.AddUpdateScheduleUseCase>()),
     );
-    gh.lazySingleton<_i1000.GetUserProfile>(
-      () => _i1000.GetUserProfile(gh<_i544.UserRepository>()),
-    );
     gh.lazySingleton<_i115.GetUserProfile>(
       () => _i115.GetUserProfile(gh<_i544.UserRepository>()),
+    );
+    gh.lazySingleton<_i1000.GetUserProfile>(
+      () => _i1000.GetUserProfile(gh<_i544.UserRepository>()),
     );
     gh.factory<_i729.DrugInteractionsRepository>(
       () => _i33.DrugInteractionsRepositoryImpl(
@@ -294,6 +301,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i624.UserAppointmentCubit>(
       () => _i624.UserAppointmentCubit(gh<_i363.GetUserAppointmentsUseCase>()),
+    );
+    gh.lazySingleton<_i1049.CreateReservationCubit>(
+      () => _i1049.CreateReservationCubit(gh<_i843.CreateReservationUsecase>()),
     );
     gh.lazySingleton<_i957.LogInUseCase>(
       () => _i957.LogInUseCase(gh<_i961.AuthRepository>()),

@@ -11,7 +11,7 @@ class AddUpdateScheduleUseCase {
 
   AddUpdateScheduleUseCase(this.repository);
 
-  Future<List<ScheduleModel>> call(String token, String userId,AddUpdateScheduleData schedule) {
+  Future<AddUpdateScheduleResponse> call(String token, String userId,AddUpdateScheduleData schedule) {
     return repository.addUpdateSchedule(token, userId,schedule);
   }
 }

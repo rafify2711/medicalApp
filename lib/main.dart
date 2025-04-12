@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/di/di.config.dart';
 import 'core/config/route_generator.dart';
 import 'core/config/route_names.dart';
 import 'core/di/di.dart';
+import 'features/medical_dignosis/presentation/view_model/prediction_cubit.dart';
 
 
 
@@ -23,10 +25,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: RouteNames.login,
+     return MultiBlocProvider(
+        providers: [
+        BlocProvider<PredictionCubit>(create: (context) => getIt<PredictionCubit>()), // توفير PredictionCubit
+
+    ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        initialRoute: RouteNames.login,
+      ),
     );
   }
 }

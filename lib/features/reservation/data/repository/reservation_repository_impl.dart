@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:graduation_medical_app/core/models/appointment_model/reservation_data_model.dart';
 import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dart';
+import 'package:graduation_medical_app/features/reservation/data/models/create_reservation_response.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/network/api_client.dart';
@@ -15,7 +18,7 @@ class ReservationRepositoryImpl implements ReservationRepository {
   ReservationRepositoryImpl(this._sharedPrefs, this._apiService);
 
   @override
-  Future<List<ScheduleModel>> addUpdateSchedule(String doctorId,
+  Future<AddUpdateScheduleResponse> addUpdateSchedule(String doctorId,
       String token, AddUpdateScheduleData schedule) async {
     try {
       final storedToken = await _sharedPrefs.getToken();
@@ -31,9 +34,24 @@ class ReservationRepositoryImpl implements ReservationRepository {
       final response = await _apiService.addUpdateSchedule(
           doctorId, "Bearer $token",schedule);
       return response;
-    } catch (e) {
+    } on DioException catch (e) {
       throw Exception("Failed to update schedule: ${e.toString()}");
     }
-  }}
+  }
+
+  @override
+  Future<CreateReservationResponse> createReservation(ReservationDataModel data,) async {
+    try {
+
+      final response = await _apiService.createReservation(data);
+      return response;
+    } on DioException catch (e) {
+      throw Exception("Failed to update schedule: ${e.toString()}");
+    }
+  }
+
+
+
+}
 
 

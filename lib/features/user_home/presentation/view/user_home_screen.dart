@@ -3,21 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/extentions/extentions.dart';
-import 'package:graduation_medical_app/features/prescription/presentation/view/read_prescription_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/models/appointment_model/appointment_model.dart';
-import '../../../../core/models/doctor_model/doctor_model.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/widgets/feature_widget/features.dart';
 import '../../../auth/presentation/view/widgets/my_app_par.dart';
-import '../../../chat_bot/presentation/view/chatbot_screen.dart';
-import '../../../drug_conflict/presentation/view/drug_tabs.dart';
-import '../../../medical_dignosis/presentation/view/disease_prediction_list_screen.dart';
-import '../../../user_appointment/presentation/view/user_appointment_screen.dart';
-import '../../../user_appointment/presentation/view/user_doctors_screen/doctors_list_screen.dart';
 import '../../../user_appointment/presentation/view_model/user_appointment_cubit.dart';
 import '../../../user_appointment/presentation/view_model/user_appointment_state.dart';
 
@@ -52,19 +44,27 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppPar(title: "User"),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              buildCalender(),
-              const SizedBox(height: 24),
-              const Text('Features', style: AppStyle.titlesTextStyle),
-              const SizedBox(height: 16),
-              GridView(
-                physics: const NeverScrollableScrollPhysics(),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            buildCalender(),
+            const SizedBox(height: 24),
+        Container(
+          height: 1,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 7,
+
+          color: AppColors.primary,),
+            const SizedBox(height: 16),
+            Expanded(
+              child: GridView(
+                physics: ScrollPhysics(),
+               scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
@@ -99,8 +99,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       routeName: RouteNames.readPrescription),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -243,12 +243,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           );
                         }
 
-                        return ListView.builder(
-                          itemCount: filtered.length,
-                          itemBuilder: (context, index) {
-                            final appointment = filtered[index];
-                            return _buildAppointmentItem(appointment);
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            itemCount: filtered.length,
+                            itemBuilder: (context, index) {
+                              final appointment = filtered[index];
+                              return _buildAppointmentItem(appointment);
+                            },
+                          ),
                         );
                       } else if (state is AppointmentLoading) {
                         return Center(child: CircularProgressIndicator());

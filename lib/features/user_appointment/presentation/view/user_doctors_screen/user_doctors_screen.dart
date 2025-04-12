@@ -7,9 +7,10 @@ import '../../../../../core/models/doctor_model/doctor_model.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../auth/presentation/view/widgets/button.dart';
 import '../../../../auth/presentation/view/widgets/my_app_par.dart';
+import '../../../data/models/doctor_model/doctor_model.dart';
 
 class DoctorDetailsScreen extends StatefulWidget {
-  final DoctorModel doctor;
+  final DoctorsModel doctor;
 
   const DoctorDetailsScreen({super.key, required this.doctor});
 
@@ -45,10 +46,10 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  widget.doctor.username,
+                  widget.doctor.username!,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                Text(widget.doctor.specialty, style: TextStyle(fontSize: 16)),
+                Text(widget.doctor.specialty!, style: TextStyle(fontSize: 16)),
                 const SizedBox(height: 20),
                 Text(
                   "Doctor bio or additional info goes here...",
@@ -83,11 +84,18 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 // Add a button to make a reservation
                 Button(
                   onClick: () {
+                    print("------------------------------${widget.doctor.id}");
+                    print("------------------------------${_selectedDay}");
                     // Navigate to the reservation screen and pass the selected date
                     Navigator.pushNamed(
                       context,
                       RouteNames.makeReservation, // The route name of the reservation screen
-                      arguments: _selectedDay, // Passing the selected date
+                      arguments: {
+                        'doctorId': widget.doctor.id,
+                        'selectedDay': _selectedDay,
+                      },
+
+                      // Passing the selected date
                     );
                   },
                   text: "Make a Reservation",

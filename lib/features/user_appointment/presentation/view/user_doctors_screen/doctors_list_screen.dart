@@ -8,7 +8,7 @@ import '../../../../../core/di/di.dart';
 import '../../../../../core/utils/app_colors.dart';
 
 import '../../../../../core/utils/app_style.dart';
-import '../../../../auth/presentation/view/widgets/button.dart';
+import '../../../data/models/doctor_model/doctor_model.dart';
 import '../../../data/repository/all_doctor_repo_impl.dart';
 
 class DoctorListScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class DoctorListScreen extends StatefulWidget {
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
   final doctorRepository = getIt<DoctorRepository>();
-  late Future<List<DoctorModel>> doctors;
+  late Future<List<DoctorsModel>> doctors;
   String selectedSpecialty = 'All'; // Variable to store selected specialty for filtering
   List<String> specialties = ['All', 'Cardiologist', 'Dentist', 'Pediatrician']; // List of specialties to filter by
   String searchQuery = ''; // Variable to store the search query
@@ -33,7 +33,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     doctors = fetchDoctors(); // Fetch the doctors on init
   }
 
-  Future<List<DoctorModel>> fetchDoctors() async {
+  Future<List<DoctorsModel>> fetchDoctors() async {
     try {
       return await doctorRepository.getAllDoctors(); // Fetch doctors from the repository
     } catch (e) {
@@ -110,7 +110,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
 
             // List of Doctors
             Expanded(
-              child: FutureBuilder<List<DoctorModel>>(
+              child: FutureBuilder<List<DoctorsModel>>(
                 future: doctors,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -125,8 +125,8 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                   final doctorsList = snapshot.data!
                       .where((doctor) =>
                   (selectedSpecialty == 'All' || doctor.specialty == selectedSpecialty) &&
-                      (doctor.username.toLowerCase().contains(searchQuery) ||
-                          doctor.specialty.toLowerCase().contains(searchQuery)))
+                      (doctor.username!.toLowerCase().contains(searchQuery) ||
+                          doctor.specialty!.toLowerCase().contains(searchQuery)))
                       .toList();
 
                   return ListView.builder(
@@ -150,7 +150,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      doctor.username,
+                                      doctor.username!,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.primary,

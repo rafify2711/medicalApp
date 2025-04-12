@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../core/models/appointment_model/reservation_data_model.dart';
+import '../../view_model/make_reservation_cubit.dart';
+import '../../view_model/make_reservation_state.dart';
 
 class MakeReservationScreen extends StatefulWidget {
-
-  final String doctorName;
-  final String doctorSpecialty;
-  final DateTime selectedDate;
+  final String? doctorId;
+  final DateTime? selectedDate;
 
   const MakeReservationScreen({
-    required this.doctorName,
-    required this.doctorSpecialty,
-    required this.selectedDate,
+
+     this.selectedDate,  this.doctorId,
   });
 
   @override
@@ -17,17 +19,13 @@ class MakeReservationScreen extends StatefulWidget {
 }
 
 class _MakeReservationScreenState extends State<MakeReservationScreen> {
-  String? _selectedTimeSlot; // Track the selected time slot
+  String? _selectedTimeSlot;
 
-  // Static available time slots for demonstration
   List<String> availableSlots = [
     "9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"
   ];
 
-  // Sample logic to disable certain slots (for example, disable past slots)
   bool isAvailable(String slot) {
-    // Implement your logic here for available slots. For example, you can disable past times.
-    // This is just an example and assumes that slots after 1 PM are unavailable.
     DateTime now = DateTime.now();
     int currentHour = now.hour;
     if (slot.contains("PM") && currentHour > 12) {
@@ -38,83 +36,106 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     return true;
   }
 
+  void _makeReservation(BuildContext context) async {
+    final cubit = context.read<CreateReservationCubit>();
+
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId');
+
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("User not found")),
+      );
+      return;
+    }
+
+    final reservationData = ReservationDataModel(
+      doctorId: widget.doctorId??"",
+      userId: userId,
+      date: widget.selectedDate?? DateTime.now(),
+      timeSlot: _selectedTimeSlot,
+    );
+
+    cubit.createReservation(reservationData);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Make a Reservation"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Doctor Name and Specialty
-            Text(
-              "Doctor: ${widget.doctorName}",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              "Specialty: ${widget.doctorSpecialty}",
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 16),
-            Text(
-              "Select Date: ${widget.selectedDate.toLocal().toString().split(' ')[0]}",
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 16),
-            Text(
-              "Available Time Slots",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
+      body: BlocConsumer<CreateReservationCubit, CreateReservationState>(
+        listener: (context, state) {
+          if (state is CreateReservationSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Reservation successful")),
+            );
+            Navigator.pop(context, _selectedTimeSlot);
+          } else if (state is CreateReservationError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Error: ${state.message}")),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Doctor: ${widget.doctorId}",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
 
-            // Displaying available time slots with Radio buttons for selection
-            Expanded(
-              child: ListView.builder(
-                itemCount: availableSlots.length,
-                itemBuilder: (context, index) {
-                  String slot = availableSlots[index];
-                  bool available = isAvailable(slot);
-
-                  return ListTile(
-                    title: Text(slot),
-                    leading: Radio<String>(
-                      value: slot,
-                      groupValue: _selectedTimeSlot,
-                      onChanged: available
-                          ? (String? value) {
-                        setState(() {
-                          _selectedTimeSlot = value;
-                        });
-                      }
-                          : null, // Disable selection if slot is unavailable
-                    ),
-                    tileColor: !available
-                        ? Colors.grey[300] // Gray out unavailable slots
-                        : null,
-                  );
-                },
-              ),
+                SizedBox(height: 16),
+                Text(
+                  "Select Date: ${widget.selectedDate?.toLocal().toString().split(' ')[0]}",
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                Text("Available Time Slots",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: availableSlots.length,
+                    itemBuilder: (context, index) {
+                      String slot = availableSlots[index];
+                      bool available = isAvailable(slot);
+                      return ListTile(
+                        title: Text(slot),
+                        leading: Radio<String>(
+                          value: slot,
+                          groupValue: _selectedTimeSlot,
+                          onChanged: available
+                              ? (String? value) {
+                            setState(() {
+                              _selectedTimeSlot = value;
+                            });
+                          }
+                              : null,
+                        ),
+                        tileColor: available ? Colors.grey[300] : null,
+                      );
+                    },
+                  ),
+                ),
+                Center(
+                  child: state is CreateReservationLoading
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
+                    onPressed: _selectedTimeSlot == null
+                        ? null
+                        : () => _makeReservation(context),
+                    child: Text("Make Reservation"),
+                  ),
+                ),
+              ],
             ),
-
-            // Make Reservation Button
-            Center(
-              child: ElevatedButton(
-                onPressed: _selectedTimeSlot == null
-                    ? null // Disable the button if no time slot is selected
-                    : () {
-                  // Proceed to confirm reservation with the selected slot
-                  // You can pass the selected date and time slot to your reservation confirmation screen
-                  Navigator.pop(context, _selectedTimeSlot); // Pass the selected time slot
-                },
-                child: Text("Make Reservation"),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

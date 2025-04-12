@@ -43,27 +43,27 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     return Scaffold(
       
       appBar: MyAppPar(title: "doctor"),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              buildCalender(),
-              const SizedBox(height: 24),
-              const Text(
-                'Features',
-                style: AppStyle.titlesTextStyle,
-              ),
-              const SizedBox(height: 16),
-              
-              GridView(gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            buildCalender(),
+            const SizedBox(height: 24),
+            const Text(
+              'Features',
+              style: AppStyle.titlesTextStyle,
+            ),
+            const SizedBox(height: 16),
+
+            Expanded(
+              child: GridView(gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 childAspectRatio: 1,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 5,),
-                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: [ FeatureCard(icon:  Icons.medical_services, label: 'Diagnosis', routeName: RouteNames.diseasePredictionList,),
                   FeatureCard(icon: Icons.people, label: 'Doctors', routeName: ''),
@@ -72,10 +72,10 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                   FeatureCard(icon: Icons.chat, label: 'Chat Bot', routeName: RouteNames.chatbot),
                   FeatureCard(icon: Icons.chrome_reader_mode_outlined, label: 'Perception', routeName: ''),],
               ),
+            ),
 
 
-            ],
-          ),
+          ],
         ),
       ),
     );
