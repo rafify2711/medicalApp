@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/sign_up_screen.dart';
 import 'package:graduation_medical_app/features/doctor_profile/presentation/view/doctor_screen.dart';
 import 'package:graduation_medical_app/features/layout/presentation/lay_out.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../../../../../core/config/route_names.dart';
 import '../../../../../core/utils/app_colors.dart';
@@ -11,12 +12,12 @@ import '../../../../layout/presentation/doctor_lay_out.dart';
 import '../../../data/models/sign_in_model/sign_in_model.dart';
 import '../../view_model/auth_cubit.dart';
 
+import '../widgets/button.dart';
 import '../widgets/my_app_par.dart';
 import '../widgets/my_text_field.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
-
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -24,9 +25,33 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(text: 'rafify27@gmail.com');
+  final TextEditingController _passwordController = TextEditingController(text: '123456789Rr#');
   bool _obscurePassword = true;
+  final LocalAuthentication _localAuth = LocalAuthentication();
+  bool _isBiometricAvailable = true;
+
+  Future<void> _authenticateWithBiometrics() async {
+    bool isAvailable = await _localAuth.canCheckBiometrics;
+    if (isAvailable) {
+      try {
+        bool isAuthenticated = await _localAuth.authenticate(
+          localizedReason: 'Please authenticate to continue',
+          options: const AuthenticationOptions(biometricOnly: true, stickyAuth: true),
+        );
+        if (isAuthenticated) {
+          print('Biometric authentication successful!');
+          // Handle successful authentication, e.g., navigate to next screen
+        } else {
+          print('Biometric authentication failed');
+        }
+      } catch (e) {
+        print('Error with biometric authentication: $e');
+      }
+    } else {
+      print('Biometric authentication is not available');
+    }
+  }
 
   void _logIn() {
     if (_formKey.currentState!.validate()) {
@@ -38,6 +63,19 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
+  void _checkBiometricAvailability() async {
+    bool isAvailable = await _localAuth.canCheckBiometrics;
+    setState(() {
+      _isBiometricAvailable = isAvailable;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometricAvailability();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,8 +84,11 @@ class _LogInScreenState extends State<LogInScreen> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
+              Text('Welcome', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.primary1)),
+              const SizedBox(height: 10),
               Form(
                 key: _formKey,
                 child: Column(
@@ -57,7 +98,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     // Email Field
                     Text(
                       'Email',
-                      style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16),
+                      style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     MyTextField(
                       controller: _emailController,
@@ -83,7 +124,8 @@ class _LogInScreenState extends State<LogInScreen> {
                       obscureText: _obscurePassword,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          color: AppColors.primary1,
                         ),
                         onPressed: () {
                           setState(() {
@@ -100,46 +142,46 @@ class _LogInScreenState extends State<LogInScreen> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Spacer(),
+                        Text(
+                          'Forget Password?',
+                          style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 12, color: AppColors.primary1),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
                     // Log-In Button with BlocConsumer
                     BlocConsumer<AuthCubit, AuthState>(
-                       listener: (context, state) {
-              if (state is AuthLoginSuccess) {
-              final role = state.role;
-              print(role);
-              ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Login Successful!")),
-              );
-              if (role == 'User') {
-              Navigator.pushReplacementNamed(context, RouteNames.userLayout);
-              } else if (role == 'Doctor'){
-              Navigator.pushReplacementNamed(context,  RouteNames.doctorLayout);
-              }
-              } else if (state is AuthFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-              );
-              }
-              },
+                      listener: (context, state) {
+                        if (state is AuthLoginSuccess) {
+                          final role = state.role;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Login Successful!")),
+                          );
+                          if (role == 'User') {
+                            Navigator.pushReplacementNamed(context, RouteNames.userLayout);
+                          } else if (role == 'Doctor') {
+                            Navigator.pushReplacementNamed(context, RouteNames.doctorLayout);
+                          }
+                        } else if (state is AuthFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message)),
+                          );
+                        }
+                      },
                       builder: (context, state) {
                         if (state is AuthLoading) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator(color: AppColors.primary1));
                         }
                         return SizedBox(
                           width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _logIn, // Fixed function call
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              'Log In',
-                              style: AppStyle.bodyWhiteTextStyle,
-                            ),
+                          child: Button(
+                            text: 'Log In',
+                            onClick: _logIn,
+                            color: AppColors.primary,
                           ),
                         );
                       },
@@ -147,16 +189,30 @@ class _LogInScreenState extends State<LogInScreen> {
                     const SizedBox(height: 16),
                     // Redirect to Sign Up
                     Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, RouteNames.signUp);
-                        },
-                        child: Text(
-                          "Don't have an account? Sign up",
-                          style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 15),
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't have an account? ",
+                            style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 14, color: AppColors.black, fontWeight: FontWeight.w500),
+                          ),
+                          InkWell(
+                            child: Text(
+                              "Sign up",
+                              style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14, color: AppColors.primary1, fontWeight: FontWeight.w500),
+                            ),
+                            onTap: () {
+                              Navigator.pushNamed(context, RouteNames.signUp);
+                            },
+                          ),
+                        ],
                       ),
                     ),
+                    if (_isBiometricAvailable)
+                      ElevatedButton(
+                        onPressed: _authenticateWithBiometrics,
+                        child: Text('Login with Biometrics'),
+                      ),
                   ],
                 ),
               ),

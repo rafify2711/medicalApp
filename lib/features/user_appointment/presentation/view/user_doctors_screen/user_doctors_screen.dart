@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_doctors_screen/make_reservation_screen.dart';
 import 'package:table_calendar/table_calendar.dart';  // Import table_calendar package
 import '../../../../../core/config/route_names.dart';
-import '../../../../../core/models/doctor_model/doctor_model.dart';
-import '../../../../../core/utils/app_colors.dart';
 import '../../../../auth/presentation/view/widgets/button.dart';
 import '../../../../auth/presentation/view/widgets/my_app_par.dart';
 import '../../../data/models/doctor_model/doctor_model.dart';
@@ -36,7 +33,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       body: SingleChildScrollView(  // Wrap the whole body inside a SingleChildScrollView
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Center(  // Center widget to align content in the middle
+          child: Center(  // Center widgets to align content in the middle
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,  // Center content horizontally
               children: [

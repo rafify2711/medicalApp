@@ -22,4 +22,6 @@ class RouteNames {
   static const String doctorLayout = '/doctorLayout';
   static const String readPrescription = '/readPrescription';
   static const String makeReservation = '/makeReservation';
+  static const String splash = '/splash';
+  static const String welcome = '/welcome';
 }

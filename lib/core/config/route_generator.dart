@@ -28,6 +28,8 @@ import '../../features/medical_dignosis/presentation/view_model/prediction_cubit
 import '../../features/prescription/presentation/view/read_prescription_screen.dart';
 import '../../features/prescription/presentation/view_model/prescription_cubit.dart';
 import '../../features/reservation/presentation/view/add_doctor_scadule.dart';
+import '../../features/splash/splash_screen.dart';
+import '../../features/splash/welcome_screen.dart';
 import '../../features/user_appointment/data/models/doctor_model/doctor_model.dart';
 import '../../features/user_appointment/presentation/view/available_slots_screen.dart';
 import '../../features/user_appointment/presentation/view/user_appointment_screen.dart';
@@ -171,11 +173,16 @@ class RouteGenerator {
           ),
         );
 
+      case RouteNames.splash:
+        return MaterialPageRoute(builder: (_) =>  SplashScreen());
+
+        case RouteNames.welcome:
+        return MaterialPageRoute(builder: (_) => WelcomeScreen());
+
       default:
         return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text('No route defined for \${settings.name}')),
-          ),
+          builder: (context) => const SplashScreen(),
+          settings: settings,
         );
     }
   }

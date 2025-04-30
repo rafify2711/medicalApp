@@ -9,6 +9,7 @@ import '../../../../../core/utils/app_style.dart';
 import '../../../data/models/signup_model/signup_doctor_model.dart';
 import '../../../data/models/signup_model/signup_user_model.dart';
 import '../../view_model/auth_cubit.dart';
+import '../widgets/button.dart';
 import '../widgets/my_app_par.dart';
 import '../widgets/my_text_field.dart';
 
@@ -25,16 +26,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   String _role = 'User';
-  String? _selectedSpecialty; // 🔹 لتخزين التخصص المختار
+  String? _selectedSpecialty;
 
-  // قائمة التخصصات المتاحة
+
   final List<String> _specialties = [
-    "General",
-    "Cardiology",
-    "Dermatology",
-    "Neurology",
-    "Pediatrics",
-    "Psychiatry"
+  "General Practitioner",
+  "Family Medicine",
+  "Internal Medicine",
+  "Cardiology",
+  "Neurology",
+  "Endocrinology",
+  "Pulmonology",
+  "Gastroenterology",
+  "Nephrology",
+  "Rheumatology",
+  "General Surgery",
+  "Orthopedic Surgery",
+  "Neurosurgery",
+  "Plastic Surgery",
+  "Emergency Medicine",
+  "Obstetrics & Gynecology",
+  "Pediatrics",
+  "Neonatology",
+  "Psychiatry",
+  "Psychology",
+  "Dermatology",
+  "Ophthalmology",
+  "Otolaryngology (ENT)",
+  "Allergy & Immunology",
+  "Oncology",
+  "Hematology",
+  "Infectious Diseases",
+  "Anesthesiology",
+  "Geriatrics",
+  "Urology"
+
   ];
 
   void _signUp() {
@@ -83,12 +109,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                Text('Role', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                Text('Role', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 18)),
                 Row(
                   children: [
                     Expanded(
                       child: RadioListTile(
-                        activeColor: AppColors.primary,
+                        activeColor: AppColors.primary1,
                         title: Text('Patient', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
                         value: 'User',
                         groupValue: _role,
@@ -100,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Expanded(
                       child: RadioListTile(
-                        activeColor: AppColors.primary,
+                        activeColor: AppColors.primary1,
                         title: Text('Doctor', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
                         value: 'Doctor',
                         groupValue: _role,
@@ -116,12 +142,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 if (_role == "Doctor") ...[
                   Text('Specialty', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
                   DropdownButtonFormField<String>(
+                      style: AppStyle.bodyCyanTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,),
                     value: _selectedSpecialty,
 
+                    hint: Text('Select Specialty',  style: AppStyle.bodyCyanTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w100,)),
 
-                    hint: Text('Select Specialty', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 14)),
                     items: _specialties.map((specialty) {
                       return DropdownMenuItem(
+
                         value: specialty,
                         child: Text(specialty),
                       );
@@ -129,7 +161,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (value) => setState(() => _selectedSpecialty = value),
                     validator: (value) => value == null ? 'Please select a specialty' : null,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      filled: true,
+                      fillColor: AppColors.fill,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                     ),
                   ),
@@ -181,6 +215,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
+                Center(child: Text('By continuing, you agree to ',textAlign: TextAlign.center,)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  InkWell(child: Text('Terms of Use ',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1),)),
+                    Text(' and '),
+                    InkWell(child: Text(' Privacy Policy,',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1))),
+                  ],
+                ),
+                const SizedBox(height: 12),
 
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
@@ -206,24 +250,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                     return Container(
                       alignment: Alignment.center,
-                      child: ElevatedButton(
-                        onPressed: _signUp,
-                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary,fixedSize: Size(100, 20)),
-                        child: Text('Sign Up', style: AppStyle.bodyWhiteTextStyle),
+                      child:Button(
+                        onClick: _signUp,
+                        text:'Sign Up',
+                        color: AppColors.primary,
+
                       ),
                     );
                   },
                 ),
                 SizedBox(height: 10,),
                 Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, RouteNames.login);
-                    },
-                    child: Text(
-                      "Do you have an account? Login",
-                      style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 15),
-                    ),
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Do you have an account? ",
+                        style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 14,color: AppColors.black,fontWeight: FontWeight.w500),
+                      ),
+                      InkWell(
+                          child: Text("Log in",
+                            style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1,fontWeight: FontWeight.w500),),
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.signUp);}
+                      ),
+                    ],
                   ),
                 ),
               ],

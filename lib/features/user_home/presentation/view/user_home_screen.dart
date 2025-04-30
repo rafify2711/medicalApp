@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/extentions/extentions.dart';
+import 'package:graduation_medical_app/core/models/user_model/user_model.dart';
+import 'package:graduation_medical_app/features/user_home/presentation/view/widgets/home_app_bar.dart';
+import 'package:graduation_medical_app/features/user_profile/presentation/view_model/user_profile_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/models/appointment_model/appointment_model.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -37,13 +40,27 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
     if (userId != null && token != null) {
       context.read<UserAppointmentCubit>().fetchAppointments(userId, token);
+      context.read<UserProfileCubit>().fetchUserProfile(token, userId);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppPar(title: "User"),
+     appBar: PreferredSize(
+       preferredSize: Size.fromHeight(kToolbarHeight), // Set preferred size for the app bar
+       child: BlocBuilder<UserProfileCubit, UserProfileState>(
+         builder: (context, state) {
+           UserModel? user = UserModel(id: '0', username: "username", email: 'email'); // Default fallback name
+
+           if (state is UserProfileLoaded) {
+             user = state.profile.user; // Adjust based on the actual data structure
+           }
+
+           return HomeAppBar(user: user); // Pass the user data to the AppBar
+         },
+       ),
+     ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -313,3 +330,5 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 }
+
+

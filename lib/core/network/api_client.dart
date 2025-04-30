@@ -39,7 +39,7 @@ import '../models/api_message_response.dart';
 
 part 'api_client.g.dart';
 
-@RestApi(baseUrl: "http://192.168.1.12:3000/")
+@RestApi(baseUrl: "https://medicalapp-sku9qeo9.b4a.run/")
 abstract class ApiClient {
   @factoryMethod
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
@@ -170,7 +170,7 @@ abstract class ApiClientPrediction {
   );
 }
 
-@RestApi(baseUrl: "http://127.0.0.1:8000/predict")
+@RestApi(baseUrl: "https://medical-ai-production.up.railway.app/predict")
 abstract class ReadPerceptionClint {
   factory ReadPerceptionClint(Dio dio, {String baseUrl}) = _ReadPerceptionClint;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_medical_app/core/utils/app_colors.dart';
 
 import '../../../../../core/utils/app_style.dart';
 
@@ -10,7 +11,9 @@ class MyAppPar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-  automaticallyImplyLeading: false,
+
+      iconTheme: IconThemeData(color: AppColors.white,),
+      actionsIconTheme: IconThemeData(color: Colors.white,),
       actions: action,
       centerTitle: true,
       flexibleSpace: Container(
@@ -19,6 +22,7 @@ class MyAppPar extends StatelessWidget implements PreferredSizeWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 25,),
             Text(
               title,
               style: TextStyle(

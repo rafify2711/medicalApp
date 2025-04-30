@@ -10,7 +10,6 @@ import 'features/medical_dignosis/presentation/view_model/prediction_cubit.dart'
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
   await getIt.init();
 
   configureDependencies();
@@ -22,7 +21,7 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widgets is the root of your application.
   @override
   Widget build(BuildContext context) {
      return MultiBlocProvider(
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: RouteNames.login,
+        initialRoute: RouteNames.splash,
       ),
     );
   }

@@ -10,7 +10,7 @@ part of 'api_client.dart';
 
 class _ApiClient implements ApiClient {
   _ApiClient(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://192.168.1.12:3000/';
+    baseUrl ??= 'https://medicalapp-sku9qeo9.b4a.run/';
   }
 
   final Dio _dio;
@@ -913,7 +913,7 @@ class _ApiClientPrediction implements ApiClientPrediction {
 
 class _ReadPerceptionClint implements ReadPerceptionClint {
   _ReadPerceptionClint(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://127.0.0.1:8000/predict';
+    baseUrl ??= 'https://medical-ai-production.up.railway.app/predict';
   }
 
   final Dio _dio;
