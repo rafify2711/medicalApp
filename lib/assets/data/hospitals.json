@@ -1,0 +1,254 @@
+[
+  {
+    "name": "Kasr El Aini Hospital",
+    "location": "Cairo",
+    "type": "Public",
+    "affiliation": "Cairo University",
+    "website": "http://hospitals.kasralainy.edu.eg"
+  },
+  {
+    "name": "Dar Al Fouad Hospital",
+    "location": "6th October City",
+    "type": "Private",
+    "specialties": ["Cardiology", "Neurology", "Orthopedics"],
+    "website": "https://www.daralfouad.org"
+  },
+  {
+    "name": "As-Salam International Hospital",
+    "location": "Maadi, Cairo",
+    "type": "Private",
+    "specialties": ["Emergency Care", "Surgery", "Maternity"],
+    "website": "https://www.as-salamhospital.com"
+  },
+  {
+    "name": "International Medical Center (IMC)",
+    "location": "El Shorouk City, Cairo Governorate",
+    "type": "Military",
+    "specialties": ["Oncology", "Cardiac Surgery", "Pediatrics"],
+    "website": "http://www.imceg.com"
+  },
+  {
+    "name": "Cleopatra Hospital",
+    "location": "Heliopolis, Cairo",
+    "type": "Private",
+    "specialties": ["General Surgery", "Orthopedics", "Cardiology"],
+    "website": "https://www.cleopatrahospitals.com"
+  },
+  {
+    "name": "Nile Badrawi Hospital",
+    "location": "Maadi, Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.nilebadrawihospital.com"
+  },
+  {
+    "name": "Misr International Hospital",
+    "location": "Dokki, Giza",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.mih-eg.com"
+  },
+  {
+    "name": "Zagazig University Hospitals",
+    "location": "Zagazig, Sharqia Governorate",
+    "type": "Public",
+    "affiliation": "Zagazig University",
+    "website": "https://www.zu.edu.eg"
+  },
+  {
+    "name": "Alexandria University Hospitals",
+    "location": "Alexandria",
+    "type": "Public",
+    "affiliation": "Alexandria University",
+    "website": "https://www.alexu.edu.eg"
+  },
+  {
+    "name": "Arab Contractors Medical Center",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.acmc.com.eg"
+  },
+  {
+    "name": "Saudi German Hospital Cairo",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://sgheg.com/"
+  },
+  {
+    "name": "Andalusia Hospital Al Maadi",
+    "location": "Maadi, Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://andalusiaegypt.com"
+  },
+  {
+    "name": "Nile Hospital Hurghada",
+    "location": "Hurghada, Red Sea Governorate",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.nilehospitalhurghada.com"
+  },
+  {
+    "name": "Misr El Amal Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.misrelamalhospital.com"
+  },
+  {
+    "name": "El Galaa Hospital",
+    "location": "Cairo",
+    "type": "Public",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elgalaahospital.com"
+  },
+  {
+    "name": "El Mobarra Maadi Hospital",
+    "location": "Maadi, Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elmobarra.com"
+  },
+  {
+    "name": "El Monera General Hospital",
+    "location": "Cairo",
+    "type": "Public",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elmonerahospital.com"
+  },
+  {
+    "name": "El Nada Maternity Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["Maternity", "Gynecology"],
+    "website": "https://www.elnadahospital.com"
+  },
+  {
+    "name": "El Nozha International Hospital",
+    "location": "Heliopolis, Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elnozhahospital.com"
+  },
+  {
+    "name": "El Salam Hospital El Haram",
+    "location": "Giza",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elsalamhospital.com"
+  },
+  {
+    "name": "El Safa Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elsafahospital.com"
+  },
+  {
+    "name": "El Shorouk Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.elshoroukhospital.com"
+  },
+  {
+    "name": "El Tawfikia Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.eltawfikiahospital.com"
+  },
+  {
+    "name": "Gohar Hospital & Women's Health Clinic",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["Women's Health", "Obstetrics", "Gynecology"],
+    "website": "https://www.goharhospital.com"
+  },
+  {
+    "name": "Garden City Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.gardencityhospital.com"
+  },
+  {
+    "name": "Hassabo International Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.hassabohospital.com"
+  },
+  {
+    "name": "Hayat Medical Center",
+    "location": "Heliopolis, Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.hayatmedicalcenter.com"
+  },
+  {
+    "name": "Heliopolis Cardiac Center",
+    "location": "Heliopolis, Cairo",
+    "type": "Private",
+    "specialties": ["Cardiology"],
+    "website": "https://www.heliopoliscardiaccenter.com"
+  },
+  {
+    "name": "Hussein University Hospital",
+    "location": "Cairo",
+    "type": "Public",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.husseinuniversityhospital.com"
+  },
+  {
+    "name": "Ibn Sina Hospital",
+    "location": "Dokki, Giza",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.ibnsinahospital.com"
+  },
+  {
+    "name": "Italian Hospital Cairo",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.italianhospitalcairo.com"
+  },
+  {
+    "name": "Greek Hospital Cairo",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.greekhospitalcairo.com"
+  },
+  {
+    "name": "Kasralainy Hospital",
+    "location": "Cairo",
+    "type": "Public",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.kasralainyhospital.com"
+  },
+  {
+    "name": "Misr El Amal Hospital",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.misrelamalhospital.com"
+  },
+  {
+    "name": "Misr International Hospital",
+    "location": "Dokki, Giza",
+    "type": "Private",
+    "specialties": ["General Medicine", "Surgery", "Pediatrics"],
+    "website": "https://www.mih-eg.com"
+  },
+  {
+    "name": "MISR Cancer Center",
+    "location": "Cairo",
+    "type": "Private",
+    "specialties": ["Oncology"],
+    "website": "https://www.misrcancercenter.com"
+  }
+]

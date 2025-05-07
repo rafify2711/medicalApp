@@ -52,6 +52,7 @@ dependencies:
   easy_date_timeline: ^2.0.4
   table_calendar:
   local_auth: ^2.1.6
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,7 @@ flutter:
     - lib/assets/img/
     - lib/assets/icon/
     - lib/assets/icon/medicine.png
+    - lib/assets/data/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -37,7 +37,7 @@ class _UserLayOutState extends State<UserLayOut> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: AppColors.primary1,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

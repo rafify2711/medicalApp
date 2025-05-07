@@ -9,20 +9,33 @@ import 'make_reservation_state.dart';
 @lazySingleton
 class CreateReservationCubit extends Cubit<CreateReservationState> {
   final CreateReservationUsecase usecase;
+  bool _isLoading = false;
+  bool _isClosed = false;
 
   CreateReservationCubit(this.usecase) : super(CreateReservationInitial());
 
   Future<void> createReservation(ReservationDataModel data) async {
-    emit(CreateReservationLoading());
+    if (_isLoading || _isClosed) return;
+    
     try {
+      _isLoading = true;
+      if (!_isClosed) emit(CreateReservationLoading());
+      
       final response = await usecase(data);
-      emit(CreateReservationSuccess(response));
+      if (!_isClosed) emit(CreateReservationSuccess(response));
     } catch (e) {
-      emit(CreateReservationError(e.toString()));
+      if (!_isClosed) emit(CreateReservationError(e.toString()));
+    } finally {
+      _isLoading = false;
     }
   }
 
-  void resetState() {
-    emit(CreateReservationInitial());
+  @override
+  Future<void> close() async {
+    _isClosed = true;
+    _isLoading = false;
+    return super.close();
   }
 }
+
+

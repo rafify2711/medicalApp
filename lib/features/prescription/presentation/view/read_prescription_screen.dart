@@ -187,7 +187,7 @@ class _ReadPrescriptionScreen extends State<ReadPrescriptionScreen> {
                         ),
                         SizedBox(height: 5),
                         SelectableText(
-                          "Detected Text ${state.prescription.detectedText}",
+                          " ${state.prescription.detectedText}",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

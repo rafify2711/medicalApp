@@ -18,7 +18,7 @@ class AppointmentCard extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: AppColors.primary,
+              backgroundColor: AppColors.primary1,
               child: Text(
                 appointment.doctor.name[0].toUpperCase(),
                 style: TextStyle(color: Colors.white),
@@ -32,13 +32,19 @@ class AppointmentCard extends StatelessWidget {
                 children: [
                   Text(
                     appointment.doctor.name,
-                    style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+                    style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.black),
                   ),
                   Text(appointment.doctor.specialization),
                   SizedBox(height: 8),
                   Text("Date: ${appointment.date.toLocal().toString().split(' ')[0]}",
                       style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  Text("Status: ${appointment.status}", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  Row(
+                    children: [
+                      Text("Status: ", style: TextStyle(fontSize: 12, color: Colors.grey )),
+                      SizedBox(width: 4),
+                      Text(appointment.status, style: TextStyle(fontSize: 12, color:AppColors.primary1)),
+                    ],
+                  ),
                 ],
               ),
             ),

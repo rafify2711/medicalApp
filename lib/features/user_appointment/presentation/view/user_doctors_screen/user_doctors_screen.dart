@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graduation_medical_app/features/user_appointment/presentation/view/widgets/Custom_calinder.dart';
 import 'package:table_calendar/table_calendar.dart';  // Import table_calendar package
 import '../../../../../core/config/route_names.dart';
+import '../../../../../core/utils/app_colors.dart';
 import '../../../../auth/presentation/view/widgets/button.dart';
 import '../../../../auth/presentation/view/widgets/my_app_par.dart';
 import '../../../data/models/doctor_model/doctor_model.dart';
@@ -16,15 +18,7 @@ class DoctorDetailsScreen extends StatefulWidget {
 }
 
 class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
-  late DateTime _selectedDay;
-  late DateTime _focusedDay;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedDay = DateTime.now();
-    _focusedDay = DateTime.now();
-  }
+  late DateTime selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +32,18 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,  // Center content horizontally
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage(widget.doctor.profilePhoto ?? ""),
+                  backgroundColor: AppColors.primary,
                   radius: 60,
+                  child: Text(
+                    widget.doctor.username?.isNotEmpty == true
+                        ? widget.doctor.username![0].toUpperCase()
+                        : '?',
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -55,26 +59,12 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 ),
                 const SizedBox(height: 20),
                 // Add the TableCalendar here
-                TableCalendar(
-                  headerStyle: HeaderStyle(
-                    titleCentered: true,
-                    formatButtonVisible: false,
-                  ),
-                  calendarStyle: CalendarStyle(),
-                  firstDay: DateTime.utc(2020, 1, 1),
-                  lastDay: DateTime.utc(2030, 12, 31),
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) {
-                    return isSameDay(_selectedDay, day);
-                  },
-                  onDaySelected: (selectedDay, focusedDay) {
+                CustomCalendar(
+                  initialDate: DateTime.now(),
+                  onDateSelected: (DateTime date) {
                     setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay; // update `_focusedDay` here as well
+                      selectedDate = date;
                     });
-                  },
-                  onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
                   },
                 ),
                 const SizedBox(height: 20),
@@ -82,17 +72,21 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 Button(
                   onClick: () {
                     print("------------------------------${widget.doctor.id}");
-                    print("------------------------------${_selectedDay}");
+                    print("------------------------------${selectedDate}");
+                    // Format the date to YYYY-MM-DD
+                    final formattedDate = DateTime(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                    );
                     // Navigate to the reservation screen and pass the selected date
                     Navigator.pushNamed(
                       context,
-                      RouteNames.makeReservation, // The route name of the reservation screen
+                      RouteNames.makeReservation,
                       arguments: {
                         'doctorId': widget.doctor.id,
-                        'selectedDay': _selectedDay,
+                        'selectedDate': formattedDate,
                       },
-
-                      // Passing the selected date
                     );
                   },
                   text: "Make a Reservation",

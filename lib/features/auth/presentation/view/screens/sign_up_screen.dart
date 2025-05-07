@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/log_in_screen.dart';
 import 'package:graduation_medical_app/features/doctor_home/presentation/doctor_home_screen.dart';
+import 'package:graduation_medical_app/features/auth/presentation/view/terms_of_use_screen.dart';
+import 'package:graduation_medical_app/features/auth/presentation/view/privacy_policy_screen.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
@@ -83,12 +85,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
 
         final signupDoctorModel = SignupDoctorModel(
-          username: 'DR-${_usernameController.text.trim()}',
+          username: 'DR${_usernameController.text.trim()}',
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
           confirmationPassword: _confirmPasswordController.text.trim(),
           specialty: _selectedSpecialty!,
-          role: _role,
+          role: 'Doctor',
         );
         print(signupDoctorModel.username);
         context.read<AuthCubit>().signUpDoctor(signupDoctorModel);
@@ -219,9 +221,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  InkWell(child: Text('Terms of Use ',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1),)),
+                  InkWell(
+                    child: Text('Terms of Use ',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1),),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
+                      );
+                    },
+                  ),
                     Text(' and '),
-                    InkWell(child: Text(' Privacy Policy,',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1))),
+                    InkWell(
+                      child: Text(' Privacy Policy,',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1)),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),

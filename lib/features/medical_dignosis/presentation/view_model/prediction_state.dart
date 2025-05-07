@@ -13,7 +13,14 @@ class PredictionSuccess extends PredictionState {
   PredictionSuccess(this.prediction);
 }
 
-class PredictionFailure extends PredictionState {
-  final String error;
-  PredictionFailure(this.error);
+class PredictionError extends PredictionState {
+  final String message;
+  PredictionError(this.message);
+}
+
+class PredictionHistoryLoading extends PredictionState {}
+
+class PredictionHistoryLoaded extends PredictionState {
+  final List<SavedPrediction> predictions;
+  PredictionHistoryLoaded(this.predictions);
 }

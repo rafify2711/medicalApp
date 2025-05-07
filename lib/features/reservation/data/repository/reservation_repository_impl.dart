@@ -42,11 +42,14 @@ class ReservationRepositoryImpl implements ReservationRepository {
   @override
   Future<CreateReservationResponse> createReservation(ReservationDataModel data,) async {
     try {
-
-      final response = await _apiService.createReservation(data);
+      final token = await _sharedPrefs.getToken();
+      if (token == null) {
+        throw Exception("Authentication token not found");
+      }
+      final response = await _apiService.createReservation(data,);
       return response;
     } on DioException catch (e) {
-      throw Exception("Failed to update schedule: ${e.toString()}");
+      throw Exception("Failed to create reservation: ${e.toString()}");
     }
   }
 

@@ -96,10 +96,11 @@ class _UserAppointmentScreenState extends State<UserAppointmentScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(tabs.length, (index) {
         return ChoiceChip(
+
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
           label: Text(tabs[index]),
           selected: selectedIndex == index,
-          selectedColor: AppColors.primary,
+          selectedColor: AppColors.primary1,
           onSelected: (bool selected) {
             setState(() {
               selectedIndex = index;

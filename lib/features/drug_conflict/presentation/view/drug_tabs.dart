@@ -9,7 +9,6 @@ import 'drug_subsitiutions_screen.dart';  // استيراد شاشة البدا�
 class DrugTabsScreen extends StatefulWidget {
   const DrugTabsScreen({super.key});
 
-
   @override
   State<DrugTabsScreen> createState() => _DrugTabsScreenState();
 }
@@ -26,31 +25,70 @@ class _DrugTabsScreenState extends State<DrugTabsScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(flexibleSpace: Container(
-        decoration:  BoxDecoration(
-        gradient: AppStyle.gradient,
-        ),),
-        title: const Text('Drug Interaction',style: TextStyle(fontSize: 20,color: AppColors.white,fontWeight: FontWeight.bold),),
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: AppStyle.gradient,
+          ),
+        ),
+        title: const Text(
+          'Drug Interaction',
+          style: TextStyle(
+            fontSize: 24,
+            color: AppColors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         bottom: TabBar(
           dividerColor: AppColors.white,
           labelColor: AppColors.white,
           indicatorColor: AppColors.white,
-          unselectedLabelColor: AppColors.white,
+          unselectedLabelColor: AppColors.white.withOpacity(0.7),
+          indicatorWeight: 3,
+          labelStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
           controller: _tabController,
           tabs: const [
-            Tab(text: 'Drug Interaction'),
-            Tab(text: 'Drug-Disease Interaction'),
-            Tab(text: 'Substitutions'),
+            Tab(
+              icon: Icon(Icons.medication),
+              text: 'Drug Interaction',
+            ),
+            Tab(
+              icon: Icon(Icons.medical_services),
+              text: 'Drug-Disease',
+            ),
+            Tab(
+              icon: Icon(Icons.swap_horiz),
+              text: 'Substitutions',
+            ),
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          CheckDrugInteractionScreen(),
-          DiseaseDrugInteractionScreen(),
-          DrugSubstitutionScreen(),
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.primary.withOpacity(0.1),
+              Colors.white,
+            ],
+          ),
+        ),
+        child: TabBarView(
+          controller: _tabController,
+          children: const [
+            CheckDrugInteractionScreen(),
+            DiseaseDrugInteractionScreen(),
+            DrugSubstitutionScreen(),
+          ],
+        ),
       ),
     );
   }

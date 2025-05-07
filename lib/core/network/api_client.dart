@@ -83,6 +83,8 @@ abstract class ApiClient {
     @Body() AddUpdateScheduleData data,
   );
 
+
+
   @PATCH('user/profile')
   Future<UserProfileResponse> updateUserProfile(
     @Header("Authorization") String token,
@@ -105,8 +107,9 @@ abstract class ApiClient {
 
   @POST("reservation")
   Future<CreateReservationResponse> createReservation(
-      @Body() ReservationDataModel data,
-      );
+    @Body() ReservationDataModel data,
+
+  );
 
 
   @GET("api/drug-interactions/disease-check")
@@ -125,7 +128,7 @@ abstract class ApiClient {
   Future<ApiMessageResponse> deleteChat(@Query('email') String userId);
 }
 
-@RestApi(baseUrl: "http://192.168.1.12:3000/api/")
+@RestApi(baseUrl: "https://medicalapp-sku9qeo9.b4a.run/api/")
 abstract class ApiClientPrediction {
   factory ApiClientPrediction(Dio dio, {String baseUrl}) = _ApiClientPrediction;
 
@@ -140,7 +143,7 @@ abstract class ApiClientPrediction {
     @Part(name: "file") File? imagePath,
   );
 
-  @POST("/kidney-stone/predict")
+  @POST("/kidneystone/predict")
   Future<PredictionResponse> predictKidneyStone(
     @Part(name: "file") File? imagePath,
   );

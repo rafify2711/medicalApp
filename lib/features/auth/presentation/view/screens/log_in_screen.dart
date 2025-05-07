@@ -1,8 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graduation_medical_app/features/auth/presentation/view/screens/sign_up_screen.dart';
-import 'package:graduation_medical_app/features/doctor_profile/presentation/view/doctor_screen.dart';
-import 'package:graduation_medical_app/features/layout/presentation/lay_out.dart';
 import 'package:local_auth/local_auth.dart';
 
 import '../../../../../core/config/route_names.dart';
@@ -29,27 +28,26 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _passwordController = TextEditingController(text: '123456789Rr#');
   bool _obscurePassword = true;
   final LocalAuthentication _localAuth = LocalAuthentication();
-  bool _isBiometricAvailable = true;
+  bool _isBiometricAvailable = false;
 
-  Future<void> _authenticateWithBiometrics() async {
-    bool isAvailable = await _localAuth.canCheckBiometrics;
-    if (isAvailable) {
-      try {
-        bool isAuthenticated = await _localAuth.authenticate(
-          localizedReason: 'Please authenticate to continue',
-          options: const AuthenticationOptions(biometricOnly: true, stickyAuth: true),
-        );
-        if (isAuthenticated) {
-          print('Biometric authentication successful!');
-          // Handle successful authentication, e.g., navigate to next screen
-        } else {
-          print('Biometric authentication failed');
-        }
-      } catch (e) {
-        print('Error with biometric authentication: $e');
-      }
-    } else {
-      print('Biometric authentication is not available');
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometricAvailability();
+  }
+
+  Future<void> _checkBiometricAvailability() async {
+    try {
+      final isAvailable = await _localAuth.canCheckBiometrics;
+      final isDeviceSupported = await _localAuth.isDeviceSupported();
+      setState(() {
+        _isBiometricAvailable = isAvailable && isDeviceSupported;
+      });
+    } catch (e) {
+      print('Error checking biometric availability: $e');
+      setState(() {
+        _isBiometricAvailable = false;
+      });
     }
   }
 
@@ -63,17 +61,8 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
-  void _checkBiometricAvailability() async {
-    bool isAvailable = await _localAuth.canCheckBiometrics;
-    setState(() {
-      _isBiometricAvailable = isAvailable;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkBiometricAvailability();
+  void _loginWithBiometrics() {
+    context.read<AuthCubit>().loginWithBiometrics();
   }
 
   @override
@@ -158,6 +147,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       listener: (context, state) {
                         if (state is AuthLoginSuccess) {
                           final role = state.role;
+                          log('roleeeee ${state.role}');
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Login Successful!")),
                           );
@@ -176,13 +166,40 @@ class _LogInScreenState extends State<LogInScreen> {
                         if (state is AuthLoading) {
                           return const Center(child: CircularProgressIndicator(color: AppColors.primary1));
                         }
-                        return SizedBox(
-                          width: double.infinity,
-                          child: Button(
-                            text: 'Log In',
-                            onClick: _logIn,
-                            color: AppColors.primary,
-                          ),
+                        return Column(
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Button(
+                                text: 'Log In',
+                                onClick: _logIn,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            if (_isBiometricAvailable) ...[
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  onPressed: _loginWithBiometrics,
+                                  icon: Icon(Icons.fingerprint, color: AppColors.primary1),
+                                  label: Text(
+                                    'Login with Biometrics',
+                                    style: TextStyle(color: AppColors.primary1),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(color: AppColors.primary1),
+                                    ),
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
                         );
                       },
                     ),
@@ -208,11 +225,6 @@ class _LogInScreenState extends State<LogInScreen> {
                         ],
                       ),
                     ),
-                    if (_isBiometricAvailable)
-                      ElevatedButton(
-                        onPressed: _authenticateWithBiometrics,
-                        child: Text('Login with Biometrics'),
-                      ),
                   ],
                 ),
               ),

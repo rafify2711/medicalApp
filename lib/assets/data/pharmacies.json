@@ -1,0 +1,296 @@
+[
+  {
+    "name": "El Ezaby Pharmacy",
+    "branches": [
+      {
+        "name": "El Ezaby - Heliopolis",
+        "address": "6C, Takseem Asmaa Fahmy Division, Ard El Golf, Heliopolis",
+        "phone": "19600",
+        "website": "https://www.elezaby.com"
+      },
+      {
+        "name": "El Ezaby - Maadi",
+        "address": "Maadi, Cairo",
+        "phone": "19600",
+        "website": "https://www.elezaby.com"
+      }
+    ]
+  },
+  {
+    "name": "Care Pharmacies",
+    "branches": [
+      {
+        "name": "Care - Zamalek",
+        "address": "Zamalek, Cairo",
+        "phone": "19757",
+        "website": "https://care-pharmacies.com/"
+      },
+      {
+        "name": "Care - Mohandessin",
+        "address": "Mohandessin, Cairo",
+        "phone": "19757",
+        "website": "https://care-pharmacies.com/"
+      }
+    ]
+  },
+  {
+    "name": "19011 Pharmacy",
+    "branches": [
+      {
+        "name": "19011 - Downtown",
+        "address": "Downtown, Cairo",
+        "phone": "19011",
+        "website": "https://www.19011.com"
+      },
+      {
+        "name": "19011 - Nasr City",
+        "address": "Nasr City, Cairo",
+        "phone": "19011",
+        "website": "https://www.19011.com"
+      }
+    ]
+  },
+  {
+    "name": "Ibnsina Pharma",
+    "branches": [
+      {
+        "name": "Ibnsina - Mohandessin",
+        "address": "Mohandessin, Cairo",
+        "phone": "Not specified",
+        "website": "https://www.ibnsina-pharma.com"
+      },
+      {
+        "name": "Ibnsina - Heliopolis",
+        "address": "Heliopolis, Cairo",
+        "phone": "Not specified",
+        "website": "https://www.ibnsina-pharma.com"
+      }
+    ]
+  },
+  {
+    "name": "Zikry Pharmacies",
+    "branches": [
+      {
+        "name": "Zikry - Heliopolis",
+        "address": "106, Omar Ibn El-Khattab St., Heliopolis",
+        "phone": "19029",
+        "website": "Not specified"
+      },
+      {
+        "name": "Zikry - Nasr City",
+        "address": "Nasr City, Cairo",
+        "phone": "19029",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Roshdy Pharmacy",
+    "branches": [
+      {
+        "name": "Roshdy - Alexandria",
+        "address": "Alexandria",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "FOUDA Pharmacy",
+    "branches": [
+      {
+        "name": "FOUDA - Mohandessin",
+        "address": "20 Wezaret El-Zeraa St., Mohandessin",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Misr Pharmacies",
+    "branches": [
+      {
+        "name": "Misr - Mohandessin",
+        "address": "29 Al Quds Al Sharif St., Mohandessin",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Bloom Pharmacy",
+    "branches": [
+      {
+        "name": "Bloom - Online",
+        "address": "Online Store",
+        "phone": "01026562982",
+        "website": "https://www.bloompharmacy.com/"
+      }
+    ]
+  },
+  {
+    "name": "Al Dawaa Pharmacies",
+    "branches": [
+      {
+        "name": "Al Dawaa - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "15252",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Abd El Gawad Pharmacy",
+    "branches": [
+      {
+        "name": "Abd El Gawad - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "19272",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Abdel Maksoud Pharmacies",
+    "branches": [
+      {
+        "name": "Abdel Maksoud - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "15552",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Abdin Pharmacies",
+    "branches": [
+      {
+        "name": "Abdin - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "19036",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Abdul Malik Pharmacy",
+    "branches": [
+      {
+        "name": "Abdul Malik - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "19573",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Abo Ali Pharmacies",
+    "branches": [
+      {
+        "name": "Abo Ali - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "19141",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Abou Zeyada Pharmacy",
+    "branches": [
+      {
+        "name": "Abou Zeyada - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "16027",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Ahmed Aly Pharmacy",
+    "branches": [
+      {
+        "name": "Ahmed Aly - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "19196",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "AL Alfey Pharmacy",
+    "branches": [
+      {
+        "name": "AL Alfey - Cairo",
+        "address": "Cairo, Egypt",
+        "phone": "16706",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Osama Othman Pharmacy",
+    "branches": [
+      {
+        "name": "Osama Othman - Zagazig",
+        "address": "Al Qawmia - Al Khashab Street, behind Al Tawhid Supermarket, Zagazig",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Bassam Pharmacy",
+    "branches": [
+      {
+        "name": "Bassam - Zagazig",
+        "address": "Al Qawmia - Ahmed Ismail Street, next to Al Haramain Hospital, Zagazig",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Emara Pharmacy",
+    "branches": [
+      {
+        "name": "Emara - Zagazig",
+        "address": "Al Qawmeya - Al Qawmeya Square - Al Muna Tower, next to Vodafone, Zagazig",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "El Saad Pharmacy",
+    "branches": [
+      {
+        "name": "El Saad - Zagazig",
+        "address": "Al Qawmia - Al Qawmia Square, Zagazig",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Teba Pharmacy",
+    "branches": [
+      {
+        "name": "Teba - Zagazig",
+        "address": "Zagazig, Faqous",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  },
+  {
+    "name": "Wahdan Pharmacy",
+    "branches": [
+      {
+        "name": "Wahdan - Zagazig",
+        "address": "Zagazig",
+        "phone": "Not specified",
+        "website": "Not specified"
+      }
+    ]
+  }
+]

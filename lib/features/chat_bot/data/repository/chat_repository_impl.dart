@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:graduation_medical_app/core/network/api_client.dart';
 import 'package:injectable/injectable.dart';
 
@@ -24,7 +26,7 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Future<ChatResponse> sendMessage(String email ,String message) async {
     final storedUserId =await _sharedPrefs.getUserId();
-    print("-----------------------------$storedUserId");
+    log("-----------------------------$storedUserId");
     return api.sendMessage(SendMessageData(user: email, email: storedUserId , message: message));
   }
 

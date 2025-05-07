@@ -4,7 +4,9 @@ import 'package:graduation_medical_app/core/utils/app_colors.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   UserModel user;
-   HomeAppBar({super.key, required this.user});
+   HomeAppBar({super.key, required this.user, required this.onTap});
+
+   void Function()? onTap;
 
 
   @override
@@ -29,18 +31,23 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: CircleAvatar(backgroundColor: AppColors.fill,
-                  child: ImageIcon(AssetImage('lib/assets/icon/search.png'),size: 15,),
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: CircleAvatar(backgroundColor: AppColors.fill,
+                    child: ImageIcon(AssetImage('lib/assets/icon/search.png'),size: 15,),
+                  ),
                 ),
               ),
               Spacer(),
-              Column(
-                children: [
-                  Text('Hi, WelcomeBack',style: TextStyle(color: AppColors.primary1,fontSize: 13,fontWeight: FontWeight.w400),),
-                  Text('${user.username}',style: TextStyle(color: AppColors.black,fontSize: 13,fontWeight: FontWeight.w400),textAlign: TextAlign.center,),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(child: Text('Hi, WelcomeBack',style: TextStyle(color: AppColors.primary1,fontSize: 13,fontWeight: FontWeight.w400),)),
+                    Expanded(child: Text('${user.username}',style: TextStyle(color: AppColors.black,fontSize: 13,fontWeight: FontWeight.w400),textAlign: TextAlign.center,)),
+                  ],
 
 
+                ),
               ),
               const SizedBox(width: 5,),
               CircleAvatar(

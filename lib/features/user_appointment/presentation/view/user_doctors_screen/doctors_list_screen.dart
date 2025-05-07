@@ -46,68 +46,110 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppPar(title: "Doctors"),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Search Bar
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value.toLowerCase(); // Update search query on text change
-                });
-              },
-              decoration: InputDecoration(
-                hintText: "Search by name or specialty...",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),),fillColor: AppColors.primary
-
+            SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Find Your Doctor",
+                    style: AppStyle.titlesTextStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Browse and book appointments with top doctors",
+                    style: AppStyle.bodyBlackTextStyle.copyWith(color: Colors.grey[600]),
+                  ),
+                  SizedBox(height: 16),
+                  // Search Bar
+                  Material(
+                    elevation: 2,
+                    borderRadius: BorderRadius.circular(12),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value.toLowerCase();
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Search by name or specialty...",
+                        prefixIcon: Icon(Icons.search, color: AppColors.primary1),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  // Sort and Filter Section
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.sort, size: 18, color: AppColors.primary1),
+                            SizedBox(width: 4),
+                            Text("A → Z", style: TextStyle(color: AppColors.primary1)),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedSpecialty,
+                            icon: Icon(Icons.keyboard_arrow_down, color: AppColors.primary1),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedSpecialty = newValue!;
+                              });
+                            },
+                            items: specialties.map<DropdownMenuItem<String>>((String specialty) {
+                              return DropdownMenuItem<String>(
+                                value: specialty,
+                                child: Text(specialty),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.primary1.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.filter_alt, color: AppColors.primary1),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Sort and Filter Section
-            Row(
-              children: [
-                Text("Sort By"),
-                const SizedBox(width: 8),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Colors.blue.shade100,
-                  ),
-                  child: Text("A → Z"),
-                ),
-                Spacer(),
-
-                // Dropdown for selecting specialty
-                DropdownButton<String>(
-                  value: selectedSpecialty,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedSpecialty = newValue!;
-                    });
-                  },
-                  items: specialties.map<DropdownMenuItem<String>>((String specialty) {
-                    return DropdownMenuItem<String>(
-                      value: specialty,
-                      child: Text(specialty),
-                    );
-                  }).toList(),
-                ),
-
-                // Filter Button
-                TextButton(
-                  onPressed: () {
-                    // You can implement more advanced filtering functionality here if needed
-                  },
-                  child: Text("Filter", style: TextStyle(color: AppColors.primary)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-
+            SizedBox(height: 12),
             // List of Doctors
             Expanded(
               child: FutureBuilder<List<DoctorsModel>>(
@@ -116,93 +158,81 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return Center(child: Text('Error: \\${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No doctors found'));
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.medical_services, size: 64, color: Colors.grey[300]),
+                          SizedBox(height: 16),
+                          Text('No doctors found', style: TextStyle(color: Colors.grey[600], fontSize: 18)),
+                        ],
+                      ),
+                    );
                   }
-
-                  // Filter the doctors based on selected specialty and search query
                   final doctorsList = snapshot.data!
                       .where((doctor) =>
-                  (selectedSpecialty == 'All' || doctor.specialty == selectedSpecialty) &&
-                      (doctor.username!.toLowerCase().contains(searchQuery) ||
-                          doctor.specialty!.toLowerCase().contains(searchQuery)))
+                          (selectedSpecialty == 'All' || doctor.specialty == selectedSpecialty) &&
+                          (doctor.username!.toLowerCase().contains(searchQuery) ||
+                              doctor.specialty!.toLowerCase().contains(searchQuery)))
                       .toList();
-
                   return ListView.builder(
                     itemCount: doctorsList.length,
+                    padding: EdgeInsets.only(bottom: 16, top: 8),
                     itemBuilder: (context, index) {
                       final doctor = doctorsList[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          leading: CircleAvatar(
+                            backgroundImage: AssetImage('assets/doctor_placeholder.png'),
+                            radius: 30,
+                          ),
+                          title: Text(
+                            doctor.username!,
+                            style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary1, fontSize: 16),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                backgroundImage: AssetImage('assets/doctor_placeholder.png'),
-                                radius: 30,
+                              SizedBox(height: 4),
+                              Text(
+                                doctor.specialty!,
+                                style: TextStyle(color: Colors.grey[700], fontSize: 14),
                               ),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      doctor.username!,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    Text(
-                                      doctor.specialty!,
-                                      style: TextStyle(color: AppColors.primary),
-                                    ),
-                                    SizedBox(height: 8),
-
-                                  ],
-
-                                ),
-                              ),Spacer(),
-                              SizedBox(
-                                height: 50,
-                                width: 70,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DoctorDetailsScreen(doctor: doctor),
-                                      ),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                    elevation: MaterialStateProperty.all(0),
-                                  ),
-                                  child: Ink(
-                                    decoration: BoxDecoration(
-                                      gradient: AppStyle.gradient,
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Info',
-                                        style: AppStyle.bodyWhiteTextStyle.copyWith(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              SizedBox(height: 4),
+                              // Optionally add more info here (e.g., rating, experience)
                             ],
+                          ),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DoctorDetailsScreen(doctor: doctor),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              elevation: 0,
+                              backgroundColor: AppColors.primary1,
+                            ),
+                            child: Text('Info', style: AppStyle.bodyWhiteTextStyle.copyWith(fontSize: 14)),
                           ),
                         ),
                       );

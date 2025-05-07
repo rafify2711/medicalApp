@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: RouteNames.splash,
+        initialRoute: RouteNames.userHome,
       ),
     );
   }

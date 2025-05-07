@@ -5,13 +5,14 @@ import 'package:json_annotation/json_annotation.dart';
 part 'appointment_model.g.dart';
 
 @JsonSerializable()
-class AppointmentModel {
+class  AppointmentModel {
   final String id;
   final DateTime date;
   final String status;
   final Doctor doctor;
   final User user;
   final String? timeSlot;
+
 
   AppointmentModel({
     required this.id,

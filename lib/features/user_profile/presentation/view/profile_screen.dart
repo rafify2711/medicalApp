@@ -3,14 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/screens/log_in_screen.dart';
-
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/edit_profile/presentation/view/update_user_profile_screen.dart';
-
 import '../../../../core/config/route_names.dart';
 import '../../../../core/di/di.dart';
-import '../view_model/user_profile_cubit.dart'; // Import your cubit file
-
+import '../view_model/user_profile_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String token;
@@ -21,12 +18,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) =>
-              getIt<UserProfileCubit>()..fetchUserProfile(
-                token,
-                userId,
-              ), // Using getIt for dependency injection
+      create: (context) => getIt<UserProfileCubit>()..fetchUserProfile(token, userId),
       child: BlocBuilder<UserProfileCubit, UserProfileState>(
         builder: (context, state) {
           if (state is UserProfileLoading) {
@@ -34,119 +26,146 @@ class ProfileScreen extends StatelessWidget {
           } else if (state is UserProfileLoaded) {
             final userData = state.profile.user;
             return Scaffold(
-              appBar: MyAppPar(title: 'Hello ${state.profile.user.username}'),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // User Info Section
-                    Center(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage:
-                                userData.profilePhoto!.isNotEmpty
-                                    ? NetworkImage(userData.profilePhoto!)
-                                    : AssetImage(
-                                          "lib/assets/img/default_avatar.png",
-                                        )
-                                        as ImageProvider,
-                            backgroundColor: Colors.grey[800],
+              backgroundColor: AppColors.primary1.withOpacity(0.05),
+              body: Column(
+                children: [
+                  // Gradient Header
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(top: 60, bottom: 24),
+                    decoration: BoxDecoration(
+                      gradient: AppStyle.gradient,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(32),
+                        bottomRight: Radius.circular(32),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        // Back button and title
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.arrow_back, color: Colors.white),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  'My Profile',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 48), // To balance the back button
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        // Avatar
+                        CircleAvatar(
+                          radius: 44,
+                          backgroundImage: userData.profilePhoto != null && userData.profilePhoto!.isNotEmpty
+                              ? NetworkImage(userData.profilePhoto!)
+                              : AssetImage("lib/assets/img/default_avatar.png") as ImageProvider,
+                          backgroundColor: Colors.grey[300],
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          userData.username ?? '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: 50),
-                          Column(
-                            children: [
-                              Text(
-                                userData.username!, // Use the loaded user's name
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                userData.phone ??
-                                    "N/A", // Use the loaded phone number
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[400],
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                userData.email!, // Use the loaded email
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[400],
-                                ),
-                              ),
-                            ],
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          userData.phone ?? '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          userData.email ?? '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Menu
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(top: 24, left: 16, right: 16, bottom: 16),
+                      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          _buildMenuItem(
+                            context,
+                            Icons.person,
+                            'Profile',
+                            () async{
+                              await Navigator.pushNamed(
+                                context,
+                                RouteNames.updateProfile,
+                                arguments: {
+                                  'token': token,
+                                  'userId': userId,
+                                  'username': userData.username ?? '',
+                                  'phone': userData.phone ?? '',
+                                  'address': userData.adress,
+                                  'medicationHistory': userData.medicationHistory,
+                                  'dob': userData.dob,
+                                  'profilePhoto': userData.profilePhoto,
+                                },
+                              );
+                              context.read<UserProfileCubit>().fetchUserProfile(token, userId);
+                            },
+                          ),
+                          _buildMenuItem(context, Icons.favorite, 'Favorite', null),
+                          _buildMenuItem(context, Icons.credit_card, 'Payment Method', null),
+                          _buildMenuItem(context, Icons.privacy_tip, 'Privacy Policy', null),
+                          _buildMenuItem(context, Icons.settings, 'Settings', null),
+                          _buildMenuItem(context, Icons.help, 'Help', null),
+                          _buildMenuItem(
+                            context,
+                            Icons.logout,
+                            'Logout',
+                            () async {
+                              await context.read<UserProfileCubit>().logout();
+                              Navigator.popAndPushNamed(context, RouteNames.login);
+                            },
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 32),
-
-                    // Menu Items
-                    _buildMenuItem(
-                      context,
-                      Icons.person,
-                      'user_profile',
-                      RouteNames.updateProfile,
-                    ),
-
-
-                    _buildMenuItem(
-                      context,
-                      Icons.privacy_tip,
-                      'Privacy Policy',
-                       '',
-                    ),
-                    _buildMenuItem(context, Icons.settings, 'Settings', ''),
-                    _buildMenuItem(context, Icons.help, 'Help', ''),
-                    ListTile(
-                      leading: Container(
-                        decoration: BoxDecoration(
-                          shape:
-                              BoxShape
-                                  .circle, // This makes the container circular
-                          gradient:
-                              AppStyle
-                                  .gradient, // Set the background color here
-                        ),
-                        padding: EdgeInsets.all(
-                          10,
-                        ), // You can adjust padding to control the size of the circle
-                        child: Icon(
-                          Icons.logout, // Choose your icon here
-                          color:
-                              Colors
-                                  .white, // Set the icon color (usually white for contrast)
-                          size: 20, // Adjust the size of the icon
-                        ),
-                      ),
-                      title: Text(
-                        'Logout',
-                        style: TextStyle(color: AppColors.primary),
-                      ),
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        color: Colors.grey[600],
-                      ),
-                      onTap: ()async {
-                       await context.read<UserProfileCubit>().logout();
-                        Navigator.popAndPushNamed(context, RouteNames.login);
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           } else if (state is UserProfileError) {
-            return Center(child: Text("Error: ${state.message}"));
+            return Center(child: Text("Error: "+state.message));
           }
           return Center(child: Text("No data available"));
         },
@@ -154,33 +173,19 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String route,
-  ) {
+  Widget _buildMenuItem(BuildContext context, IconData icon, String title, VoidCallback? onTap) {
     return ListTile(
       leading: Container(
         decoration: BoxDecoration(
-          shape: BoxShape.circle, // This makes the container circular
-          gradient: AppStyle.gradient, // Set the background color here
+          shape: BoxShape.circle,
+          color: AppColors.primary1.withOpacity(0.1),
         ),
-        padding: EdgeInsets.all(
-          10,
-        ), // You can adjust padding to control the size of the circle
-        child: Icon(
-          icon, // Choose your icon here
-          color:
-              Colors.white, // Set the icon color (usually white for contrast)
-          size: 20, // Adjust the size of the icon
-        ),
+        padding: EdgeInsets.all(10),
+        child: Icon(icon, color: AppColors.primary1, size: 22),
       ),
-      title: Text(title, style: TextStyle(color: AppColors.primary)),
-      trailing: Icon(Icons.chevron_right, color: Colors.grey[600]),
-      onTap: () {
-        Navigator.pushNamed(context, route);
-      },
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
+      trailing: Icon(Icons.chevron_right, color: Colors.grey[400]),
+      onTap: onTap,
     );
   }
 }

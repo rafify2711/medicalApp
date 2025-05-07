@@ -4,7 +4,8 @@ part 'prescription_response.g.dart';  // This part file will be generated
 
 @JsonSerializable()
 class PrescriptionResponse {
-  final String detectedText;
+  @JsonKey(name: 'Detected text')
+  final String? detectedText;
 
   PrescriptionResponse({required this.detectedText});
 

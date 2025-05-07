@@ -11,7 +11,7 @@ class PredictionUseCase {
 
   PredictionUseCase(this.predictionRepo);
 
-  Future<PredictionResponse> predict(String disease, File imagePath) {
+  Future<PredictionResponse> predict(String disease, File imagePath,) {
     return predictionRepo.predictDisease(disease, imagePath);
     
   }

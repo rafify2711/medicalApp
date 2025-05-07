@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_medical_app/features/doctor_profile/presentation/view/doctor_screen.dart';
 import 'package:graduation_medical_app/features/reservation/presentation/view/add_doctor_scadule.dart';
+import 'package:graduation_medical_app/features/reservation/presentation/view/view_schedule_screen.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_appointment_screen.dart';
 
 
 import '../../../core/utils/app_colors.dart';
 import '../../doctor_home/presentation/doctor_home_screen.dart';
+import '../../doctor_profile/presentation/view/doctor_profile_screen.dart';
 import '../../user_home/presentation/view/user_home_screen.dart';
 import '../../user_profile/presentation/view/profile_screen.dart';
 
@@ -20,7 +21,7 @@ class _DoctorLayOutState extends State<DoctorLayOut> {
 
   static  final List<Widget> _screens = <Widget>[
     DoctorHomeScreen(),
-    DoctorScheduleScreen(),
+    ViewScheduleScreen(),
     DoctorProfileScreen(userId: ''),
 
 
@@ -40,7 +41,7 @@ class _DoctorLayOutState extends State<DoctorLayOut> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: AppColors.primary1,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

@@ -18,10 +18,15 @@ class RouteNames {
   static const String profile = '/profile';
   static const String userLayout = '/userLayout';
   static const String doctorProfile = '/doctorProfile';
+  static const String editDoctorProfile = '/editDoctorProfile';
   static const String availableSlots = '/availableSlots';
   static const String doctorLayout = '/doctorLayout';
   static const String readPrescription = '/readPrescription';
   static const String makeReservation = '/makeReservation';
   static const String splash = '/splash';
   static const String welcome = '/welcome';
+  static const String hospital = '/hospital';
+  static const String pharmacy = '/pharmacy';
+  static const String globalSearch = '/global-search';
+  static const String viewSchedule = '/viewSchedule';
 }

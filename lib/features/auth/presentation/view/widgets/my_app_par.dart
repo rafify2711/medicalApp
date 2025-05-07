@@ -11,6 +11,7 @@ class MyAppPar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
 
       iconTheme: IconThemeData(color: AppColors.white,),
       actionsIconTheme: IconThemeData(color: Colors.white,),

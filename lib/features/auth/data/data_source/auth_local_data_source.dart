@@ -47,16 +47,44 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<bool> authenticateWithBiometrics() async {
     try {
-      bool isAvailable = await _localAuth.canCheckBiometrics;
-      if (!isAvailable) {
-        return false; // Biometrics not available on the device
+      // Check if device supports biometrics
+      bool isDeviceSupported = await _localAuth.isDeviceSupported();
+      if (!isDeviceSupported) {
+        print('Device does not support biometrics');
+        return false;
       }
 
+      // Check if biometrics are available
+      bool isAvailable = await _localAuth.canCheckBiometrics;
+      if (!isAvailable) {
+        print('No biometrics available on this device');
+        return false;
+      }
+
+      // Get available biometrics
+      List<BiometricType> availableBiometrics = await _localAuth.getAvailableBiometrics();
+      if (availableBiometrics.isEmpty) {
+        print('No biometrics enrolled on this device');
+        return false;
+      }
+
+      // Attempt authentication
       bool isAuthenticated = await _localAuth.authenticate(
         localizedReason: 'Please authenticate to access your account',
-        options: const AuthenticationOptions(biometricOnly: true, stickyAuth: true),
+        options: const AuthenticationOptions(
+          biometricOnly: true,
+          stickyAuth: true,
+          useErrorDialogs: true,
+        ),
       );
-      return isAuthenticated;
+
+      if (isAuthenticated) {
+        print('Biometric authentication successful');
+        return true;
+      } else {
+        print('Biometric authentication failed');
+        return false;
+      }
     } catch (e) {
       print('Error during biometric authentication: $e');
       return false;

@@ -19,7 +19,7 @@ class CreateReservationResponse {
 class ReservationModel {
   final String? doctor;
   final String? user;
-  final String? date;
+  final DateTime? date;
   final String? timeSlot;
   final String? status;
   @JsonKey(name: "_d")

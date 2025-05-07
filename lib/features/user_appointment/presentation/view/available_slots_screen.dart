@@ -13,11 +13,7 @@ class AvailableSlotsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Available Slots"),
-      ),
-      body: BlocProvider(
+    return  BlocProvider(
         create:  (context) => AvailableSlotsCubit(getIt<GetAvailableSlotsUseCase>()),
         child: BlocBuilder<AvailableSlotsCubit, AvailableSlotsState>(
           builder: (context, state) {
@@ -35,8 +31,7 @@ class AvailableSlotsScreen extends StatelessWidget {
             }
             return Center(child: Text('No available slots'));
           },
-        ),
-      ),
-    );
+
+    ));
   }
 }

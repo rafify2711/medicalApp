@@ -18,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.35),
+              Spacer(),
               Image(
                 image: AssetImage('lib/assets/icon/VectorColored.png'),
                 height: 150,
@@ -69,6 +69,8 @@ class WelcomeScreen extends StatelessWidget {
                   height:45 ,
                   width: 200,
                   color: AppColors.fill),
+
+              SizedBox(height: 40,)
 
             ],
           ),

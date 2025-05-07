@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/utils/drug_constants.dart';
+import 'package:graduation_medical_app/core/utils/drug_constants.dart';
+import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/drug_substitutions_cubit.dart';
 import '../../../../core/utils/app_style.dart';
+import '../../../../core/utils/app_colors.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
-import '../view_model/drug_substitutions_cubit.dart';
 
 class DrugSubstitutionScreen extends StatefulWidget {
   const DrugSubstitutionScreen({super.key});
@@ -13,71 +14,254 @@ class DrugSubstitutionScreen extends StatefulWidget {
 }
 
 class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
-  String? selectedDrug;  // متغير لتخزين الدواء المحدد
+  final TextEditingController drugController = TextEditingController();
+  String? selectedDrug;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                // استخدام DropdownButtonFormField بدلاً من DropdownButton
-                DropdownButtonFormField<String>(
-                  value: selectedDrug,
-                  hint: const Text('Select Drug'),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedDrug = newValue;
-                    });
-                  },
-                  isExpanded: true,  // لجعل القائمة تأخذ العرض الكامل
-                  decoration: const InputDecoration(
-
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.primary.withOpacity(0.1),
+            Colors.white,
+          ],
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.swap_horiz,
+                    color: AppColors.primary,
+                    size: 32,
                   ),
-                  items: drugs.map<DropdownMenuItem<String>>((String drug) {
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Find Drug Substitutions',
+                      style: AppStyle.bodyCyanTextStyle.copyWith(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Select a drug to find suitable alternatives',
+                        style: AppStyle.bodyCyanTextStyle.copyWith(
+                          fontSize: 14,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: DropdownButtonFormField<String>(
+                  value: selectedDrug,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Select Drug',
+                    labelStyle: TextStyle(color: AppColors.primary),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors.primary.withOpacity(0.5)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors.primary.withOpacity(0.5)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors.primary),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[50],
+                    prefixIcon: Icon(Icons.medication, color: AppColors.primary),
+                  ),
+                  items: drugs.map((drug) {
                     return DropdownMenuItem<String>(
                       value: drug,
-                      child: Text(drug),
+                      child: Text(
+                        drug,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     );
                   }).toList(),
-                ),
-                const SizedBox(height: 20),
-                Button(
-                  onClick: () {
-                    context.read<DrugSubstitutionsCubit>().getDrugSubstitutions(
-                      selectedDrug!, // إرسال الدواء المحدد
-                    );
+                  onChanged: (value) {
+                    setState(() {
+                      selectedDrug = value;
+                    });
                   },
-                  text: 'Get Substitutions',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a drug';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 20),
-                BlocBuilder<DrugSubstitutionsCubit, DrugSubstitutionsState>(
-                  builder: (context, state) {
-                    if (state is DrugSubstitutionsLoading) {
-                      return const CircularProgressIndicator();
-                    } else if (state is DrugSubstitutionsSuccess) {
-                      return Column(
+              ),
+              const SizedBox(height: 24),
+              Button(
+                onClick: () {
+                  if (selectedDrug != null) {
+                    context.read<DrugSubstitutionsCubit>().getDrugSubstitutions(selectedDrug!);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please select a drug'),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+                text: 'Find Substitutions',
+              ),
+              const SizedBox(height: 24),
+              BlocBuilder<DrugSubstitutionsCubit, DrugSubstitutionsState>(
+                builder: (context, state) {
+                  if (state is DrugSubstitutionsLoading) {
+                    return Center(
+                      child: Column(
+                        children: [
+                          const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Finding alternatives...',
+                            style: AppStyle.bodyCyanTextStyle.copyWith(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is DrugSubstitutionsSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Substitutions for ${selectedDrug!}:'),
-                          ...state.response.result.split(',').map((substitution) {
-                            return ListTile(
-                              title: Text(substitution.trim()), // عرض كل اسم مفصول بفاصلة
-                            );
-                          }).toList(),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.medication_outlined,
+                                color: AppColors.primary,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Alternative Drugs',
+                                style: AppStyle.bodyCyanTextStyle.copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey[200]!),
+                            ),
+                            child: Text(
+                              state.response.result,
+                              style: AppStyle.bodyCyanTextStyle.copyWith(
+                                fontSize: 16,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
                         ],
-                      );
-                    } else if (state is DrugSubstitutionsError) {
-                      return Text(state.message, style: const TextStyle(color: Colors.red));
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ],
-            ),
+                      ),
+                    );
+                  } else if (state is DrugSubstitutionsError) {
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.red[50],
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.red[200]!),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.error_outline, color: Colors.red[400]),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              state.message,
+                              style: TextStyle(
+                                color: Colors.red[700],
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ],
           ),
         ),
       ),

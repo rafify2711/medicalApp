@@ -93,6 +93,9 @@ import '../../features/reservation/domain/use_cases/create_reservation_usecase.d
     as _i843;
 import '../../features/reservation/presentation/view_model/add_update_schedule_cubit.dart'
     as _i63;
+import '../../features/search/data/search_service.dart' as _i506;
+import '../../features/search/presentation/view_model/search_cubit.dart'
+    as _i794;
 import '../../features/user_appointment/data/data_source/all_doctors_data_source/all_doctors_data_source.dart'
     as _i1040;
 import '../../features/user_appointment/data/data_source/available_slot_data_source/available_slot_data_source.dart'
@@ -320,8 +323,24 @@ extension GetItInjectableX on _i174.GetIt {
         repository: gh<_i729.DrugInteractionsRepository>(),
       ),
     );
+    gh.factory<_i506.SearchService>(
+      () => _i506.SearchService(gh<_i596.DoctorRepository>()),
+    );
+    gh.factory<_i208.AuthCubit>(
+      () => _i208.AuthCubit(
+        gh<_i957.LogInUseCase>(),
+        gh<_i571.SignupUseCase>(),
+        gh<_i280.AuthLocalDataSource>(),
+      ),
+    );
     gh.factory<_i501.PredictionCubit>(
-      () => _i501.PredictionCubit(gh<_i640.PredictionUseCase>()),
+      () => _i501.PredictionCubit(
+        predictionUseCase: gh<_i640.PredictionUseCase>(),
+        prefs: gh<_i460.SharedPreferences>(),
+      ),
+    );
+    gh.factory<_i794.SearchCubit>(
+      () => _i794.SearchCubit(gh<_i506.SearchService>()),
     );
     gh.factory<_i525.CheckDrugInteractionCubit>(
       () =>
@@ -334,10 +353,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i994.DrugSubstitutionsCubit>(
       () => _i994.DrugSubstitutionsCubit(gh<_i917.DrugInteractionsUseCase>()),
-    );
-    gh.factory<_i208.AuthCubit>(
-      () =>
-          _i208.AuthCubit(gh<_i957.LogInUseCase>(), gh<_i571.SignupUseCase>()),
     );
     gh.factory<_i987.AvailableSlotsCubit>(
       () => _i987.AvailableSlotsCubit(gh<_i753.GetAvailableSlotsUseCase>()),
