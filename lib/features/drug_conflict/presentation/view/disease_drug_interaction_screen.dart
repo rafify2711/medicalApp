@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/drug_constants.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
@@ -49,7 +50,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Check Disease-Drug Interaction',
+                      AppLocalizations.of(context).checkDiseaseDrugInteraction,
                       style: AppStyle.bodyCyanTextStyle.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -75,7 +76,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Select a disease and a drug to check their interaction',
+                        AppLocalizations.of(context).drugInteractionInfo,
                         style: AppStyle.bodyCyanTextStyle.copyWith(
                           fontSize: 14,
                           color: Colors.grey[700],
@@ -106,7 +107,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                       value: selectedDisease,
                       isExpanded: true,
                       decoration: InputDecoration(
-                        labelText: 'Disease',
+                        labelText: AppLocalizations.of(context).disease,
                         labelStyle: TextStyle(color: AppColors.primary),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -140,7 +141,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a disease';
+                          return AppLocalizations.of(context).pleaseSelectDrug;
                         }
                         return null;
                       },
@@ -150,7 +151,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                       value: selectedDrug,
                       isExpanded: true,
                       decoration: InputDecoration(
-                        labelText: 'Drug',
+                        labelText: AppLocalizations.of(context).drugs,
                         labelStyle: TextStyle(color: AppColors.primary),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -184,7 +185,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a drug';
+                          return AppLocalizations.of(context).pleaseSelectDrug;
                         }
                         return null;
                       },
@@ -202,15 +203,15 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please select both disease and drug'),
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context).pleaseSelectDiseaseAndDrug),
                         backgroundColor: Colors.red,
                         behavior: SnackBarBehavior.floating,
                       ),
                     );
                   }
                 },
-                text: 'Check Interaction',
+                text: AppLocalizations.of(context).checkInteraction,
               ),
               const SizedBox(height: 24),
               BlocBuilder<DiseaseDrugInteractionCubit, DiseaseDrugInteractionState>(
@@ -224,7 +225,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Checking interaction...',
+                            AppLocalizations.of(context).checkingInteraction,
                             style: AppStyle.bodyCyanTextStyle.copyWith(
                               fontSize: 16,
                               color: Colors.grey[600],
@@ -260,7 +261,7 @@ class _DiseaseDrugInteractionScreenState extends State<DiseaseDrugInteractionScr
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Interaction Result',
+                                AppLocalizations.of(context).interactionResult,
                                 style: AppStyle.bodyCyanTextStyle.copyWith(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,

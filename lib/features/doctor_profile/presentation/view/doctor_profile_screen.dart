@@ -8,6 +8,7 @@ import 'package:graduation_medical_app/features/doctor_profile/presentation/view
 import 'package:graduation_medical_app/features/doctor_profile/presentation/view_model/doctor_profile_cubit.dart';
 
 import '../../../../core/di/di.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class DoctorProfileScreen extends StatelessWidget {
   final String userId;
@@ -51,7 +52,7 @@ class DoctorProfileScreen extends StatelessWidget {
                             Expanded(
                               child: Center(
                                 child: Text(
-                                  'Doctor Profile',
+                                  AppLocalizations.of(context).doctorProfile,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 22,
@@ -88,7 +89,7 @@ class DoctorProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          profile.username ?? 'Doctor',
+                          profile.username ?? AppLocalizations.of(context).doctor,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -97,7 +98,7 @@ class DoctorProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          profile.specialty ?? 'Specialist',
+                          profile.specialty ?? AppLocalizations.of(context).specialty,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -123,23 +124,21 @@ class DoctorProfileScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             _buildInfoCard(
-                              title: 'Personal Information',
+                              title: AppLocalizations.of(context).personalInfo,
                               children: [
-                                _buildInfoRow(Icons.email, 'Email', profile.email ?? 'Not provided'),
-                                _buildInfoRow(Icons.phone, 'Phone', profile.phone ?? 'Not provided'),
-                                //_buildInfoRow(Icons.phone, 'Phone', profile.phone ?? 'Not provided'),
+                                _buildInfoRow(Icons.email, AppLocalizations.of(context).email, profile.email ?? AppLocalizations.of(context).notProvided),
+                                _buildInfoRow(Icons.phone, AppLocalizations.of(context).phone, profile.phone ?? AppLocalizations.of(context).notProvided),
                               ],
                             ),
                             SizedBox(height: 16),
                             _buildInfoCard(
-                              title: 'Professional Information',
+                              title: AppLocalizations.of(context).professionalInfo,
                               children: [
-                                _buildInfoRow(Icons.medical_services, 'Specialty', profile.specialty ?? 'Not provided'),
-                                _buildInfoRow(Icons.school, 'Education', 'Not provided'),
-                                _buildInfoRow(Icons.work, 'Experience', ' years'),
+                                _buildInfoRow(Icons.medical_services, AppLocalizations.of(context).specialty, profile.specialty ?? AppLocalizations.of(context).notProvided),
+                                _buildInfoRow(Icons.school, AppLocalizations.of(context).education, AppLocalizations.of(context).notProvided),
+                                _buildInfoRow(Icons.work, AppLocalizations.of(context).experience, AppLocalizations.of(context).notProvided),
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -151,7 +150,7 @@ class DoctorProfileScreen extends StatelessWidget {
           } else if (state is DoctorProfileError) {
             return Center(child: Text(state.message));
           }
-          return Center(child: Text("No data available"));
+          return Center(child: Text(AppLocalizations.of(context).noData));
         },
       ),
     );

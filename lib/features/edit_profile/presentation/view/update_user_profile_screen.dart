@@ -6,6 +6,7 @@ import '../../../auth/presentation/view/widgets/button.dart';
 import '../../../auth/presentation/view/widgets/my_text_field.dart';
 import '../../data/models/updated_user_model.dart';
 import '../view_model/update_user_Profile_cubit.dart';
+import 'package:graduation_medical_app/core/localization/app_localizations.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
@@ -32,12 +33,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     print('UpdateProfileScreen arguments: ' + args.toString());
     if (args == null || args is! Map<String, dynamic>) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No profile data passed!')),
+        SnackBar(content: Text(AppLocalizations.of(context).noProfileData)),
       );
       Future.microtask(() => Navigator.of(context).pop());
       return;
     }
-    final map = args as Map<String, dynamic>;
+    final map = args;
     token = map['token'] as String;
     userId = map['userId'] as String;
     _usernameController.text = map['username'] as String;
@@ -54,7 +55,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       backgroundColor: AppColors.primary1.withOpacity(0.05),
       appBar: AppBar(
         title: Text(
-          "Update Profile",
+          AppLocalizations.of(context).editProfile,
           style: TextStyle(color: Colors.white),
         ),
         flexibleSpace: Container(
@@ -104,25 +105,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   SizedBox(height: 16),
                   MyTextField(
                     controller: _usernameController,
-                    label: "Username",
+                    label: AppLocalizations.of(context).username,
                     prefixIcon: Icons.person,
                   ),
                   SizedBox(height: 16),
                   MyTextField(
                     controller: _phoneController,
-                    label: "Phone",
+                    label: AppLocalizations.of(context).phone,
                     prefixIcon: Icons.phone,
                   ),
                   SizedBox(height: 16),
                   MyTextField(
                     controller: _addressController,
-                    label: "Address",
+                    label: AppLocalizations.of(context).address,
                     prefixIcon: Icons.location_on,
                   ),
                   SizedBox(height: 16),
                   MyTextField(
                     controller: _medicationHistoryController,
-                    label: "Medication History",
+                    label: AppLocalizations.of(context).medicationHistory,
                     prefixIcon: Icons.medical_services,
                   ),
                   SizedBox(height: 16),
@@ -142,8 +143,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         Expanded(
                           child: Text(
                             _dob == null
-                                ? 'Select Date of Birth'
-                                : 'DOB: ${_dob!.toLocal().toString().split(' ')[0]}',
+                                ? AppLocalizations.of(context).selectDateOfBirth
+                                : '${AppLocalizations.of(context).dob}: ${_dob!.toLocal().toString().split(' ')[0]}',
                             style: TextStyle(
                               color: _dob == null ? Colors.grey : Colors.black87,
                             ),
@@ -183,7 +184,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           .read<UpdateUserProfileCubit>()
                           .updateProfile(token, user);
                     },
-                    text: "Update Profile",
+                    text: AppLocalizations.of(context).saveChanges,
                   ),
                 ],
               ),

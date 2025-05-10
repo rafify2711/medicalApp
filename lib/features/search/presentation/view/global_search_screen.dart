@@ -10,6 +10,7 @@ import '../../data/search_service.dart';
 import '../view_model/search_cubit.dart';
 import 'dart:async';
 import '../../../../core/di/di.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class GlobalSearchScreen extends StatefulWidget {
   @override
@@ -27,7 +28,6 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
     return BlocProvider(
       create: (context) {
         final cubit = getIt<SearchCubit>();
-        // Initialize immediately
         cubit.initialize();
         return cubit;
       },
@@ -39,7 +39,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                "Search",
+                AppLocalizations.of(context).search,
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: 24,
@@ -55,7 +55,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
                       child: TextField(
                         controller: _searchController,
                         decoration: InputDecoration(
-                          hintText: "Search doctors, specialties, hospitals...",
+                          hintText: AppLocalizations.of(context).searchHint,
                           hintStyle: TextStyle(color: Colors.grey[400]),
                           prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
                           suffixIcon: _searchController.text.isNotEmpty
@@ -98,9 +98,9 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
                       unselectedLabelColor: Colors.grey[600],
                       indicatorColor: Color(0xFF30948F),
                       tabs: [
-                        Tab(text: 'Specialties'),
-                        Tab(text: 'Doctors'),
-                        Tab(text: 'Hospitals'),
+                        Tab(text: AppLocalizations.of(context).specialties),
+                        Tab(text: AppLocalizations.of(context).doctors),
+                        Tab(text: AppLocalizations.of(context).hospitals),
                       ],
                     ),
                   ],
@@ -139,7 +139,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
                 }
 
                 return Center(
-                  child: Text('Start searching...'),
+                  child: Text(AppLocalizations.of(context).startSearching),
                 );
               },
             ),
@@ -165,7 +165,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
 
   Widget _buildSpecialtiesTab(List<String> specialties, String selectedSpecialty) {
     if (_isSearching && specialties.isEmpty) {
-      return _buildEmptyState('No specialties found', Icons.local_hospital_outlined);
+      return _buildEmptyState(AppLocalizations.of(context).noSpecialtiesFound, Icons.local_hospital_outlined);
     }
 
     return ListView.builder(
@@ -224,7 +224,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
 
   Widget _buildDoctorsTab(List<DoctorsModel> doctors) {
     if (_isSearching && doctors.isEmpty) {
-      return _buildEmptyState('No doctors found', Icons.person_outline);
+      return _buildEmptyState(AppLocalizations.of(context).noDoctorsFound, Icons.person_outline);
     }
     
     return ListView.builder(
@@ -239,7 +239,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> with SingleTick
 
   Widget _buildHospitalsTab(List<Hospital> hospitals) {
     if (_isSearching && hospitals.isEmpty) {
-      return _buildEmptyState('No hospitals found', Icons.local_hospital_outlined);
+      return _buildEmptyState(AppLocalizations.of(context).noHospitalsFound, Icons.local_hospital_outlined);
     }
 
     return ListView.builder(

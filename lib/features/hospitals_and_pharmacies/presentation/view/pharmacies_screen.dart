@@ -3,6 +3,7 @@ import 'dart:async';
 import '../../../../core/utils/app_colors.dart';
 import '../../load_data/load_pharmacies_data.dart';
 import '../../models/pharmacy_model.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class PharmacyListScreen extends StatefulWidget {
   @override
@@ -84,7 +85,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Pharmacies",
+          AppLocalizations.of(context).pharmacies,
           style: TextStyle(
             color: Colors.black87,
             fontSize: 24,
@@ -120,7 +121,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                     Icon(Icons.error_outline, size: 60, color: Colors.grey),
                     SizedBox(height: 16),
                     Text(
-                      'Error loading pharmacies',
+                      AppLocalizations.of(context).errorOccurred,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 18,
@@ -138,7 +139,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: "Search pharmacies...",
+                      hintText: AppLocalizations.of(context).searchHint,
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
                       suffixIcon: _searchController.text.isNotEmpty
@@ -188,13 +189,13 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                         SizedBox(height: 16),
                         Text(
                           _searchController.text.isEmpty
-                              ? "No Pharmacies Available"
-                              : "No Pharmacies Found",
+                              ? AppLocalizations.of(context).noPharmaciesAvailable
+                              : AppLocalizations.of(context).noPharmaciesFound,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 18,
                           ),
-                        ),
+                        ),  
                       ],
                     ),
                   )
@@ -252,7 +253,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                               ),
                             ),
                             subtitle: Text(
-                              '${pharmacy.branches.length} ${pharmacy.branches.length == 1 ? 'Branch' : 'Branches'}',
+                              '${pharmacy.branches.length} ${pharmacy.branches.length == 1 ? AppLocalizations.of(context).branch : AppLocalizations.of(context).branches}',
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: 14,
@@ -322,7 +323,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                                                 color: Colors.grey[400], size: 16),
                                             SizedBox(width: 4),
                                             Text(
-                                              'Visit Website',
+                                              AppLocalizations.of(context).visitWebsite,
                                               style: TextStyle(
                                                 color: Color(0xFF30948F),
                                                 fontSize: 14,

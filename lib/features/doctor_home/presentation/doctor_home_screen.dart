@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:graduation_medical_app/core/config/route_names.dart';
-import 'package:graduation_medical_app/core/extentions/extentions.dart';
-import 'package:graduation_medical_app/core/utils/widgets/feature_widget/features.dart';
-import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
-import 'package:graduation_medical_app/features/reservation/presentation/view/add_doctor_scadule.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/features/doctor_profile/presentation/view_model/doctor_profile_cubit.dart';
+import 'package:graduation_medical_app/core/localization/app_localizations.dart';
 
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_style.dart';
-import '../../chat_bot/presentation/view/chatbot_screen.dart';
-import '../../medical_dignosis/presentation/view/disease_prediction_list_screen.dart';
-import '../../user_appointment/presentation/view/user_appointment_screen.dart';
-
 class DoctorHomeScreen extends StatefulWidget {
-  DoctorHomeScreen({super.key});
+  const DoctorHomeScreen({super.key});
 
   @override
   State<DoctorHomeScreen> createState() => _DoctorHomeScreenState();
@@ -90,77 +81,24 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
       builder: (context, state) {
-        String doctorName = "Doctor";
-        String specialty = "Specialist";
+        String doctorName = AppLocalizations.of(context).doctor;
+        String specialty = AppLocalizations.of(context).specialty;
         if (state is DoctorProfileLoaded) {
-          doctorName = state.profile.username ?? "Doctor";
-          specialty = state.profile.specialty ?? "Specialist";
+          doctorName = state.profile.username ?? AppLocalizations.of(context).doctor;
+          specialty = state.profile.specialty ?? AppLocalizations.of(context).specialty;
         }
         
         return Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(kToolbarHeight),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: AppStyle.gradient,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context).doctorHome),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteNames.settings);
+                },
               ),
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        child: Text(
-                          doctorName[0].toUpperCase(),
-                          style: TextStyle(
-                            color: AppColors.primary1,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              doctorName,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              specialty,
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.notifications_outlined, color: Colors.white),
-                        onPressed: () {
-                          // Handle notifications
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.settings_outlined, color: Colors.white),
-                        onPressed: () {
-                          // Handle settings
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -168,24 +106,139 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
-                  _buildStatisticsSection(),
+                  // Welcome Section
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary1, AppColors.primary],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.person, size: 40, color: AppColors.primary1),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${AppLocalizations.of(context).welcomeDr} $doctorName',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                specialty,
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 24),
-                  buildCalender(),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Quick Actions',
-                    style: AppStyle.titlesTextStyle,
+
+                  // Quick Actions Section
+                  Text(
+                    AppLocalizations.of(context).quickActions,
+                    style: AppStyle.bodyBlackTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  _buildQuickActions(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildActionCard(
+                          context,
+                          icon: Icons.add_circle_outline,
+                          title: AppLocalizations.of(context).addAppointment,
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.doctorSchedule);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildActionCard(
+                          context,
+                          icon: Icons.people_outline,
+                          title: AppLocalizations.of(context).viewPatients,
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.userAppointment);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Features',
-                    style: AppStyle.titlesTextStyle,
+
+                  // Features Section
+                  Text(
+                    AppLocalizations.of(context).features,
+                    style: AppStyle.bodyBlackTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  _buildFeaturesGrid(),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    children: [
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.calendar_today,
+                        title: AppLocalizations.of(context).appointments,
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.userAppointment);
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.chat_bubble_outline,
+                        title: AppLocalizations.of(context).chatBot,
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.chatbot);
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.medical_services_outlined,
+                        title: AppLocalizations.of(context).specialty,
+                        onTap: () {
+                          // Handle specialty
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.settings_outlined,
+                        title: AppLocalizations.of(context).settings,
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.settings);
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -195,342 +248,81 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     );
   }
 
-  Widget _buildStatisticsSection() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildStatItem(Icons.people, "Today's\nAppointments", "5"),
-          _buildStatItem(Icons.check_circle, "Completed\nAppointments", "12"),
-          _buildStatItem(Icons.pending, "Pending\nAppointments", "3"),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(IconData icon, String label, String value) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.primary1.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: AppColors.primary1, size: 24),
-        ),
-        SizedBox(height: 8),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary1,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuickActions() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildQuickActionItem(Icons.add_circle, "New\nAppointment", () {
-            Navigator.pushNamed(context, RouteNames.doctorSchedule);
-          }),
-          _buildQuickActionItem(Icons.medical_services, "View\nPatients", () {
-            Navigator.pushNamed(context, RouteNames.userAppointment);
-          }),
-          _buildQuickActionItem(Icons.chat, "Chat\nBot", () {
-            Navigator.pushNamed(context, RouteNames.chatbot);
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActionItem(IconData icon, String label, VoidCallback onTap) {
+  Widget _buildActionCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.primary1.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppColors.primary1, size: 24),
-          ),
-          SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeaturesGrid() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      childAspectRatio: 1,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      children: [
-        FeatureCard(
-          icon: Icons.medical_services,
-          label: 'Diagnosis',
-          routeName: RouteNames.diseasePredictionList,
-        ),
-        FeatureCard(
-          icon: Icons.people,
-          label: 'Patients',
-          routeName: RouteNames.userAppointment,
-        ),
-        FeatureCard(
-          icon: Icons.insert_chart,
-          label: 'Reports',
-          routeName: '',
-        ),
-        FeatureCard(
-          icon: Icons.calendar_today,
-          label: 'Schedule',
-          routeName: RouteNames.doctorSchedule,
-        ),
-        FeatureCard(
-          icon: Icons.chat,
-          label: 'Chat Bot',
-          routeName: RouteNames.chatbot,
-        ),
-        FeatureCard(
-          icon: Icons.chrome_reader_mode_outlined,
-          label: 'Prescriptions',
-          routeName: '',
-        ),
-      ],
-    );
-  }
-
-  Widget buildCalender() {
-    final appointmentsForSelectedDate = getAppointmentsForDate(selectedCalenderDate);
-    
-    return Container(
-      decoration: BoxDecoration(
-        gradient: AppStyle.gradient,
-      ),
-      width: double.infinity,
-      child: Column(
-        children: [
-          EasyInfiniteDateTimeLine(
-            headerBuilder: (context, date) => Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    Text(
-                      'upcoming schedule',
-                      style: AppStyle.bodyWhiteTextStyle.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Spacer(),
-                    Text(
-                      months[selectedCalenderDate.month].toString(),
-                      style: AppStyle.bodyWhiteTextStyle.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Container(
-                    height: 1,
-                    width: MediaQuery.of(context).size.width * 7,
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-            firstDate: DateTime.now().subtract(Duration(days: 30)),
-            focusDate: selectedCalenderDate,
-            lastDate: DateTime.now().add(Duration(days: 30)),
-            dayProps: EasyDayProps(
-              height: 90,
-              width: 65,
-            ),
-            onDateChange: (selectedDate) {
-              setState(() => selectedCalenderDate = selectedDate);
-            },
-            itemBuilder: (context, date, isSelected, onTap) => GestureDetector(
-              onTap: () => setState(() => selectedCalenderDate = date),
-              child: Container(
-                margin: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.white : Colors.transparent,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: AppColors.white),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      date.day.toString(),
-                      style: TextStyle(
-                        color: isSelected ? AppColors.primary1 : AppColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      date.dayName,
-                      style: TextStyle(
-                        color: isSelected ? AppColors.primary1 : AppColors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            height: 160,
-            width: MediaQuery.of(context).size.width * .9,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: AppColors.white),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    'Appointments',
-                    style: AppStyle.titlesTextStyle.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: appointmentsForSelectedDate.isEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text(
-                            "You have no appointments today",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.only(left: 12, bottom: 12),
-                          itemCount: appointmentsForSelectedDate.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            final appointment = appointmentsForSelectedDate[index];
-                            return _buildAppointmentItem(appointment);
-                          },
-                        ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAppointmentItem(Map<String, dynamic> appointment) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(color: Colors.transparent),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Icon(icon, size: 32, color: AppColors.primary1),
+            const SizedBox(height: 8),
             Text(
-              appointment['patientName'],
-              style: TextStyle(
+              title,
+              textAlign: TextAlign.center,
+              style: AppStyle.bodyBlackTextStyle.copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: AppColors.white,
               ),
             ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Icon(Icons.access_time, color: AppColors.white, size: 15),
-                const SizedBox(width: 4),
-                Text(
-                  appointment['time'],
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
-            Container(
-              height: 1,
-              width: MediaQuery.of(context).size.width * 7,
-              color: AppColors.white,
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 32, color: AppColors.primary1),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppStyle.bodyBlackTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

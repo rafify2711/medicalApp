@@ -7,6 +7,7 @@ import 'package:graduation_medical_app/features/auth/presentation/view/widgets/m
 import 'package:graduation_medical_app/features/edit_profile/presentation/view/update_user_profile_screen.dart';
 import '../../../../core/config/route_names.dart';
 import '../../../../core/di/di.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../view_model/user_profile_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -52,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                             Expanded(
                               child: Center(
                                 child: Text(
-                                  'My Profile',
+                                  AppLocalizations.of(context).profile,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 22,
@@ -124,7 +125,7 @@ class ProfileScreen extends StatelessWidget {
                           _buildMenuItem(
                             context,
                             Icons.person,
-                            'Profile',
+                            AppLocalizations.of(context).profile,
                             () async{
                               await Navigator.pushNamed(
                                 context,
@@ -143,15 +144,15 @@ class ProfileScreen extends StatelessWidget {
                               context.read<UserProfileCubit>().fetchUserProfile(token, userId);
                             },
                           ),
-                          _buildMenuItem(context, Icons.favorite, 'Favorite', null),
-                          _buildMenuItem(context, Icons.credit_card, 'Payment Method', null),
-                          _buildMenuItem(context, Icons.privacy_tip, 'Privacy Policy', null),
-                          _buildMenuItem(context, Icons.settings, 'Settings', null),
-                          _buildMenuItem(context, Icons.help, 'Help', null),
+                          _buildMenuItem(context, Icons.favorite, AppLocalizations.of(context).favorites, null),
+                          _buildMenuItem(context, Icons.credit_card, AppLocalizations.of(context).paymentMethod, null),
+                          _buildMenuItem(context, Icons.privacy_tip, AppLocalizations.of(context).privacyPolicy, null),
+                          _buildMenuItem(context, Icons.settings, AppLocalizations.of(context).settings, null),
+                          _buildMenuItem(context, Icons.help, AppLocalizations.of(context).help, null),
                           _buildMenuItem(
                             context,
                             Icons.logout,
-                            'Logout',
+                            AppLocalizations.of(context).logout,
                             () async {
                               await context.read<UserProfileCubit>().logout();
                               Navigator.popAndPushNamed(context, RouteNames.login);
@@ -165,9 +166,9 @@ class ProfileScreen extends StatelessWidget {
               ),
             );
           } else if (state is UserProfileError) {
-            return Center(child: Text("Error: "+state.message));
+            return Center(child: Text(AppLocalizations.of(context).error + ": " + state.message));
           }
-          return Center(child: Text("No data available"));
+          return Center(child: Text(AppLocalizations.of(context).noData));
         },
       ),
     );

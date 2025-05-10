@@ -21,6 +21,7 @@ import '../../../user_appointment/presentation/view_model/user_appointment_cubit
 import '../../../user_appointment/presentation/view_model/user_appointment_state.dart';
 import '../../../search/data/search_service.dart';
 import '../../../search/presentation/view_model/search_cubit.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -62,7 +63,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             builder: (context, state) {
               UserModel? user = UserModel(
                 id: '0',
-                username: "username",
+                username: AppLocalizations.of(context).username,
                 email: 'email',
               );
 
@@ -70,8 +71,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 user = state.profile.user;
               }
 
-              return HomeAppBar(user: user,
-              onTap: ()=>Navigator.pushNamed(context, RouteNames.globalSearch) ,);
+              return HomeAppBar(user: user);
             },
           ),
         ),
@@ -85,7 +85,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '  categories',
+                  AppLocalizations.of(context).categories,
                   style: TextStyle(
                     color: AppColors.primary1,
                     fontSize: 14,
@@ -108,7 +108,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             AppDivider(),
             const SizedBox(height: 16),
             Expanded(
-              child: GridView(padding: EdgeInsets.symmetric(horizontal: 15),
+              child: GridView(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 physics: ScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -121,32 +122,32 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 children: [
                   FeatureCard(
                     icon: Icons.medical_services,
-                    label: 'Diagnosis',
+                    label: AppLocalizations.of(context).diagnosis,
                     routeName: RouteNames.diseasePredictionList,
                   ),
                   FeatureCard(
                     icon: Icons.people,
-                    label: 'Doctors',
+                    label: AppLocalizations.of(context).doctors,
                     routeName: RouteNames.doctorList,
                   ),
                   FeatureCard(
                     image: 'lib/assets/icon/medicine.png',
-                    label: 'Drugs',
+                    label: AppLocalizations.of(context).drugs,
                     routeName: RouteNames.drugTabs,
                   ),
                   FeatureCard(
                     icon: Icons.calendar_today,
-                    label: 'Schedule',
+                    label: AppLocalizations.of(context).schedule,
                     routeName: RouteNames.userAppointment,
                   ),
                   FeatureCard(
                     icon: Icons.chat,
-                    label: 'Chat Bot',
+                    label: AppLocalizations.of(context).chatBot,
                     routeName: RouteNames.chatbot,
                   ),
                   FeatureCard(
                     icon: Icons.chrome_reader_mode_outlined,
-                    label: 'Perception',
+                    label: AppLocalizations.of(context).prescriptions,
                     routeName: RouteNames.readPrescription,
                   ),
                 ],
@@ -167,90 +168,81 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       child: Column(
         children: [
           EasyInfiniteDateTimeLine(
-            headerBuilder:
-                (context, date) => Column(
+            headerBuilder: (context, date) => Column(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(width: 20),
-                        Text(
-                          'upcoming schedule',
-                          style: AppStyle.bodyWhiteTextStyle.copyWith(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          months[selectedCalenderDate.month].toString(),
-                          style: AppStyle.bodyWhiteTextStyle.copyWith(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                      ],
+                    SizedBox(width: 20),
+                    Text(
+                      AppLocalizations.of(context).upcomingSchedule,
+                      style: AppStyle.bodyWhiteTextStyle.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                   Padding(
-                     padding: const EdgeInsets.symmetric(vertical: 5),
-                     child: AppDivider(),
-                   ),
-
+                    Spacer(),
+                    Text(
+                      months[selectedCalenderDate.month].toString(),
+                      style: AppStyle.bodyWhiteTextStyle.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                    SizedBox(width: 10),
                   ],
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: AppDivider(),
+                ),
+              ],
+            ),
             firstDate: DateTime.now().subtract(Duration(days: 30)),
             focusDate: selectedCalenderDate,
             lastDate: DateTime.now().add(Duration(days: 30)),
             dayProps: EasyDayProps(
               height: 90,
-                  width: 65,
+              width: 65,
             ),
             onDateChange: (selectedDate) {
               setState(() => selectedCalenderDate = selectedDate);
-
             },
-            itemBuilder:
-                (context, date, isSelected, onTap) => GestureDetector(
-                  onTap: () => setState(() => selectedCalenderDate = date),
-                  child: Container(margin: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.white : Colors.transparent,
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: AppColors.white),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          date.day.toString(),
-                          style: TextStyle(
-                            color:
-                                isSelected
-                                    ? AppColors.primary1
-                                    : AppColors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Text(
-                          date.dayName,
-                          style: TextStyle(
-                            color:
-                                isSelected
-                                    ? AppColors.primary1
-                                    : AppColors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            itemBuilder: (context, date, isSelected, onTap) => GestureDetector(
+              onTap: () => setState(() => selectedCalenderDate = date),
+              child: Container(
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(color: AppColors.white),
                 ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      date.day.toString(),
+                      style: TextStyle(
+                        color: isSelected ? AppColors.primary1 : AppColors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      date.dayName,
+                      style: TextStyle(
+                        color: isSelected ? AppColors.primary1 : AppColors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10),
           Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 160,
@@ -266,7 +258,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
-                    'Appointments',
+                    AppLocalizations.of(context).appointments,
                     style: AppStyle.titlesTextStyle.copyWith(
                       color: Colors.white,
                       fontSize: 16,
@@ -275,27 +267,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   ),
                 ),
                 Expanded(
-                  child: BlocBuilder<
-                    UserAppointmentCubit,
-                    UserAppointmentState
-                  >(
+                  child: BlocBuilder<UserAppointmentCubit, UserAppointmentState>(
                     builder: (context, state) {
                       if (state is AppointmentLoaded) {
-                        final filtered =
-                            state.appointments.reservations.where((a) {
-                              final date = a.date;
-                              return date.year == selectedCalenderDate.year &&
-                                  date.month == selectedCalenderDate.month &&
-                                  date.day == selectedCalenderDate.day &&
-                                  a.status.toLowerCase() == "confirmed";
-                            }).toList();
+                        final filtered = state.appointments.reservations.where((a) {
+                          final date = a.date;
+                          return date.year == selectedCalenderDate.year &&
+                              date.month == selectedCalenderDate.month &&
+                              date.day == selectedCalenderDate.day &&
+                              a.status.toLowerCase() == "confirmed";
+                        }).toList();
 
                         if (filtered.isEmpty) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 12.0),
                             child: Text(
-                              "You have no appointments today",
-                              style: TextStyle(color: Colors.white,),
+                              AppLocalizations.of(context).noAppointmentsToday,
+                              style: TextStyle(color: Colors.white),
                             ),
                           );
                         }
@@ -309,22 +297,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         );
                       } else if (state is AppointmentLoading) {
                         return Center(child: CircularProgressIndicator());
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text(
-                            "No data",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        );
                       }
+                      
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 12.0),
+                        child: Text(
+                          AppLocalizations.of(context).noData,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
                     },
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 10,)
+          SizedBox(height: 10)
         ],
       ),
     );
@@ -332,7 +320,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   Widget _buildAppointmentItem(AppointmentModel appointment) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(color: Colors.transparent),
@@ -340,7 +328,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              appointment.doctor.name ?? 'Doctor',
+              appointment.doctor.name ?? AppLocalizations.of(context).doctor,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -362,7 +350,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 ),
               ],
             ),
-          AppDivider()
+            AppDivider()
           ],
         ),
       ),

@@ -9,6 +9,7 @@ import '../../view_model/make_reservation_state.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
 import '../../../../../core/di/di.dart';
+import '../../../../../core/localization/app_localizations.dart';
 
 class MakeReservationScreen extends StatefulWidget {
   final String? doctorId;
@@ -28,8 +29,8 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   String? _selectedTimeSlot;
   String _patientType = 'Yourself';
   String _gender = 'Male';
-  final TextEditingController _nameController = TextEditingController(text: 'Jane Doe');
-  final TextEditingController _ageController = TextEditingController(text: '30');
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _problemController = TextEditingController();
   bool _isNavigating = false;
 
@@ -41,7 +42,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Missing required information. Please try again."),
+            content: Text(AppLocalizations.of(context).missingInfo),
             backgroundColor: Colors.red,
           ),
         );
@@ -76,7 +77,17 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     if (_selectedTimeSlot == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Please select a time slot"),
+          content: Text(AppLocalizations.of(context).selectTimeSlot),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (_nameController.text.isEmpty || _ageController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).missingInfo),
           backgroundColor: Colors.red,
         ),
       );
@@ -89,7 +100,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("User not found. Please login again."),
+          content: Text(AppLocalizations.of(context).userNotFound),
           backgroundColor: Colors.red,
         ),
       );
@@ -111,6 +122,16 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
 
     try {
       await context.read<CreateReservationCubit>().createReservation(reservationData);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).reservationSuccess),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pop(context, true); // Return true to indicate successful reservation
+      }
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -130,25 +151,20 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Make a Reservation"),
+        title: Text(AppLocalizations.of(context).makeReservation),
         backgroundColor: AppColors.primary1,
       ),
       body: BlocConsumer<CreateReservationCubit, CreateReservationState>(
         listener: (context, state) {
-          if (!mounted) return;
-          
           if (state is CreateReservationSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Reservation successful"),
+                content: Text(AppLocalizations.of(context).reservationSuccess),
                 backgroundColor: Colors.green,
               ),
             );
-            Navigator.pop(context, _selectedTimeSlot);
+            Navigator.pop(context);
           } else if (state is CreateReservationError) {
-            setState(() {
-              _isNavigating = false;
-            });
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -167,7 +183,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
               children: [
                 // Selected Date
                 Text(
-                  "Selected Date",
+                  AppLocalizations.of(context).selectedDate,
                   style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
                 ),
                 SizedBox(height: 6),
@@ -180,14 +196,14 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                   child: Text(
                     widget.selectedDate != null
                         ? "${widget.selectedDate!.toLocal().toString().split(' ')[0]}"
-                        : "No date selected",
+                        : AppLocalizations.of(context).noDateSelected,
                     style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.primary1),
                   ),
                 ),
                 SizedBox(height: 20),
                 // Available Time
                 Text(
-                  "Available Time",
+                  AppLocalizations.of(context).availableTime,
                   style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
                 ),
                 SizedBox(height: 10),
@@ -218,7 +234,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Text(
-                              "No available slots for this date",
+                              AppLocalizations.of(context).noAvailableSlots,
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -258,7 +274,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Text(
-                          "No available slots",
+                          AppLocalizations.of(context).noAvailableSlots,
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
@@ -268,49 +284,49 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 SizedBox(height: 24),
                 // Patient Details
                 Text(
-                  "Patient Details",
+                  AppLocalizations.of(context).patientDetails,
                   style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
                 ),
                 SizedBox(height: 10),
                 Row(
                   children: [
-                    _buildToggleButton("Yourself", _patientType == 'Yourself', () {
+                    _buildToggleButton(AppLocalizations.of(context).yourself, _patientType == 'Yourself', () {
                       setState(() => _patientType = 'Yourself');
                     }),
                     SizedBox(width: 10),
-                    _buildToggleButton("Another Person", _patientType == 'Another Person', () {
+                    _buildToggleButton(AppLocalizations.of(context).anotherPerson, _patientType == 'Another Person', () {
                       setState(() => _patientType = 'Another Person');
                     }),
                   ],
                 ),
                 SizedBox(height: 16),
                 // Full Name
-                _buildTextField(_nameController, "Full Name"),
+                _buildTextField(_nameController, AppLocalizations.of(context).fullName),
                 SizedBox(height: 12),
                 // Age
-                _buildTextField(_ageController, "Age", keyboardType: TextInputType.number),
+                _buildTextField(_ageController, AppLocalizations.of(context).age, keyboardType: TextInputType.number),
                 SizedBox(height: 12),
                 // Gender
-                Text("Gender", style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
+                Text(AppLocalizations.of(context).gender, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    _buildToggleButton("Male", _gender == 'Male', () {
+                    _buildToggleButton(AppLocalizations.of(context).male, _gender == 'Male', () {
                       setState(() => _gender = 'Male');
                     }),
                     SizedBox(width: 10),
-                    _buildToggleButton("Female", _gender == 'Female', () {
+                    _buildToggleButton(AppLocalizations.of(context).female, _gender == 'Female', () {
                       setState(() => _gender = 'Female');
                     }),
                     SizedBox(width: 10),
-                    _buildToggleButton("Other", _gender == 'Other', () {
+                    _buildToggleButton(AppLocalizations.of(context).other, _gender == 'Other', () {
                       setState(() => _gender = 'Other');
                     }),
                   ],
                 ),
                 SizedBox(height: 18),
                 // Problem Description
-                Text("Describe your problem", style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
+                Text(AppLocalizations.of(context).describeProblem, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
                 SizedBox(height: 8),
                 Container(
                   decoration: BoxDecoration(
@@ -322,32 +338,36 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     minLines: 3,
                     maxLines: 5,
                     decoration: InputDecoration(
-                      hintText: "Enter Your Problem Here...",
+                      hintText: AppLocalizations.of(context).enterProblem,
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                   ),
                 ),
                 SizedBox(height: 24),
-                Center(
-                  child: isLoading
-                      ? CircularProgressIndicator(
-                          color: AppColors.primary1,
-                        )
-                      : ElevatedButton(
-                          onPressed: _handleReservation,
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
+                // Submit Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: isLoading ? null : _handleReservation,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary1,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            AppLocalizations.of(context).confirmReservation,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            backgroundColor: AppColors.primary1,
                           ),
-                          child: Text(
-                            "Make Reservation",
-                            style: AppStyle.bodyWhiteTextStyle.copyWith(fontSize: 16),
-                          ),
-                        ),
+                  ),
                 ),
               ],
             ),
@@ -357,40 +377,46 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     );
   }
 
-  Widget _buildToggleButton(String label, bool selected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        decoration: BoxDecoration(
-          gradient: selected ? AppStyle.gradient : null,
-          color: selected ? null : AppColors.primary1.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected ? Colors.white : AppColors.primary1,
-            fontWeight: FontWeight.w600,
+  Widget _buildTextField(TextEditingController controller, String label, {TextInputType? keyboardType}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
+        SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.primary1.withOpacity(0.08),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, {TextInputType keyboardType = TextInputType.text}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary1.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          hintText: hint,
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+  Widget _buildToggleButton(String text, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          gradient: isSelected ? AppStyle.gradient : null,
+          color: isSelected ? null : AppColors.primary1.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : AppColors.primary1,
+          ),
         ),
       ),
     );

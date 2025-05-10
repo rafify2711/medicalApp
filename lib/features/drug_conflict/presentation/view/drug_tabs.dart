@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/disease_drug_interaction_cubit.dart';
 import '../../../../core/utils/app_style.dart';
+import '../../../../core/localization/app_localizations.dart';
 import 'check_drug_interaction_screen.dart';  // استيراد شاشة تفاعل الأدوية
 import 'disease_drug_interaction_screen.dart';
 import 'drug_subsitiutions_screen.dart';  // استيراد شاشة البدائل
@@ -31,9 +32,9 @@ class _DrugTabsScreenState extends State<DrugTabsScreen> with SingleTickerProvid
             gradient: AppStyle.gradient,
           ),
         ),
-        title: const Text(
-          'Drug Interaction',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context).drugInteraction,
+          style: const TextStyle(
             fontSize: 24,
             color: AppColors.white,
             fontWeight: FontWeight.bold,
@@ -54,18 +55,18 @@ class _DrugTabsScreenState extends State<DrugTabsScreen> with SingleTickerProvid
             fontWeight: FontWeight.normal,
           ),
           controller: _tabController,
-          tabs: const [
+          tabs: [
             Tab(
-              icon: Icon(Icons.medication),
-              text: 'Drug Interaction',
+              icon: const Icon(Icons.medication),
+              text: AppLocalizations.of(context).drugInteraction,
             ),
             Tab(
-              icon: Icon(Icons.medical_services),
-              text: 'Drug-Disease',
+              icon: const Icon(Icons.medical_services),
+              text: AppLocalizations.of(context).drugDisease,
             ),
             Tab(
-              icon: Icon(Icons.swap_horiz),
-              text: 'Substitutions',
+              icon: const Icon(Icons.swap_horiz),
+              text: AppLocalizations.of(context).substitutions,
             ),
           ],
         ),

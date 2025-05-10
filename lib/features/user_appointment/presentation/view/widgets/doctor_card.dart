@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_medical_app/core/models/appointment_model/appointment_model.dart';
-
 import '../../../../../core/utils/app_colors.dart';
+import '../../../../../core/localization/app_localizations.dart';
 
 class AppointmentCard extends StatelessWidget {
   final AppointmentModel appointment;
@@ -36,13 +36,21 @@ class AppointmentCard extends StatelessWidget {
                   ),
                   Text(appointment.doctor.specialization),
                   SizedBox(height: 8),
-                  Text("Date: ${appointment.date.toLocal().toString().split(' ')[0]}",
-                      style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text(
+                    "${AppLocalizations.of(context).date}: ${appointment.date.toLocal().toString().split(' ')[0]}",
+                    style: TextStyle(fontSize: 12, color: Colors.grey)
+                  ),
                   Row(
                     children: [
-                      Text("Status: ", style: TextStyle(fontSize: 12, color: Colors.grey )),
+                      Text(
+                        "${AppLocalizations.of(context).status}: ",
+                        style: TextStyle(fontSize: 12, color: Colors.grey)
+                      ),
                       SizedBox(width: 4),
-                      Text(appointment.status, style: TextStyle(fontSize: 12, color:AppColors.primary1)),
+                      Text(
+                        appointment.status,
+                        style: TextStyle(fontSize: 12, color: AppColors.primary1)
+                      ),
                     ],
                   ),
                 ],

@@ -5,6 +5,7 @@ import 'package:graduation_medical_app/features/auth/presentation/view/screens/l
 import 'package:graduation_medical_app/features/doctor_home/presentation/doctor_home_screen.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/terms_of_use_screen.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/privacy_policy_screen.dart';
+import 'package:graduation_medical_app/core/localization/app_localizations.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
@@ -79,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } else if (_role == "Doctor") {
         if (_selectedSpecialty == null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Please select a specialty')),
+            SnackBar(content: Text(AppLocalizations.of(context).pleaseSelectSpecialty)),
           );
           return;
         }
@@ -92,7 +93,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           specialty: _selectedSpecialty!,
           role: 'Doctor',
         );
-        print(signupDoctorModel.username);
         context.read<AuthCubit>().signUpDoctor(signupDoctorModel);
       }
     }
@@ -101,202 +101,202 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppPar(title: "Sign Up"),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                Text('Role', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 18)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RadioListTile(
-                        activeColor: AppColors.primary1,
-                        title: Text('Patient', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                        value: 'User',
-                        groupValue: _role,
-                        onChanged: (value) => setState(() {
-                          _role = value.toString();
-                          _selectedSpecialty = null; // 🔹 إعادة تعيين التخصص عند تغيير الدور
-                        }),
-                      ),
-                    ),
-                    Expanded(
-                      child: RadioListTile(
-                        activeColor: AppColors.primary1,
-                        title: Text('Doctor', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                        value: 'Doctor',
-                        groupValue: _role,
-                        onChanged: (value) => setState(() {
-                          _role = value.toString();
-                        }),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                if (_role == "Doctor") ...[
-                  Text('Specialty', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                  DropdownButtonFormField<String>(
-                      style: AppStyle.bodyCyanTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,),
-                    value: _selectedSpecialty,
-
-                    hint: Text('Select Specialty',  style: AppStyle.bodyCyanTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w100,)),
-
-                    items: _specialties.map((specialty) {
-                      return DropdownMenuItem(
-
-                        value: specialty,
-                        child: Text(specialty),
-                      );
-                    }).toList(),
-                    onChanged: (value) => setState(() => _selectedSpecialty = value),
-                    validator: (value) => value == null ? 'Please select a specialty' : null,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.fill,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                    ),
-                  ),
+      appBar: MyAppPar(title: AppLocalizations.of(context).signup),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const SizedBox(height: 16),
-                ],
-
-                Text('Username', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                MyTextField(
-                  controller: _usernameController,
-                  label: 'Enter your username',
-                  validator: (value) => value?.isEmpty ?? true ? 'Please enter your username' : null,
-                ),
-                const SizedBox(height: 16),
-
-                Text('Email', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                MyTextField(
-                  controller: _emailController,
-                  label: 'example@example.com',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter your email';
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) return 'Invalid email format';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                Text('Password', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                MyTextField(
-                  controller: _passwordController,
-                  label: '**********',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter your password';
-                    if (value.length < 6) return 'Password must be at least 6 characters';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                Text('Confirm Password', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
-                MyTextField(
-                  controller: _confirmPasswordController,
-                  label: '**********',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please confirm your password';
-                    if (value != _passwordController.text) return 'Passwords do not match';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                Center(child: Text('By continuing, you agree to ',textAlign: TextAlign.center,)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  InkWell(
-                    child: Text('Terms of Use ',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1),),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
-                      );
-                    },
-                  ),
-                    Text(' and '),
-                    InkWell(
-                      child: Text(' Privacy Policy,',style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1)),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-
-                BlocConsumer<AuthCubit, AuthState>(
-                  listener: (context, state) {
-                    if (state is AuthSignupSuccessDoctor) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Welcome Dr. ${state.doctor.username}!')),
-                      );
-                      Navigator.pushReplacementNamed(context, RouteNames.login);
-                    } else if (state is AuthSignupSuccessPatient) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Welcome ${state.patient.username}!')),
-                      );
-                      Navigator.pushReplacementNamed(context, RouteNames.login);
-                    } else if (state is AuthFailure) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message.toString())),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is AuthLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return Container(
-                      alignment: Alignment.center,
-                      child:Button(
-                        onClick: _signUp,
-                        text:'Sign Up',
-                        color: AppColors.primary,
-
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(height: 10,),
-                Center(
-
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Text('Role', style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 18)),
+                  Row(
                     children: [
-                      Text(
-                        "Do you have an account? ",
-                        style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 14,color: AppColors.black,fontWeight: FontWeight.w500),
+                      Expanded(
+                        child: RadioListTile(
+                          activeColor: AppColors.primary1,
+                          title: Text(AppLocalizations.of(context).patient, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                          value: 'User',
+                          groupValue: _role,
+                          onChanged: (value) => setState(() {
+                            _role = value.toString();
+                            _selectedSpecialty = null;
+                          }),
+                        ),
                       ),
-                      InkWell(
-                          child: Text("Log in",
-                            style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14,color: AppColors.primary1,fontWeight: FontWeight.w500),),
-                          onTap: () {
-                            Navigator.pushNamed(context, RouteNames.signUp);}
+                      Expanded(
+                        child: RadioListTile(
+                          activeColor: AppColors.primary1,
+                          title: Text(AppLocalizations.of(context).doctor, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                          value: 'Doctor',
+                          groupValue: _role,
+                          onChanged: (value) => setState(() {
+                            _role = value.toString();
+                          }),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+
+                  if (_role == "Doctor") ...[
+                    Text(AppLocalizations.of(context).specialty, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                    DropdownButtonFormField<String>(
+                      style: AppStyle.bodyCyanTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      value: _selectedSpecialty,
+                      hint: Text(AppLocalizations.of(context).selectSpecialty, style: AppStyle.bodyCyanTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w100,
+                      )),
+                      items: _specialties.map((specialty) {
+                        return DropdownMenuItem(
+                          value: specialty,
+                          child: Text(specialty),
+                        );
+                      }).toList(),
+                      onChanged: (value) => setState(() => _selectedSpecialty = value),
+                      validator: (value) => value == null ? AppLocalizations.of(context).pleaseSelectSpecialty : null,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.fill,
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  Text(AppLocalizations.of(context).username, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                  MyTextField(
+                    controller: _usernameController,
+                    label: AppLocalizations.of(context).enterUsername,
+                    validator: (value) => value?.isEmpty ?? true ? AppLocalizations.of(context).pleaseEnterUsername : null,
+                  ),
+                  const SizedBox(height: 16),
+
+                  Text(AppLocalizations.of(context).email, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                  MyTextField(
+                    controller: _emailController,
+                    label: 'example@example.com',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseEnterEmail;
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) return AppLocalizations.of(context).invalidEmail;
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  Text(AppLocalizations.of(context).password, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                  MyTextField(
+                    controller: _passwordController,
+                    label: '**********',
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseEnterPassword;
+                      if (value.length < 6) return AppLocalizations.of(context).passwordTooShort;
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  Text(AppLocalizations.of(context).confirmPassword, style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 16)),
+                  MyTextField(
+                    controller: _confirmPasswordController,
+                    label: '**********',
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseConfirmPassword;
+                      if (value != _passwordController.text) return AppLocalizations.of(context).passwordsDoNotMatch;
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Center(child: Text(AppLocalizations.of(context).termsAndPrivacy, textAlign: TextAlign.center)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        child: Text(AppLocalizations.of(context).termsOfUse, style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14, color: AppColors.primary1)),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
+                          );
+                        },
+                      ),
+                      Text(' ${AppLocalizations.of(context).and} '),
+                      InkWell(
+                        child: Text(AppLocalizations.of(context).privacyPolicy, style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14, color: AppColors.primary1)),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  BlocConsumer<AuthCubit, AuthState>(
+                    listener: (context, state) {
+                      if (state is AuthSignupSuccessDoctor) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${AppLocalizations.of(context).welcomeDr} ${state.doctor.username}!')),
+                        );
+                        Navigator.pushReplacementNamed(context, RouteNames.login);
+                      } else if (state is AuthSignupSuccessPatient) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${AppLocalizations.of(context).welcome} ${state.patient.username}!')),
+                        );
+                        Navigator.pushReplacementNamed(context, RouteNames.login);
+                      } else if (state is AuthFailure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.message.toString())),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is AuthLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Button(
+                          onClick: _signUp,
+                          text: AppLocalizations.of(context).signup,
+                          color: AppColors.primary,
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context).haveAccount,
+                          style: AppStyle.bodyBlackTextStyle.copyWith(fontSize: 14, color: AppColors.black, fontWeight: FontWeight.w500),
+                        ),
+                        InkWell(
+                          child: Text(AppLocalizations.of(context).login,
+                            style: AppStyle.bodyCyanTextStyle.copyWith(fontSize: 14, color: AppColors.primary1, fontWeight: FontWeight.w500)),
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.signUp);
+                          }
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

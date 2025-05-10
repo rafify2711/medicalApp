@@ -49,6 +49,7 @@ import '../../features/user_profile/presentation/view_model/user_profile_cubit.d
 import '../di/di.dart';
 import '../models/doctor_model/doctor_model.dart';
 import '../../features/reservation/presentation/view/view_schedule_screen.dart';
+import '../../features/settings/presentation/settings_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -336,10 +337,16 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
 
       case RouteNames.hospital:
-        return MaterialPageRoute(builder: (_) => HospitalScreen());
+        return MaterialPageRoute(
+          builder: (_) => HospitalScreen(
+          ),
+        );
 
       case RouteNames.pharmacy:
-        return MaterialPageRoute(builder: (_) => PharmacyListScreen());
+        return MaterialPageRoute(
+          builder: (_) => PharmacyListScreen(
+          ),
+        );
 
       case RouteNames.globalSearch:
         return MaterialPageRoute(
@@ -356,10 +363,16 @@ class RouteGenerator {
           builder: (_) => ViewScheduleScreen(schedule: args['schedule']),
         );
 
+      case RouteNames.settings:
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
+
       default:
         return MaterialPageRoute(
-          builder: (context) => const SplashScreen(),
-          settings: settings,
+          builder: (_) => Scaffold(
+            body: Center(
+              child: Text('No route defined for ${settings.name}'),
+            ),
+          ),
         );
     }
   }

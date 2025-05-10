@@ -1,15 +1,16 @@
-import 'dart:io';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/localization/app_localizations.dart';
+import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
 import '../../../auth/presentation/view/widgets/my_app_par.dart';
 import '../view_model/prediction_cubit.dart';
-import '../view/prediction_history_screen.dart';
 
 class PredictionScreen extends StatefulWidget {
   final String disease;
@@ -28,16 +29,13 @@ class _PredictionScreenState extends State<PredictionScreen> {
   @override
   void initState() {
     super.initState();
-    // Clear any existing prediction when entering the screen
     context.read<PredictionCubit>().clearPrediction();
   }
 
   @override
   void dispose() {
-    // Clear image data
     _imageFile = null;
     _webImage = null;
-    // Clear prediction state
     context.read<PredictionCubit>().clearPrediction();
     super.dispose();
   }
@@ -78,7 +76,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Please select an image first"),
+          content: Text(AppLocalizations.of(context).pleaseSelectImage),
           backgroundColor: Colors.red,
         ),
       );
@@ -89,14 +87,13 @@ class _PredictionScreenState extends State<PredictionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppPar(
-        title: "${widget.disease}",
+        title: AppLocalizations.of(context).prediction,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Section
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -107,7 +104,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Upload Medical Image',
+                    AppLocalizations.of(context).uploadMedicalImage,
                     style: AppStyle.titlesTextStyle.copyWith(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -115,7 +112,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Please upload a clear image for accurate prediction',
+                    AppLocalizations.of(context).uploadClearImage,
                     style: AppStyle.bodyBlackTextStyle.copyWith(
                       color: Colors.grey[600],
                     ),
@@ -125,7 +122,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
             ),
             SizedBox(height: 24),
 
-            // Image Preview Section
             Container(
               width: double.infinity,
               height: 250,
@@ -141,7 +137,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                         Icon(Icons.image, size: 64, color: Colors.grey[400]),
                         SizedBox(height: 16),
                         Text(
-                          'No image selected',
+                          AppLocalizations.of(context).noImageSelected,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[600],
@@ -158,14 +154,13 @@ class _PredictionScreenState extends State<PredictionScreen> {
             ),
             SizedBox(height: 24),
 
-            // Image Selection Buttons
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () => _pickImage(ImageSource.gallery),
                     icon: Icon(Icons.upload_file, color: AppColors.primary1),
-                    label: Text('Gallery'),
+                    label: Text(AppLocalizations.of(context).gallery),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: AppColors.primary1,
@@ -183,7 +178,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                   child: ElevatedButton.icon(
                     onPressed: () => _pickImage(ImageSource.camera),
                     icon: Icon(Icons.camera_alt, color: AppColors.primary1),
-                    label: Text('Camera'),
+                    label: Text(AppLocalizations.of(context).camera),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: AppColors.primary1,
@@ -200,18 +195,16 @@ class _PredictionScreenState extends State<PredictionScreen> {
             ),
             SizedBox(height: 24),
 
-            // Predict Button
             SizedBox(
               width: double.infinity,
               child: Button(
                 onClick: _predictDisease,
-                text: 'Analyze Image',
+                text: AppLocalizations.of(context).analyzeImage,
                 color: AppColors.primary,
               ),
             ),
             SizedBox(height: 24),
 
-            // Results Section
             BlocBuilder<PredictionCubit, PredictionState>(
               builder: (context, state) {
                 if (state is PredictionLoading) {
@@ -221,7 +214,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                         CircularProgressIndicator(color: AppColors.primary1),
                         SizedBox(height: 16),
                         Text(
-                          'Analyzing image...',
+                          AppLocalizations.of(context).analyzingImage,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 16,
@@ -264,7 +257,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                                         Icon(Icons.error_outline, color: Colors.red, size: 32),
                                         SizedBox(height: 8),
                                         Text(
-                                          'Failed to load image',
+                                          AppLocalizations.of(context).failedToLoadImage,
                                           style: TextStyle(color: Colors.red),
                                         ),
                                       ],
@@ -277,7 +270,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                           SizedBox(height: 20),
                         ],
                         Text(
-                          'Analysis Results',
+                          AppLocalizations.of(context).analysisResults,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -296,7 +289,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Prediction:',
+                                AppLocalizations.of(context).prediction + ':',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -315,7 +308,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                               if (state.prediction.confidence != null) ...[
                                 SizedBox(height: 12),
                                 Text(
-                                  'Confidence:',
+                                  AppLocalizations.of(context).confidence + ':',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -355,7 +348,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                             Icon(Icons.error_outline, color: Colors.red[700]),
                             SizedBox(width: 8),
                             Text(
-                              'Error',
+                              AppLocalizations.of(context).error,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -385,5 +378,3 @@ class _PredictionScreenState extends State<PredictionScreen> {
     );
   }
 }
-
-

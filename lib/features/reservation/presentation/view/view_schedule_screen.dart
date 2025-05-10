@@ -4,6 +4,7 @@ import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/button.dart';
 import 'package:graduation_medical_app/features/reservation/presentation/view/add_doctor_scadule.dart';
+import 'package:graduation_medical_app/core/localization/app_localizations.dart';
 
 class ViewScheduleScreen extends StatelessWidget {
   final List<ScheduleModel>? schedule;
@@ -13,7 +14,7 @@ class ViewScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppPar(title: 'My Schedule'),
+      appBar: MyAppPar(title: AppLocalizations.of(context).mySchedule),
       body: schedule == null || schedule!.isEmpty
           ? Center(
               child: Column(
@@ -26,7 +27,7 @@ class ViewScheduleScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'No schedule available',
+                    AppLocalizations.of(context).noScheduleAvailable,
                     style: TextStyle(
                       fontSize: 18,
                       color: AppColors.primary,
@@ -42,7 +43,7 @@ class ViewScheduleScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    text: 'Add Schedule',
+                    text: AppLocalizations.of(context).addSchedule,
                   ),
                 ],
               ),
@@ -117,7 +118,7 @@ class ViewScheduleScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    text: 'Add More Slots',
+                    text: AppLocalizations.of(context).addMoreSlots,
                   ),
                 ),
               ],

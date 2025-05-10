@@ -4,6 +4,7 @@ import 'package:graduation_medical_app/core/utils/drug_constants.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
 import '../view_model/check_drug_interaction_cubit.dart';
 
@@ -41,7 +42,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Check Drug Interactions',
+                AppLocalizations.of(context).checkDrugInteractions,
                 style: AppStyle.bodyCyanTextStyle.copyWith(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -49,7 +50,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                'Select two drugs to check their interaction',
+                AppLocalizations.of(context).selectTwoDrugs,
                 style: AppStyle.bodyCyanTextStyle.copyWith(
                   fontSize: 16,
                   color: Colors.grey[600],
@@ -75,7 +76,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                     DropdownButtonFormField<String>(
                       value: selectedDrug1,
                       decoration: InputDecoration(
-                        labelText: 'First Drug',
+                        labelText: AppLocalizations.of(context).firstDrug,
                         labelStyle: TextStyle(color: AppColors.primary),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -105,7 +106,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a drug';
+                          return AppLocalizations.of(context).pleaseSelectDrug;
                         }
                         return null;
                       },
@@ -114,7 +115,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                     DropdownButtonFormField<String>(
                       value: selectedDrug2,
                       decoration: InputDecoration(
-                        labelText: 'Second Drug',
+                        labelText: AppLocalizations.of(context).secondDrug,
                         labelStyle: TextStyle(color: AppColors.primary),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -144,7 +145,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a drug';
+                          return AppLocalizations.of(context).pleaseSelectDrug;
                         }
                         return null;
                       },
@@ -162,15 +163,15 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please select both drugs'),
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context).pleaseSelectBothDrugs),
                         backgroundColor: Colors.red,
                         behavior: SnackBarBehavior.floating,
                       ),
                     );
                   }
                 },
-                text: 'Check Interaction',
+                text: AppLocalizations.of(context).checkInteraction,
               ),
               const SizedBox(height: 24),
               BlocBuilder<CheckDrugInteractionCubit, CheckDrugInteractionState>(
@@ -184,7 +185,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Checking interaction...',
+                            AppLocalizations.of(context).checkingInteraction,
                             style: AppStyle.bodyCyanTextStyle.copyWith(
                               fontSize: 16,
                               color: Colors.grey[600],
@@ -212,7 +213,7 @@ class _CheckDrugInteractionScreenState extends State<CheckDrugInteractionScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Interaction Result',
+                            AppLocalizations.of(context).interactionResult,
                             style: AppStyle.bodyCyanTextStyle.copyWith(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

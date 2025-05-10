@@ -5,6 +5,7 @@ import '../../../../core/models/chat_message.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_style.dart';
 import '../view_model/chat_cubit.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -93,7 +94,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppPar(
-        title: 'ChatBot',
+        title: AppLocalizations.of(context).chatbot,
         action: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.white),
@@ -127,7 +128,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateM
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            "No messages yet.",
+                            AppLocalizations.of(context).noMessages,
                             style: AppStyle.bodyCyanTextStyle.copyWith(
                               fontSize: 18,
                               color: AppColors.primary.withOpacity(0.7),
@@ -172,7 +173,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> with TickerProviderStateM
                       controller: _controller,
                       onSubmitted: (_) => _sendMessage(),
                       decoration: InputDecoration(
-                        hintText: "Type your message...",
+                        hintText: AppLocalizations.of(context).chatbotPlaceholder,
                         hintStyle: TextStyle(color: Colors.grey[400]),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),

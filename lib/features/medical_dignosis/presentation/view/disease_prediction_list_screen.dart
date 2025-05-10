@@ -4,59 +4,70 @@ import 'package:graduation_medical_app/core/utils/app_style.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/medical_dignosis/presentation/view/prediction_screen.dart';
 import 'package:graduation_medical_app/features/medical_dignosis/presentation/view/prediction_history_screen.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class DiseasePredictionListScreen extends StatelessWidget {
   DiseasePredictionListScreen({super.key});
 
-  final List<Map<String, dynamic>> diseases = [
+  List<Map<String, dynamic>> getDiseases(BuildContext context) => [
     {
       "name": "covid19",
+      "displayName": AppLocalizations.of(context).covid19,
       "icon": Icons.coronavirus,
-      "description": "Predict COVID-19 from chest X-ray images",
+      "description": AppLocalizations.of(context).covid19Description,
     },
     {
       "name": "brain-tumor",
+      "displayName": AppLocalizations.of(context).brainTumor,
       "icon": Icons.psychology,
-      "description": "Detect brain tumors from MRI scans",
+      "description": AppLocalizations.of(context).brainTumorDescription,
     },
     {
       "name": "kidney-stone",
+      "displayName": AppLocalizations.of(context).kidneyStone,
       "icon": Icons.medical_services,
-      "description": "Identify kidney stones from ultrasound images",
+      "description": AppLocalizations.of(context).kidneyStoneDescription,
     },
     {
       "name": "skin-cancer",
+      "displayName": AppLocalizations.of(context).skinCancer,
       "icon": Icons.add,
-      "description": "Analyze skin lesions for cancer detection",
+      "description": AppLocalizations.of(context).skinCancerDescription,
     },
     {
       "name": "tuberculosis",
+      "displayName": AppLocalizations.of(context).tuberculosis,
       "icon": Icons.air,
-      "description": "Detect tuberculosis from chest X-rays",
+      "description": AppLocalizations.of(context).tuberculosisDescription,
     },
     {
       "name": "bone-fracture",
+      "displayName": AppLocalizations.of(context).boneFracture,
       "icon": Icons.add,
-      "description": "Identify bone fractures from X-ray images",
+      "description": AppLocalizations.of(context).boneFractureDescription,
     },
     {
       "name": "Alzheimer",
+      "displayName": AppLocalizations.of(context).alzheimer,
       "icon": Icons.psychology_alt,
-      "description": "Analyze brain scans for Alzheimer detection",
+      "description": AppLocalizations.of(context).alzheimerDescription,
     },
     {
       "name": "eye-diseases",
+      "displayName": AppLocalizations.of(context).eyeDiseases,
       "icon": Icons.visibility,
-      "description": "Detect various eye conditions from retinal images",
+      "description": AppLocalizations.of(context).eyeDiseasesDescription,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    final diseases = getDiseases(context);
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Disease Prediction"),
+        title: Text(AppLocalizations.of(context).diseasePrediction),
         actions: [
           IconButton(
             icon: Icon(Icons.history),
@@ -77,7 +88,7 @@ class DiseasePredictionListScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Select a Disease",
+              AppLocalizations.of(context).selectDisease,
               style: AppStyle.titlesTextStyle.copyWith(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -85,7 +96,7 @@ class DiseasePredictionListScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              "Choose a disease to analyze and get predictions",
+              AppLocalizations.of(context).chooseDisease,
               style: AppStyle.bodyBlackTextStyle.copyWith(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -138,7 +149,7 @@ class DiseasePredictionListScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    disease["name"] as String,
+                                    disease["displayName"] as String,
                                     style: AppStyle.bodyBlackTextStyle.copyWith(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,

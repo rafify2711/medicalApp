@@ -6,15 +6,12 @@ import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/features/prescription/presentation/view_model/prescription_cubit.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/utils/app_style.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
 import '../../../auth/presentation/view/widgets/my_app_par.dart';
 
-
 class ReadPrescriptionScreen extends StatefulWidget {
-
-
-
-  const ReadPrescriptionScreen({Key? key,}) : super(key: key);
+  const ReadPrescriptionScreen({Key? key}) : super(key: key);
 
   @override
   _ReadPrescriptionScreen createState() => _ReadPrescriptionScreen();
@@ -27,13 +24,8 @@ class _ReadPrescriptionScreen extends State<ReadPrescriptionScreen> {
 
   @override
   void dispose() {
-    // Clean up resources when the screen is popped
     _imageFile = null;
     _webImage = null;
-
-
-
-    // Call the superclass dispose method to ensure proper cleanup
     super.dispose();
   }
 
@@ -64,8 +56,9 @@ class _ReadPrescriptionScreen extends State<ReadPrescriptionScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Please select an image first"),
+          content: Text(AppLocalizations.of(context).selectImageFirst),
           backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
@@ -74,164 +67,254 @@ class _ReadPrescriptionScreen extends State<ReadPrescriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppPar(title: "Read Prescription"),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Display selected image
-            if (_imageFile == null && _webImage == null)
-              Column(
+      appBar: MyAppPar(title: AppLocalizations.of(context).readPrescription),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.primary.withOpacity(0.1),
+              Colors.white,
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Image Preview Section
+              Container(
+                width: double.infinity,
+                height: 250,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: _imageFile == null && _webImage == null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.image, size: 80, color: Colors.grey[400]),
+                          SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context).noImageSelected,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: kIsWeb && _webImage != null
+                            ? Image.memory(_webImage!, fit: BoxFit.cover)
+                            : Image.file(_imageFile!, fit: BoxFit.cover),
+                      ),
+              ),
+              SizedBox(height: 24),
+
+              // Image Selection Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.image, size: 100, color: Colors.grey),
-                  SizedBox(height: 10),
-                  Text(
-                    'No image selected',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  _buildImageButton(
+                    icon: Icons.upload,
+                    label: AppLocalizations.of(context).uploadImage,
+                    onTap: () => _pickImage(ImageSource.gallery),
+                  ),
+                  SizedBox(width: 16),
+                  _buildImageButton(
+                    icon: Icons.camera_alt,
+                    label: AppLocalizations.of(context).takePhoto,
+                    onTap: () => _pickImage(ImageSource.camera),
                   ),
                 ],
-              )
-            else
-              Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey, width: 2),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child:
-                  kIsWeb && _webImage != null
-                      ? Image.memory(_webImage!, fit: BoxFit.cover)
-                      : Image.file(_imageFile!, fit: BoxFit.cover),
-                ),
               ),
+              SizedBox(height: 24),
 
-            SizedBox(height: 20),
+              // Read Button
+              Button(
+                onClick: _readPrescription,
+                text: AppLocalizations.of(context).read,
+              ),
+              SizedBox(height: 24),
 
-            // Image selection buttons
-            Wrap(
-              spacing: 20,
-              alignment: WrapAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: AppColors.primary),
-                        borderRadius: BorderRadius.circular(25),
+              // Result Section
+              BlocBuilder<PrescriptionCubit, PrescriptionState>(
+                builder: (context, state) {
+                  if (state is PrescriptionLoading) {
+                    return Center(
+                      child: Column(
+                        children: [
+                          CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context).processingImage,
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    backgroundColor: MaterialStateProperty.all(AppColors.white),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(8)),
-                    elevation: MaterialStateProperty.all(0),
-                  ),
-                  onPressed: () => _pickImage(ImageSource.gallery),
-                  icon: Icon(Icons.upload, color: AppColors.primary),
-                  label: Text(
-                    'Upload Image',
-                    style: AppStyle.bodyCyanTextStyle,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: AppColors.primary),
-                        borderRadius: BorderRadius.circular(25),
+                    );
+                  } else if (state is PrescriptionSuccess) {
+                    return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.green.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.green.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
                       ),
-                    ),
-                    backgroundColor: MaterialStateProperty.all(AppColors.white),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(8)),
-                    elevation: MaterialStateProperty.all(0),
-                  ),
-                  onPressed: () => _pickImage(ImageSource.camera),
-                  icon: Icon(Icons.camera_alt, color: AppColors.primary),
-                  label: Text(
-                    'Take a Photo',
-                    style: AppStyle.bodyCyanTextStyle,
-                  ),
-                ),
-              ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.check_circle, color: Colors.green[700]),
+                              SizedBox(width: 8),
+                              Text(
+                                AppLocalizations.of(context).detectedText,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12),
+                          Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.green.shade200),
+                            ),
+                            child: SelectableText(
+                              state.prescription.detectedText ?? '',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.green[900],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is PrescriptionFailure) {
+                    return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.red.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.error_outline, color: Colors.red[700]),
+                              SizedBox(width: 8),
+                              Text(
+                                AppLocalizations.of(context).error,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            state.error,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return SizedBox();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 1),
             ),
-            SizedBox(height: 20),
-
-            Button(onClick: _readPrescription, text: ' Read'),
-            SizedBox(height: 20),
-            // Display response
-            BlocBuilder<PrescriptionCubit, PrescriptionState>(
-              builder: (context, state) {
-                if (state is PrescriptionLoading) {
-                  return CircularProgressIndicator();
-                } else if (state is PrescriptionSuccess) {
-                  return Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.green, width: 1),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Prediction:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green[800],
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        SelectableText(
-                          " ${state.prescription.detectedText}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-
-                      ],
-                    ),
-                  );
-                } else if (state is PrescriptionFailure) {
-                  return Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.red, width: 1),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Error:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red[800],
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        SelectableText(
-                          state.error,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.red[700],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return SizedBox();
-              },
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: AppColors.primary),
+            SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../load_data/load_hospital_data.dart';
 import '../../models/hospital_model.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class HospitalScreen extends StatefulWidget {
   const HospitalScreen({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _HospitalScreenState extends State<HospitalScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "Hospitals",
+          AppLocalizations.of(context).hospitals,
           style: TextStyle(
             color: Colors.black87,
             fontSize: 24,
@@ -127,7 +128,7 @@ class _HospitalScreenState extends State<HospitalScreen> {
                     Icon(Icons.error_outline, size: 60, color: Colors.grey),
                     SizedBox(height: 16),
                     Text(
-                      'Error loading hospitals',
+                      AppLocalizations.of(context).errorOccurred,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 18,
@@ -145,19 +146,19 @@ class _HospitalScreenState extends State<HospitalScreen> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: "Search hospitals...",
-                      hintStyle: TextStyle(color: Colors.grey[400]),
-                      prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
-                      suffixIcon: _searchController.text.isNotEmpty
-                          ? IconButton(
-                        icon: Icon(Icons.clear, color: Colors.grey[400]),
-                        onPressed: () {
-                          _searchController.clear();
-                        },
-                      )
-                          : null,
-                      filled: true,
-                      fillColor: Colors.grey[100],
+                    hintText: AppLocalizations.of(context).searchHint,
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                      icon: Icon(Icons.clear, color: Colors.grey[400]),
+                      onPressed: () {
+                        _searchController.clear();
+                      },
+                    )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.grey[100],
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -195,8 +196,8 @@ class _HospitalScreenState extends State<HospitalScreen> {
                         SizedBox(height: 16),
                         Text(
                           _searchController.text.isEmpty
-                              ? "No Hospitals Available"
-                              : "No Hospitals Found",
+                              ? AppLocalizations.of(context).noHospitalsAvailable
+                              : AppLocalizations.of(context).noHospitalsFound,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 18,
@@ -268,7 +269,7 @@ class _HospitalScreenState extends State<HospitalScreen> {
                                         ),
                                         SizedBox(height: 4),
                                         Text(
-                                          hospital.type,
+                                          AppLocalizations.of(context).hospitalType + ': ' + hospital.type,
                                           style: TextStyle(
                                             color: Color(0xFF30948F),
                                             fontSize: 14,

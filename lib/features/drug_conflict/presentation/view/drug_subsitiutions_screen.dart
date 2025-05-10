@@ -4,6 +4,7 @@ import 'package:graduation_medical_app/core/utils/drug_constants.dart';
 import 'package:graduation_medical_app/features/drug_conflict/presentation/view_model/drug_substitutions_cubit.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
 
 class DrugSubstitutionScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Find Drug Substitutions',
+                      AppLocalizations.of(context).findDrugSubstitutions,
                       style: AppStyle.bodyCyanTextStyle.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -72,7 +73,7 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Select a drug to find suitable alternatives',
+                        AppLocalizations.of(context).selectDrugForAlternatives,
                         style: AppStyle.bodyCyanTextStyle.copyWith(
                           fontSize: 14,
                           color: Colors.grey[700],
@@ -101,7 +102,7 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                   value: selectedDrug,
                   isExpanded: true,
                   decoration: InputDecoration(
-                    labelText: 'Select Drug',
+                    labelText: AppLocalizations.of(context).drugs,
                     labelStyle: TextStyle(color: AppColors.primary),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -135,7 +136,7 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please select a drug';
+                      return AppLocalizations.of(context).pleaseSelectDrug;
                     }
                     return null;
                   },
@@ -148,15 +149,15 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                     context.read<DrugSubstitutionsCubit>().getDrugSubstitutions(selectedDrug!);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please select a drug'),
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context).pleaseSelectDrug),
                         backgroundColor: Colors.red,
                         behavior: SnackBarBehavior.floating,
                       ),
                     );
                   }
                 },
-                text: 'Find Substitutions',
+                text: AppLocalizations.of(context).checkInteraction,
               ),
               const SizedBox(height: 24),
               BlocBuilder<DrugSubstitutionsCubit, DrugSubstitutionsState>(
@@ -170,7 +171,7 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Finding alternatives...',
+                            AppLocalizations.of(context).findingAlternatives,
                             style: AppStyle.bodyCyanTextStyle.copyWith(
                               fontSize: 16,
                               color: Colors.grey[600],
@@ -206,7 +207,7 @@ class _DrugSubstitutionScreenState extends State<DrugSubstitutionScreen> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Alternative Drugs',
+                                AppLocalizations.of(context).alternativeDrugs,
                                 style: AppStyle.bodyCyanTextStyle.copyWith(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,

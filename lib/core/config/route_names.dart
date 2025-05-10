@@ -29,4 +29,5 @@ class RouteNames {
   static const String pharmacy = '/pharmacy';
   static const String globalSearch = '/global-search';
   static const String viewSchedule = '/viewSchedule';
+  static const String settings = '/settings';
 }

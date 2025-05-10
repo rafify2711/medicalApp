@@ -5,6 +5,7 @@ import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/core/utils/app_style.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/doctor_profile/presentation/view_model/doctor_profile_cubit.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class EditDoctorProfileScreen extends StatefulWidget {
   final DoctorModel profile;
@@ -68,12 +69,12 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Edit Profile"),
+          title: Text(AppLocalizations.of(context).editProfile),
           actions: [
             TextButton(
               onPressed: _saveChanges,
               child: Text(
-                'Save',
+                AppLocalizations.of(context).save,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -95,49 +96,49 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildSection(
-                      title: 'Personal Information',
+                      title: AppLocalizations.of(context).personalInfo,
                       children: [
                         _buildTextField(
                           controller: _usernameController,
-                          label: 'Full Name',
+                          label: AppLocalizations.of(context).fullName,
                           icon: Icons.person,
                         ),
                         _buildTextField(
                           controller: _emailController,
-                          label: 'Email',
+                          label: AppLocalizations.of(context).email,
                           icon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
                         ),
                         _buildTextField(
                           controller: _phoneController,
-                          label: 'Phone',
+                          label: AppLocalizations.of(context).phone,
                           icon: Icons.phone,
                           keyboardType: TextInputType.phone,
                         ),
                         _buildTextField(
                           controller: _addressController,
-                          label: 'Address',
+                          label: AppLocalizations.of(context).address,
                           icon: Icons.location_on,
                         ),
                       ],
                     ),
                     SizedBox(height: 24),
                     _buildSection(
-                      title: 'Professional Information',
+                      title: AppLocalizations.of(context).professionalInfo,
                       children: [
                         _buildTextField(
                           controller: _specialtyController,
-                          label: 'Specialty',
+                          label: AppLocalizations.of(context).specialty,
                           icon: Icons.medical_services,
                         ),
                         _buildTextField(
                           controller: _educationController,
-                          label: 'Education',
+                          label: AppLocalizations.of(context).education,
                           icon: Icons.school,
                         ),
                         _buildTextField(
                           controller: _experienceController,
-                          label: 'Experience (years)',
+                          label: AppLocalizations.of(context).experienceYears,
                           icon: Icons.work,
                           keyboardType: TextInputType.number,
                         ),
@@ -145,19 +146,19 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                     ),
                     SizedBox(height: 24),
                     _buildSection(
-                      title: 'Working Hours',
+                      title: AppLocalizations.of(context).workingHours,
                       children: [
                         _buildTextField(
                           controller: _workingDaysController,
-                          label: 'Working Days',
+                          label: AppLocalizations.of(context).workingDays,
                           icon: Icons.calendar_today,
-                          hint: 'e.g., Monday - Friday',
+                          hint: AppLocalizations.of(context).workingDaysHint,
                         ),
                         _buildTextField(
                           controller: _workingHoursController,
-                          label: 'Working Hours',
+                          label: AppLocalizations.of(context).workingHours,
                           icon: Icons.access_time,
-                          hint: 'e.g., 9:00 AM - 5:00 PM',
+                          hint: AppLocalizations.of(context).workingHoursHint,
                         ),
                       ],
                     ),
