@@ -7,12 +7,10 @@ MedicalApp is a Flutter-based mobile application designed to streamline interact
 ### 👨‍⚕️ Doctor
 - AI Diagnosis Support
 - Manage Appointments
-- Chat with Patients
 - View Patient History
 
 ### 🧑‍⚕️ Patient
 - Book Appointments
-- Chat with Doctors
 - View Prescriptions
 - Drug Interaction Checker
 - Access Medical Reports
