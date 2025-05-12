@@ -1,16 +1,49 @@
-# graduation_medical_app
+# MedicalApp
 
-A new Flutter project.
+MedicalApp is a Flutter-based mobile application designed to streamline interactions between doctors and patients. The app provides medical services such as AI-based diagnosis, chat, appointment booking, and drug interaction checks.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+### 👨‍⚕️ Doctor
+- AI Diagnosis Support
+- Manage Appointments
+- Chat with Patients
+- View Patient History
 
-A few resources to get you started if this is your first Flutter project:
+### 🧑‍⚕️ Patient
+- Book Appointments
+- Chat with Doctors
+- View Prescriptions
+- Drug Interaction Checker
+- Access Medical Reports
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🧱 Architecture
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The app follows **Clean Architecture** principles:
+- **Presentation Layer**: Flutter UI + Cubit (Bloc)
+- **Domain Layer**: Use Cases, Entities
+- **Data Layer**: Repositories, Data Sources, Models
+
+## 🔧 Technologies Used
+
+- **Flutter**
+- **Cubit (Bloc)** for state management
+- **Retrofit** for API integration
+- **Injectable & GetIt** for dependency injection
+- **Firestore** (for appointment booking)
+- **Custom Auth Backend**
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK
+- Dart SDK
+- Android Studio or VS Code
+
+### Installation
+
+```bash
+git clone https://github.com/rafify2711/medicalApp.git
+cd medicalApp
+flutter pub get
+flutter run
