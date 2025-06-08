@@ -26,6 +26,8 @@ import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
 import '../../features/chat_bot/data/models/chat_response.dart';
+import '../../features/doctor_profile/data/models/update_doctor_model.dart';
+import '../../features/doctor_profile/data/models/update_doctor_response.dart';
 import '../../features/edit_profile/data/models/updated_user_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
 import '../../features/prescription/data/models/prescription_response.dart';
@@ -126,6 +128,12 @@ abstract class ApiClient {
 
   @DELETE("api/chat/delete-chat")
   Future<ApiMessageResponse> deleteChat(@Query('email') String userId);
+
+  @PUT("doctor/{doctorId}")
+  Future<UpdateDoctorResponse> updateDoctorProfile(
+    @Path("doctorId") String userId,
+    @Body() UpdateDoctorModel model,
+  );
 }
 
 @RestApi(baseUrl: "https://medicalapp-sku9qeo9.b4a.run/api/")

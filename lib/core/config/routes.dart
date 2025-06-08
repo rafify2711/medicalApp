@@ -8,6 +8,7 @@ import 'package:graduation_medical_app/features/hospitals_and_pharmacies/models/
 import 'package:graduation_medical_app/features/hospitals_and_pharmacies/models/pharmacy_model.dart';
 
 import '../../features/user_appointment/presentation/view/user_doctors_screen/user_doctors_screen.dart';
+import '../models/doctor_model/doctor_model.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -17,12 +18,7 @@ class Routes {
           builder: (_) => GlobalSearchScreen(),
         );
       
-      case RouteNames.doctorDetails:
-        final doctor = settings.arguments as DoctorsModel;
-        return MaterialPageRoute(
-          builder: (_) => DoctorDetailsScreen(doctor: doctor),
-        );
-      
+
       case RouteNames.hospital:
         final hospital = settings.arguments as Hospital;
         return MaterialPageRoute(

@@ -87,7 +87,7 @@ class RouteGenerator {
                     create: (context) => getIt<PredictionCubit>(),
                   ),
                 ],
-                child: DoctorHomeScreen(),
+                child: DoctorHomeScreen(userId: '',),
               ),
         );
 
@@ -157,7 +157,8 @@ class RouteGenerator {
         );
 
       case RouteNames.doctorDetails:
-        final doctor = settings.arguments as DoctorsModel;
+        final args = settings.arguments as Map<String, dynamic>;
+        final doctor = args['doctor'] as DoctorsModel;
         return MaterialPageRoute(
           builder: (_) => DoctorDetailsScreen(doctor: doctor),
         );
@@ -325,7 +326,7 @@ class RouteGenerator {
             ],
             child: MakeReservationScreen(
               doctorId: args['doctorId'],
-              selectedDate: args['selectedDate'],
+              selectedDate: args['selectedDate']
             ),
           ),
         );

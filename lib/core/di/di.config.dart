@@ -288,11 +288,14 @@ extension GetItInjectableX on _i174.GetIt {
         localDataSource: gh<_i280.AuthLocalDataSource>(),
       ),
     );
+    gh.factory<_i64.DoctorProfileCubit>(
+      () => _i64.DoctorProfileCubit(
+        gh<_i478.DoctorProfileRepository>(),
+        gh<_i397.SharedPrefs>(),
+      ),
+    );
     gh.factory<_i584.UpdateUserProfileCubit>(
       () => _i584.UpdateUserProfileCubit(gh<_i401.UpdateUserProfileUseCase>()),
-    );
-    gh.factory<_i64.DoctorProfileCubit>(
-      () => _i64.DoctorProfileCubit(gh<_i478.DoctorProfileRepository>()),
     );
     gh.factory<_i596.DoctorRepository>(
       () => _i596.DoctorRepository(

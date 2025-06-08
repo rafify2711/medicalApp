@@ -6,7 +6,9 @@ import 'package:graduation_medical_app/core/localization/app_localizations.dart'
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_style.dart';
 class DoctorHomeScreen extends StatefulWidget {
-  const DoctorHomeScreen({super.key});
+  final String userId;
+
+  const DoctorHomeScreen({super.key, required this.userId});
 
   @override
   State<DoctorHomeScreen> createState() => _DoctorHomeScreenState();
@@ -34,6 +36,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<DoctorProfileCubit>().fetchDoctorProfile(widget.userId);
     _loadAppointments();
   }
 

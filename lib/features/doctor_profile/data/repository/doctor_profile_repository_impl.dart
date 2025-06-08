@@ -4,8 +4,8 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/shared_prefs.dart';
 import '../../../user_appointment/data/repository/all_doctor_repo_impl.dart';
-
 import '../../domain/repository/doctor_profile_repository.dart';
+import '../models/update_doctor_model.dart';
 
 @LazySingleton(as: DoctorProfileRepository)
 class DoctorProfileRepositoryImpl implements DoctorProfileRepository {
@@ -15,14 +15,12 @@ class DoctorProfileRepositoryImpl implements DoctorProfileRepository {
   DoctorProfileRepositoryImpl(this._apiService, this._sharedPrefs);
 
   @override
-  Future<DoctorModel> getDoctorProfile( String userId) async {
+  Future<DoctorModel> getDoctorProfile(String userId) async {
     try {
-
-      final storedUserId =await _sharedPrefs.getUserId();
-
+      final storedUserId = await _sharedPrefs.getUserId();
       userId = userId.isNotEmpty ? userId : (storedUserId ?? "");
 
-      if ( userId.isEmpty) {
+      if (userId.isEmpty) {
         throw Exception("Missing authentication data");
       }
 
@@ -33,6 +31,20 @@ class DoctorProfileRepositoryImpl implements DoctorProfileRepository {
     }
   }
 
+  @override
+  Future<DoctorModel> updateDoctorProfile(String userId, String token, UpdateDoctorModel model) async {
+    try {
+      final storedUserId = await _sharedPrefs.getUserId();
+      userId = userId.isNotEmpty ? userId : (storedUserId ?? "");
 
+      if (userId.isEmpty) {
+        throw Exception("Missing authentication data");
+      }
 
+      final response = await _apiService.updateDoctorProfile(userId, model);
+      return response.updatedDoctor;
+    } catch (e) {
+      throw Exception("Failed to update doctor profile: ${e.toString()}");
+    }
+  }
 }

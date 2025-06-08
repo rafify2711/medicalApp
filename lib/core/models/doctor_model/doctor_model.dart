@@ -3,45 +3,56 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'doctor_model.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class DoctorModel {
+  @JsonKey(name: 'contact')
+  final ContactModel? contact;
+  final String? name;
+  final List<String>? careerPath;
+  final List<String>? highlights;
   @JsonKey(name: '_id')
   final String? id;
   final String? username;
   final String? email;
   final String? specialty;
-  final String? gender;
-  final String? phone;
-  final String? profilePhoto;
-  final DateTime? changePasswordTime;
-  final bool? isDeleted;
-  @JsonKey(name: 'password')
   final String? password;
-  @JsonKey(name: 'role')
-  final String? role;
-  @JsonKey(name: 'reservations')
-  final List<Reservation>? reservations;
+  final String? phone;
+  final String? gender;
+  final String? changePasswordTime;
+  final bool? isDeleted;
+  final String? profilePhoto;
+  final List<String>? reservations;
   @JsonKey(name: 'schedule')
   final List<ScheduleModel>? schedule;
   @JsonKey(name: '__v')
-  final int? version;
-
+  final int? v;
+  final String? role;
+  final String? bio;
+  final int? experience;
+  final String? updatedAt;
 
   DoctorModel({
-    this.id,
-    this.username,
-    this.email,
-    this.specialty,
-    this.gender,
-    this.phone,
-    this.profilePhoto,
-    this.changePasswordTime,
-    this.isDeleted,
-    this.password,
-    this.role,
-    this.reservations,
-    this.schedule,
-    this.version,
+     this.contact,
+     this.name,
+     this.careerPath,
+     this.highlights,
+     this.id,
+     this.username,
+     this.email,
+     this.specialty,
+     this.password,
+     this.phone,
+     this.gender,
+     this.changePasswordTime,
+     this.isDeleted,
+     this.profilePhoto,
+     this.reservations,
+     this.schedule,
+     this.v,
+     this.role,
+     this.bio,
+     this.experience,
+     this.updatedAt,
   });
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) =>
@@ -94,4 +105,28 @@ class ScheduleModel {
       _$ScheduleModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
+}
+
+@JsonSerializable()
+class ContactModel {
+  final String? facebook;
+  final String? linkedin;
+  final String? twitter;
+  final String? website;
+  final String? whatsapp;
+  final String? phone;
+
+  ContactModel({
+    this.facebook,
+    this.linkedin,
+    this.twitter,
+    this.website,
+    this.whatsapp,
+    this.phone,
+  });
+
+  factory ContactModel.fromJson(Map<String, dynamic> json) =>
+      _$ContactModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ContactModelToJson(this);
 }

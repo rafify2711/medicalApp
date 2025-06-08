@@ -10,6 +10,10 @@ class MyTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
   final IconData? prefixIcon;
+  final bool? enabled;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+  final Function(String)? onChanged;
 
   const MyTextField({
     Key? key,
@@ -18,13 +22,16 @@ class MyTextField extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.validator,
-    this.prefixIcon,
+    this.prefixIcon, this.enabled, this.maxLines, this.keyboardType, this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
+      onChanged: onChanged?? null,
+     keyboardType: keyboardType?? TextInputType.text,
+      enabled: enabled?? true,
+      maxLines: maxLines??1,
       controller: controller,
       obscureText: obscureText,
       validator: validator,

@@ -45,9 +45,16 @@ class Button extends StatelessWidget {
             child: Center(
               child: Text(
                 text,
+                textAlign: TextAlign.center,
                 style: isWhite
-                    ? AppStyle.bodyCyanTextStyle.copyWith(fontSize:18)
-                    : AppStyle.bodyWhiteTextStyle.copyWith(fontSize:18 ),
+                    ? AppStyle.bodyCyanTextStyle.copyWith(
+                        fontSize: 16,
+                        height: 1.2,
+                      )
+                    : AppStyle.bodyWhiteTextStyle.copyWith(
+                        fontSize: 16,
+                        height: 1.2,
+                      ),
               ),
             ),
           ),

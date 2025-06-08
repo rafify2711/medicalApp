@@ -554,6 +554,17 @@ class AppLocalizations {
       'noProfileData': 'No profile data available',
       'selectDateOfBirth': 'Select Date of Birth',
       'dob': 'Date of Birth',
+      'yearsExperience': 'years experience',
+      'focus': 'Focus',
+      'noBioAvailable': 'No bio available',
+      'careerPath': 'Career Path',
+      'noCareerPath': 'No career path available',
+      'highlights': 'Highlights',
+      'noHighlights': 'No highlights available',
+      'bio': 'Bio',
+      'basicInfo': 'Basic Information',
+      'contactInfo': 'Contact Information',
+      'contactPhone': 'Contact Phone',
     },
     'ar': {
       'appName': 'تطبيق طبي',
@@ -1095,6 +1106,17 @@ class AppLocalizations {
       'noProfileData': 'لا توجد بيانات الملف الشخصي',
       'selectDateOfBirth': 'اختر تاريخ الميلاد',
       'dob': 'تاريخ الميلاد',
+      'yearsExperience': 'سنوات خبرة',
+      'focus': 'التركيز',
+      'noBioAvailable': 'لا توجد سيرة ذاتية متاحة',
+      'careerPath': 'المسار المهني',
+      'noCareerPath': 'لا يوجد مسار مهني متاح',
+      'highlights': 'الميزات',
+      'noHighlights': 'لا توجد ميزات متاحة',
+      'bio': 'السيرة الذاتية',
+      'basicInfo': 'المعلومات الأساسية',
+      'contactInfo': 'معلومات الاتصال',
+      'contactPhone': 'هاتف الاتصال',
     },
   };
 
@@ -1647,6 +1669,16 @@ class AppLocalizations {
   String get noCompletedAppointments => get('noCompletedAppointments');
   String get date => get('date');
   String get status => get('status');
+  String get focus => get('focus');
+  String get noBioAvailable => get('noBioAvailable');
+  String get careerPath => get('careerPath');
+  String get noCareerPath => get('noCareerPath');
+  String get highlights => get('highlights');
+  String get noHighlights => get('noHighlights');
+  String get bio => get('bio');
+  String get basicInfo => get('basicInfo');
+  String get contactInfo => get('contactInfo');
+  String get contactPhone => get('contactPhone');
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

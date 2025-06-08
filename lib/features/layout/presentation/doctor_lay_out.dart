@@ -20,7 +20,7 @@ class _DoctorLayOutState extends State<DoctorLayOut> {
   int _selectedIndex = 0;
 
   static  final List<Widget> _screens = <Widget>[
-    DoctorHomeScreen(),
+    DoctorHomeScreen(userId: ''),
     ViewScheduleScreen(),
     DoctorProfileScreen(userId: ''),
 
@@ -54,49 +54,3 @@ class _DoctorLayOutState extends State<DoctorLayOut> {
   }
 }
 
-// Sample Screens
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      appBar: AppBar(title: Text('Home')),
-      body: Center(child: Text('Home Screen')),
-    );
-  }
-}
-
-class DoctorsScreen extends StatelessWidget {
-  const DoctorsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Doctors')),
-      body: Center(child: Text('Doctors Screen')),
-    );
-  }
-}
-
-
-class CleanerScreen extends StatelessWidget {
-  const CleanerScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('cleaner')),
-      body: Center(child: Text('cleaner')),
-    );
-  }
-}
-
-class RecordScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Record')),
-      body: Center(child: Text('Record Screen')),
-    );
-  }
-}

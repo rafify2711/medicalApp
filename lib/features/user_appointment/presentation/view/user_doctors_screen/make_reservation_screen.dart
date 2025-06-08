@@ -181,6 +181,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 20), // Kept this as it was a separate request
                 // Selected Date
                 Text(
                   AppLocalizations.of(context).selectedDate,

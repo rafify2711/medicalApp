@@ -69,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                         // Avatar
                         CircleAvatar(
                           radius: 44,
-                          backgroundImage: userData.profilePhoto != null && userData.profilePhoto!.isNotEmpty
+                          backgroundImage: (userData.profilePhoto != null && (userData.profilePhoto!.startsWith('http://') || userData.profilePhoto!.startsWith('https://')))
                               ? NetworkImage(userData.profilePhoto!)
                               : AssetImage("lib/assets/img/default_avatar.png") as ImageProvider,
                           backgroundColor: Colors.grey[300],

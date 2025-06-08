@@ -7,43 +7,54 @@ part 'doctor_model.g.dart';
 
 @JsonSerializable()
 class DoctorsModel {
+  @JsonKey(name: '')
+  final dynamic? contact;
+  final String? name;
+  final List<dynamic>? careerPath;
+  final List<dynamic>? highlights;
   @JsonKey(name: '_id')
   final String? id;
   final String? username;
   final String? email;
   final String? specialty;
-  final String? gender;
-  final String? phone;
-  final String? profilePhoto;
-  final DateTime? changePasswordTime;
-  final bool? isDeleted;
-  @JsonKey(name: 'password')
   final String? password;
-  @JsonKey(name: 'role')
-  final String? role;
-  @JsonKey(name: 'reservations')
+  final String? phone;
+  final String? gender;
+  final String? changePasswordTime;
+  final bool? isDeleted;
+  final String? profilePhoto;
   final List<String>? reservations;
   @JsonKey(name: 'schedule')
   final List<ScheduleModel>? schedule;
   @JsonKey(name: '__v')
-  final int? version;
-
+  final int? v;
+  final String? role;
+  final String? bio;
+  final int? experience;
+  final String? updatedAt;
 
   DoctorsModel({
+    this.contact,
+    this.name,
+    this.careerPath,
+    this.highlights,
     this.id,
     this.username,
     this.email,
     this.specialty,
-    this.gender,
+    this.password,
     this.phone,
-    this.profilePhoto,
+    this.gender,
     this.changePasswordTime,
     this.isDeleted,
-    this.password,
-    this.role,
+    this.profilePhoto,
     this.reservations,
     this.schedule,
-    this.version,
+    this.v,
+    this.role,
+    this.bio,
+    this.experience,
+    this.updatedAt,
   });
 
   factory DoctorsModel.fromJson(Map<String, dynamic> json) =>

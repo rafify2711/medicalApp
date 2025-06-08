@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view/user_doctors_screen/user_doctors_screen.dart';
@@ -8,6 +9,7 @@ import 'package:graduation_medical_app/core/localization/app_localizations.dart'
 import '../../../../../core/di/di.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
+import '../../../../auth/presentation/view/widgets/button.dart';
 import '../../../data/models/doctor_model/doctor_model.dart';
 import '../../../data/repository/all_doctor_repo_impl.dart';
 
@@ -55,12 +57,17 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                 children: [
                   Text(
                     AppLocalizations.of(context).findYourDoctor,
-                    style: AppStyle.titlesTextStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: AppStyle.titlesTextStyle.copyWith(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(height: 4),
                   Text(
                     AppLocalizations.of(context).browseAndBookAppointments,
-                    style: AppStyle.bodyBlackTextStyle.copyWith(color: Colors.grey[600]),
+                    style: AppStyle.bodyBlackTextStyle.copyWith(
+                      color: Colors.grey[600],
+                    ),
                   ),
                   SizedBox(height: 16),
                   TextField(
@@ -117,56 +124,121 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                     itemBuilder: (context, index) {
                       final doctor = filteredDoctors[index];
                       return Card(
+                        elevation: 2,
                         margin: EdgeInsets.only(bottom: 16),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.all(16),
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: NetworkImage(doctor.profilePhoto ?? ''),
-                          ),
-                          title: Text(
-                            doctor.username ?? '',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Column(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: 4),
-                              Text(
-                                doctor.specialty ?? '',
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Icon(Icons.star, color: Colors.amber, size: 16),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '0.0',
-                                    style: TextStyle(color: Colors.grey[600]),
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      (doctor.profilePhoto != null &&
+                                          (doctor.profilePhoto!.startsWith('http://') ||
+                                              doctor.profilePhoto!.startsWith('https://')))
+                                          ? doctor.profilePhoto!
+                                          : 'https://i.imgur.com/3Y1J2TFG.png',
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
-                                ],
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      doctor.username ?? '',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.primary,
+                                        letterSpacing: 0.3,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      doctor.specialty ?? '',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.star, color: Colors.amber, size: 16),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          '0.0',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Icon(Icons.location_on, color: Colors.grey[600], size: 16),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          'Online',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Align(
+                                alignment: Alignment.center,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      RouteNames.doctorDetails,
+                                      arguments: {'doctor': doctor},
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  child: Text(
+                                    AppLocalizations.of(context).viewProfile,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
-                          ),
-                          trailing: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/doctorDetails',
-                                arguments: doctor,
-                              );
-                            },
-                            child: Text(AppLocalizations.of(context).viewProfile),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF30948F),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
                           ),
                         ),
                       );
@@ -180,4 +252,5 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
       ),
     );
   }
+
 }
