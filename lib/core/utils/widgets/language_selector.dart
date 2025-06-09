@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
+import 'package:graduation_medical_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageSelector extends StatelessWidget {
@@ -8,10 +10,14 @@ class LanguageSelector extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language', languageCode);
     
-    // Restart the app to apply the new language
-    // You might want to implement a proper app restart mechanism
-    // This is a simple example
-    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    // Update the app's locale immediately
+    if (context.mounted) {
+      final state = MyApp.appStateKey.currentState;
+      if (state != null) {
+        state.changeLanguage(Locale(languageCode));
+      }
+      Navigator.pop(context);
+    }
   }
 
   @override

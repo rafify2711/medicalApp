@@ -2,28 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graduation_medical_app/core/di/di.config.dart';
+import 'package:graduation_medical_app/features/reservation/presentation/view_model/doctor_appointment_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/config/route_generator.dart';
 import 'core/config/route_names.dart';
 import 'core/di/di.dart';
 import 'features/medical_dignosis/presentation/view_model/prediction_cubit.dart';
 import 'core/localization/app_localizations.dart';
+import 'features/reservation/presentation/view_model/add_update_schedule_cubit.dart';
+import 'features/user_appointment/presentation/view_model/make_reservation_cubit.dart';
 
-
-
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getIt.init();
-
   configureDependencies();
-  runApp( const MyApp(),
-  );
+  runApp(const MyApp());
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  static final GlobalKey<_MyAppState> appStateKey = GlobalKey<_MyAppState>();
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -48,15 +47,23 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  // This widgets is the root of your application.
+  void changeLanguage(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-     return MultiBlocProvider(
-        providers: [
-        BlocProvider<PredictionCubit>(create: (context) => getIt<PredictionCubit>()), // توفير PredictionCubit
-
-    ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PredictionCubit>(create: (context) => getIt<PredictionCubit>()),
+        BlocProvider(create: (context) => getIt<ScheduleCubit>()),
+        BlocProvider(create: (context) => getIt<DoctorAppointmentCubit>()),
+        BlocProvider(create: (context) => getIt<CreateReservationCubit>()),
+      ],
       child: MaterialApp(
+        key: MyApp.appStateKey,
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.generateRoute,
         initialRoute: RouteNames.splash,

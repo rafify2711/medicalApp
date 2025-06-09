@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../load_data/load_pharmacies_data.dart';
 import '../../models/pharmacy_model.dart';
@@ -317,20 +318,37 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                                     if (branch.website != "Not specified")
                                       Padding(
                                         padding: const EdgeInsets.only(top: 4),
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.language,
-                                                color: Colors.grey[400], size: 16),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              AppLocalizations.of(context).visitWebsite,
-                                              style: TextStyle(
-                                                color: Color(0xFF30948F),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            final Uri url = Uri.parse(branch.website);
+                                            if (await canLaunchUrl(url)) {
+                                              await launchUrl(url, mode: LaunchMode.externalApplication);
+                                            } else {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('Could not launch website'),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.language,
+                                                  color: Colors.grey[400], size: 16),
+                                              SizedBox(width: 4),
+                                              Text(
+                                                AppLocalizations.of(context).visitWebsite,
+                                                style: TextStyle(
+                                                  color: Color(0xFF30948F),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                   ],

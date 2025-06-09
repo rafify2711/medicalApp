@@ -14,7 +14,7 @@ class AppLocalizations {
 
   static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
-      'appName': 'Medical App',
+      'appName': 'MedCare',
       'save': 'Save',
       'cancel': 'Cancel',
       'edit': 'Edit',
@@ -567,7 +567,7 @@ class AppLocalizations {
       'contactPhone': 'Contact Phone',
     },
     'ar': {
-      'appName': 'تطبيق طبي',
+      'appName': 'ميدكير',
       'save': 'حفظ',
       'cancel': 'إلغاء',
       'edit': 'تعديل',

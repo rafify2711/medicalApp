@@ -1,13 +1,17 @@
 import 'dart:convert';
 
+import 'package:graduation_medical_app/core/network/api_client.dart';
+import 'package:graduation_medical_app/features/auth/data/models/changePassword/change_password_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/models/doctor_model/doctor_model.dart';
 import '../../../../core/models/user_model/user_model.dart';
+import '../../../../core/utils/shared_prefs.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../data_source/auth_local_data_source.dart';
 import '../data_source/auth_remote_data_source__impl.dart';
+import '../models/changePassword/change_password_data.dart';
 import '../models/sign_in_model/sign_in_model.dart';
 import '../models/signup_model/signup_user_model.dart';
 
@@ -24,9 +28,11 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final SharedPreferences prefs;
   final AuthLocalDataSource localDataSource;
+  final ApiClient apiClient;
+  final SharedPrefs _sharedPrefs;
 
-  AuthRepositoryImpl(this.prefs,
-      {required this.remoteDataSource, required this.localDataSource});
+  AuthRepositoryImpl(this.prefs, this._sharedPrefs,
+      {required this.remoteDataSource, required this.localDataSource,required this.apiClient});
 
   @override
   @override
@@ -83,6 +89,18 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  @override
+  Future<ChangePasswordResponse> changePassword(String oldPassword, String newPassword) {
+    try{
+      final changePasswordData = ChangePasswordData(oldPassword: oldPassword, newPassword: newPassword,confirmPassword: newPassword);
+      final token = _sharedPrefs.getToken();
+      return apiClient.changePassword(  'Bearer $token', changePasswordData);
+    } on DioException catch (e) {
+      throw AuthException(_handleDioError(e)).message; // ✅ الآن يُمرر نص وليس Exception
+    }
+
+  }
+
 
   String _handleDioError(DioException e) {
     if (e.response != null && e.response!.data != null) {
@@ -118,6 +136,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> logout() async {
     await prefs.clear();
   }
+
+
 
 
 

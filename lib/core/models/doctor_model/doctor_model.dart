@@ -1,16 +1,8 @@
-import 'package:graduation_medical_app/features/reservation/data/models/create_reservation_response.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-part 'doctor_model.g.dart';
-
-@JsonSerializable()
 class DoctorModel {
-  @JsonKey(name: 'contact')
   final ContactModel? contact;
   final String? name;
   final List<String>? careerPath;
   final List<String>? highlights;
-  @JsonKey(name: '_id')
   final String? id;
   final String? username;
   final String? email;
@@ -22,9 +14,7 @@ class DoctorModel {
   final bool? isDeleted;
   final String? profilePhoto;
   final List<String>? reservations;
-  @JsonKey(name: 'schedule')
-  final List<ScheduleModel>? schedule;
-  @JsonKey(name: '__v')
+  final List<dynamic>? schedule; // ممكن تكون String أو ScheduleModel
   final int? v;
   final String? role;
   final String? bio;
@@ -32,82 +22,114 @@ class DoctorModel {
   final String? updatedAt;
 
   DoctorModel({
-     this.contact,
-     this.name,
-     this.careerPath,
-     this.highlights,
-     this.id,
-     this.username,
-     this.email,
-     this.specialty,
-     this.password,
-     this.phone,
-     this.gender,
-     this.changePasswordTime,
-     this.isDeleted,
-     this.profilePhoto,
-     this.reservations,
-     this.schedule,
-     this.v,
-     this.role,
-     this.bio,
-     this.experience,
-     this.updatedAt,
+    this.contact,
+    this.name,
+    this.careerPath,
+    this.highlights,
+    this.id,
+    this.username,
+    this.email,
+    this.specialty,
+    this.password,
+    this.phone,
+    this.gender,
+    this.changePasswordTime,
+    this.isDeleted,
+    this.profilePhoto,
+    this.reservations,
+    this.schedule,
+    this.v,
+    this.role,
+    this.bio,
+    this.experience,
+    this.updatedAt,
   });
 
-  factory DoctorModel.fromJson(Map<String, dynamic> json) =>
-      _$DoctorModelFromJson(json);
+  factory DoctorModel.fromJson(Map<String, dynamic> json) {
+    return DoctorModel(
+      contact: json['contact'] != null ? ContactModel.fromJson(json['contact']) : null,
+      name: json['name'],
+      careerPath: (json['careerPath'] as List?)?.cast<String>(),
+      highlights: (json['highlights'] as List?)?.cast<String>(),
+      id: json['_id'],
+      username: json['username'],
+      email: json['email'],
+      specialty: json['specialty'],
+      password: json['password'],
+      phone: json['phone'],
+      gender: json['gender'],
+      changePasswordTime: json['changePasswordTime'],
+      isDeleted: json['isDeleted'],
+      profilePhoto: json['profilePhoto'],
+      reservations: (json['reservations'] as List?)?.cast<String>(),
+      schedule: json['schedule'] != null
+          ? (json['schedule'] as List).map((item) {
+        if (item is String) return item;
+        return ScheduleModel.fromJson(item);
+      }).toList()
+          : null,
+      v: json['__v'],
+      role: json['role'],
+      bio: json['bio'],
+      experience: json['experience'],
+      updatedAt: json['updatedAt'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$DoctorModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'contact': contact?.toJson(),
+      'name': name,
+      'careerPath': careerPath,
+      'highlights': highlights,
+      '_id': id,
+      'username': username,
+      'email': email,
+      'specialty': specialty,
+      'password': password,
+      'phone': phone,
+      'gender': gender,
+      'changePasswordTime': changePasswordTime,
+      'isDeleted': isDeleted,
+      'profilePhoto': profilePhoto,
+      'reservations': reservations,
+      'schedule': schedule?.map((item) {
+        if (item is String) return item;
+        return (item as ScheduleModel).toJson();
+      }).toList(),
+      '__v': v,
+      'role': role,
+      'bio': bio,
+      'experience': experience,
+      'updatedAt': updatedAt,
+    };
+  }
 }
 
-@JsonSerializable()
-class Reservation {
-  @JsonKey(name: '_id')
-  final String? id;
-  final String? doctor;
-  final String? user;
-  final DateTime? date;
-  final String? timeSlot;
-  final String? status;
-  @JsonKey(name: '__v')
-  final int? version;
-
-  Reservation({
-     this.id,
-     this.doctor,
-     this.user,
-     this.date,
-     this.timeSlot,
-     this.status,
-    this.version,
-  });
-
-  factory Reservation.fromJson(Map<String, dynamic> json) =>
-      _$ReservationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ReservationToJson(this);
-}
-
-@JsonSerializable()
 class ScheduleModel {
   final DateTime? date;
   final List<String>? timeSlots;
   final String? id;
 
-  ScheduleModel({
-     this.date,
-     this.timeSlots,
-     this.id,
-  });
+  ScheduleModel({this.date, this.timeSlots, this.id});
 
-  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleModelFromJson(json);
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) {
+    return ScheduleModel(
+      date: json['date'] != null ? DateTime.tryParse(json['date']) : null,
+      timeSlots: (json['timeSlots'] as List?)?.cast<String>(),
+      id: json['id'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date?.toIso8601String(),
+      'timeSlots': timeSlots,
+      'id': id,
+    };
+  }
 }
 
-@JsonSerializable()
 class ContactModel {
   final String? facebook;
   final String? linkedin;
@@ -125,8 +147,25 @@ class ContactModel {
     this.phone,
   });
 
-  factory ContactModel.fromJson(Map<String, dynamic> json) =>
-      _$ContactModelFromJson(json);
+  factory ContactModel.fromJson(Map<String, dynamic> json) {
+    return ContactModel(
+      facebook: json['facebook'],
+      linkedin: json['linkedin'],
+      twitter: json['twitter'],
+      website: json['website'],
+      whatsapp: json['whatsapp'],
+      phone: json['phone'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$ContactModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'facebook': facebook,
+      'linkedin': linkedin,
+      'twitter': twitter,
+      'website': website,
+      'whatsapp': whatsapp,
+      'phone': phone,
+    };
+  }
 }

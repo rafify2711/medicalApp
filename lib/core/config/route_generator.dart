@@ -4,7 +4,9 @@ import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/features/edit_profile/presentation/view_model/update_user_Profile_cubit.dart';
 import 'package:graduation_medical_app/features/hospitals_and_pharmacies/presentation/view/hospitals_screen.dart';
 import 'package:graduation_medical_app/features/hospitals_and_pharmacies/presentation/view/pharmacies_screen.dart';
+import 'package:graduation_medical_app/features/reservation/presentation/view/view_doctor_patient_screen.dart';
 import 'package:graduation_medical_app/features/reservation/presentation/view_model/add_update_schedule_cubit.dart';
+import 'package:graduation_medical_app/features/reservation/presentation/view_model/doctor_appointment_cubit.dart';
 import 'package:graduation_medical_app/features/search/presentation/view_model/search_cubit.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view_model/available_slots_cubit.dart';
 import 'package:graduation_medical_app/features/user_appointment/presentation/view_model/make_reservation_cubit.dart';
@@ -30,6 +32,7 @@ import '../../features/layout/presentation/lay_out.dart';
 import '../../features/medical_dignosis/presentation/view/disease_prediction_list_screen.dart';
 import '../../features/medical_dignosis/presentation/view/prediction_screen.dart';
 import '../../features/medical_dignosis/presentation/view_model/prediction_cubit.dart';
+import '../../features/onboarding/presentation/view/onboarding_screen.dart';
 import '../../features/prescription/presentation/view/read_prescription_screen.dart';
 import '../../features/prescription/presentation/view_model/prescription_cubit.dart';
 import '../../features/reservation/presentation/view/add_doctor_scadule.dart';
@@ -50,6 +53,9 @@ import '../di/di.dart';
 import '../models/doctor_model/doctor_model.dart';
 import '../../features/reservation/presentation/view/view_schedule_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/reservation/presentation/view/doctor_appointments_screen.dart';
+import '../../features/auth/presentation/view/screens/change_password_screen.dart';
+import '../../features/user_appointment/presentation/view/specialties_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -61,6 +67,12 @@ class RouteGenerator {
                 create: (context) => getIt<AuthCubit>(),
                 child: SignUpScreen(),
               ),
+        );
+
+      case RouteNames.onboarding:
+        return MaterialPageRoute(
+          builder:
+              (_) => OnboardingScreen(),
         );
 
       case RouteNames.login:
@@ -145,6 +157,16 @@ class RouteGenerator {
                 create: (context) => getIt<UserAppointmentCubit>(),
                 child: UserAppointmentScreen(),
               ),
+        );
+
+
+      case RouteNames.viewdoctorpatient:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider<UserAppointmentCubit>(
+            create: (context) => getIt<UserAppointmentCubit>(),
+            child: ViewDoctorPatientScreen(),
+          ),
         );
 
       case RouteNames.doctorSchedule:
@@ -359,13 +381,28 @@ class RouteGenerator {
         );
 
       case RouteNames.viewSchedule:
-        final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => ViewScheduleScreen(schedule: args['schedule']),
+          builder: (_) => BlocProvider<ScheduleCubit>(create:  (context) => getIt<ScheduleCubit>(),
+              child: ViewScheduleScreen(doctorId: '', token: '',)),
         );
 
       case RouteNames.settings:
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
+
+      case RouteNames.doctorAppointments:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<DoctorAppointmentCubit>(create:  (context) => getIt<DoctorAppointmentCubit>() ,child: DoctorAppointmentsScreen()),
+        );
+
+      case RouteNames.changePassword:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<DoctorAppointmentCubit>(create:  (context) => getIt<DoctorAppointmentCubit>() ,child: ChangePasswordScreen()),
+        );
+
+      case RouteNames.specialties:
+        return MaterialPageRoute(
+          builder: (_) => const SpecialtiesScreen(),
+        );
 
       default:
         return MaterialPageRoute(

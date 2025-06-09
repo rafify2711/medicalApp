@@ -30,17 +30,12 @@ class WelcomeScreen extends StatelessWidget {
                 mainAxisAlignment:  MainAxisAlignment.center,
                   children: [
                     Text(
-                      AppLocalizations.of(context).app,
+                      AppLocalizations.of(context).appName,
                       style: AppStyle.titlesTextStyle.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      AppLocalizations.of(context).name,
-                      style: AppStyle.titlesTextStyle.copyWith(
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
+
                   ],
                 ),
               ),

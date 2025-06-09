@@ -182,30 +182,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.star, color: Colors.amber, size: 16),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          '0.0',
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Icon(Icons.location_on, color: Colors.grey[600], size: 16),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          'Online',
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    
                                   ],
                                 ),
                               ),

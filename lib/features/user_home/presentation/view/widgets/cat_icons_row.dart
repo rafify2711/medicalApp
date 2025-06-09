@@ -36,7 +36,7 @@ class CatIconsRow extends StatelessWidget {
           child: CatIconWidget(
             label: AppLocalizations.of(context).specialties,
             asset: 'lib/assets/icon/Specialties.png',
-            route: '',
+            route: RouteNames.specialties,
           ),
         ),
       ],

@@ -30,4 +30,10 @@ class RouteNames {
   static const String globalSearch = '/global-search';
   static const String viewSchedule = '/viewSchedule';
   static const String settings = '/settings';
+  static const String doctorAppointments = '/doctor-appointments';
+  static const viewdoctorpatient = '/viewdoctorpatient';
+  static const String changePassword = '/change-password';
+  static const String specialties = '/specialties';
+
+  static const String onboarding = '/onboarding';
 }

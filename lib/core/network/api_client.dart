@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:graduation_medical_app/core/models/chat_message.dart';
+import 'package:graduation_medical_app/features/auth/data/models/changePassword/change_password_data.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_doctor_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/register_user_response.dart';
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
@@ -22,6 +23,7 @@ import 'package:retrofit/retrofit.dart'
         Path,
         Query,
         RestApi;
+import '../../features/auth/data/models/changePassword/change_password_response.dart';
 import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
@@ -38,6 +40,8 @@ import '../../features/user_profile/data/models/user_profile_response.dart';
 import '../models/appointment_model/reservation_data_model.dart';
 import '../models/doctor_model/doctor_model.dart';
 import '../models/api_message_response.dart';
+import 'package:graduation_medical_app/features/reservation/data/models/schedule_response.dart';
+import '../models/doctor_appointment_model.dart';
 
 part 'api_client.g.dart';
 
@@ -76,16 +80,12 @@ abstract class ApiClient {
     @Path("date") DateTime date,
   );
 
-
-
   @PUT("doctor/{doctorId}/schedule/add")
   Future<AddUpdateScheduleResponse> addUpdateSchedule(
     @Path("doctorId") String doctorId,
     @Header("Authorization") String token,
     @Body() AddUpdateScheduleData data,
   );
-
-
 
   @PATCH('user/profile')
   Future<UserProfileResponse> updateUserProfile(
@@ -110,9 +110,7 @@ abstract class ApiClient {
   @POST("reservation")
   Future<CreateReservationResponse> createReservation(
     @Body() ReservationDataModel data,
-
   );
-
 
   @GET("api/drug-interactions/disease-check")
   Future<DrugInteractionResponse> checkDiseaseDrugInteraction(
@@ -134,6 +132,24 @@ abstract class ApiClient {
     @Path("doctorId") String userId,
     @Body() UpdateDoctorModel model,
   );
+
+  @GET("doctor/{doctorId}/schedule")
+  Future<ScheduleResponse> fetchDoctorSchedule(
+    @Path("doctorId") String doctorId,
+    @Header("Authorization") String token,
+  );
+
+  @GET("/doctor/{doctorId}/reservations")
+  Future<ReservationResponse> fetchDoctorAppointments(
+    @Path("doctorId") String doctorId,
+    @Header("Authorization") String token,
+  );
+  @GET("/user/profile/password")
+  Future<ChangePasswordResponse> changePassword(
+    @Header("Authorization") String token,
+    @Body() ChangePasswordData data,
+  );
+
 }
 
 @RestApi(baseUrl: "https://medicalapp-sku9qeo9.b4a.run/api/")

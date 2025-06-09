@@ -12,16 +12,31 @@ class DoctorScheduleScreen extends StatefulWidget {
   _DoctorScheduleScreenState createState() => _DoctorScheduleScreenState();
 }
 
-class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
-  DateTime selectedDate = DateTime.now();
+class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> with SingleTickerProviderStateMixin {
+  DateTime selectedStartDate = DateTime.now();
   AddUpdateScheduleData addUpdateScheduleData = AddUpdateScheduleData(schedule: []);
   List<String> selectedTimeSlots = [];
   List<String> availableTimeSlots = [];
+  late TabController _tabController;
+  int currentDayIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _generateTimeSlots();
+    _tabController = TabController(length: 7, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        currentDayIndex = _tabController.index;
+        selectedTimeSlots = [];
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   void _generateTimeSlots() {
@@ -43,10 +58,10 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
     return '${hour12.toString().padLeft(2, '0')}:$minute $period';
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: selectedStartDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       builder: (context, child) {
@@ -65,7 +80,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
     );
     if (pickedDate != null) {
       setState(() {
-        selectedDate = pickedDate;
+        selectedStartDate = pickedDate;
         selectedTimeSlots = [];
       });
     }
@@ -93,14 +108,15 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
       return;
     }
 
+    final date = selectedStartDate.add(Duration(days: currentDayIndex));
     final scheduleData = ScheduleData(
-      date: selectedDate,
+      date: date,
       timeSlots: selectedTimeSlots,
     );
 
     bool dateExists = false;
     for (var scheduleItem in addUpdateScheduleData.schedule) {
-      if (_isSameDay(scheduleItem.date!, selectedDate)) {
+      if (_isSameDay(scheduleItem.date!, date)) {
         dateExists = true;
         scheduleItem.timeSlots = selectedTimeSlots;
         break;
@@ -117,7 +133,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Time slots added successfully'),
+        content: Text('Time slots added for ${_formatDate(date)}'),
         backgroundColor: Colors.green,
         behavior: SnackBarBehavior.floating,
       ),
@@ -136,6 +152,11 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
+  String _getDayName(int index) {
+    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    return days[index];
   }
 
   @override
@@ -175,158 +196,122 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
       },
       child: Scaffold(
         appBar: MyAppPar(title: 'Add Schedule'),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.white,
-                AppColors.primary.withOpacity(0.1),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        body: Column(
               children: [
                 Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primary,
-                          AppColors.primary.withOpacity(0.8),
-                        ],
-                      ),
-                    ),
+              margin: EdgeInsets.all(16),
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
                               Icon(
                                 Icons.calendar_today,
-                                color: Colors.white,
-                                size: 24,
+                          color: AppColors.primary,
                               ),
                               SizedBox(width: 8),
                               Text(
-                                'Selected Date',
+                          'Week Starting: ${_formatDate(selectedStartDate)}',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                            color: AppColors.primary,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            _formatDate(selectedDate),
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
                           SizedBox(height: 16),
                           Button(
-                            onClick: () => _selectDate(context),
-                            text: 'Change Date',
-
+                      onClick: () => _selectStartDate(context),
+                      text: 'Change Week',
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 24),
+            TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              labelColor: AppColors.primary,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: AppColors.primary,
+              tabs: List.generate(7, (index) {
+                final date = selectedStartDate.add(Duration(days: index));
+                return Tab(
+                  child: Column(
+                    children: [
+                      Text(_getDayName(index)),
+                      Text('${date.day}/${date.month}'),
+                    ],
+                  ),
+                );
+              }),
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: List.generate(7, (index) {
+                  final date = selectedStartDate.add(Duration(days: index));
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                 Text(
-                  'Available Time Slots',
+                          'Time Slots for ${_formatDate(date)}',
                   style: TextStyle(
-                    fontSize: 20,
+                            fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
                   ),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Select the time slots you want to add to your schedule',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
                 SizedBox(height: 16),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 2.5,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
-                    itemCount: availableTimeSlots.length,
-                    itemBuilder: (context, index) {
-                      final timeSlot = availableTimeSlots[index];
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: availableTimeSlots.map((timeSlot) {
                       final isSelected = selectedTimeSlots.contains(timeSlot);
                       return InkWell(
                         onTap: () => _toggleTimeSlot(timeSlot),
                         child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
                           decoration: BoxDecoration(
                             color: isSelected ? AppColors.primary : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
+                                  borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: isSelected ? AppColors.primary : Colors.grey[300]!,
-                              width: 1.5,
                             ),
                           ),
-                          child: Center(
                             child: Text(
                               timeSlot,
                               style: TextStyle(
                                 color: isSelected ? Colors.white : Colors.black87,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
                             ),
                           ),
                         ),
                       );
-                    },
-                  ),
+                          }).toList(),
                 ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Button(
+                        SizedBox(height: 24),
+                        Button(
                         onClick: _addSchedule,
-                        text: 'Add Selected Slots',
-
+                          text: 'Add Time Slots',
                       ),
+                      ],
                     ),
-                  ],
+                  );
+                }),
+              ),
                 ),
                 if (addUpdateScheduleData.schedule.isNotEmpty) ...[
-                  SizedBox(height: 24),
-                  Text(
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
                     'Current Schedule',
                     style: TextStyle(
                       fontSize: 20,
@@ -334,33 +319,19 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                       color: AppColors.primary,
                     ),
                   ),
-                  SizedBox(height: 16),
+              ),
                   Expanded(
                     child: ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                       itemCount: addUpdateScheduleData.schedule.length,
                       itemBuilder: (context, index) {
                         final scheduleItem = addUpdateScheduleData.schedule[index];
                         return Card(
-                          elevation: 2,
                           margin: EdgeInsets.only(bottom: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            leading: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
+                        leading: Icon(
                                 Icons.calendar_today,
                                 color: AppColors.primary,
-                              ),
                             ),
                             title: Text(
                               _formatDate(scheduleItem.date!),
@@ -369,48 +340,23 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                                 color: AppColors.primary,
                               ),
                             ),
-                            subtitle: Padding(
-                              padding: EdgeInsets.only(top: 8),
-                              child: Wrap(
+                        subtitle: Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: scheduleItem.timeSlots.map((slot) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      slot,
-                                      style: TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 12,
-                                      ),
-                                    ),
+                            return Chip(
+                              label: Text(slot),
+                              backgroundColor: AppColors.primary.withOpacity(0.1),
+                              labelStyle: TextStyle(color: AppColors.primary),
                                   );
                                 }).toList(),
-                              ),
                             ),
                             trailing: IconButton(
-                              icon: Icon(
-                                Icons.delete_outline,
-                                color: Colors.red,
-                              ),
+                          icon: Icon(Icons.delete_outline, color: Colors.red),
                               onPressed: () {
                                 setState(() {
                                   addUpdateScheduleData.schedule.removeAt(index);
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Schedule removed'),
-                                    backgroundColor: Colors.red,
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
                               },
                             ),
                           ),
@@ -419,8 +365,9 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     ),
                   ),
                 ],
-                SizedBox(height: 16),
-                Button(
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Button(
                   onClick: () async {
                     if (addUpdateScheduleData.schedule.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -453,11 +400,9 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     }
                   },
                   text: 'Save Schedule',
-
                 ),
-              ],
             ),
-          ),
+          ],
         ),
       ),
     );

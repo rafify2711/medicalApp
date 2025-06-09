@@ -178,7 +178,7 @@ class DoctorProfileScreen extends StatelessWidget {
                               ),
                             SizedBox(height: 16),
                             _buildInfoCard(
-                              title: 'روابط التواصل',
+                              title:AppLocalizations.of(context).contactInfo,
                               children: [
                                 if (profile.contact != null && profile.contact!.facebook != null && profile.contact!.facebook!.isNotEmpty)
                                   _buildContactLink(context, Icons.facebook, 'Facebook', profile.contact!.facebook!),

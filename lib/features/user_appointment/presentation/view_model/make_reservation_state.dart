@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import '../../../reservation/data/models/create_reservation_response.dart';
 
+
 abstract class CreateReservationState extends Equatable {
   const CreateReservationState();
 
@@ -21,10 +22,10 @@ class CreateReservationSuccess extends CreateReservationState {
   List<Object?> get props => [response];
 }
 
-class CreateReservationError extends CreateReservationState {
+class CreateReservationFailure extends CreateReservationState {
   final String message;
 
-  const CreateReservationError(this.message);
+  const CreateReservationFailure(this.message);
 
   @override
   List<Object?> get props => [message];

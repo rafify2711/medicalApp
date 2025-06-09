@@ -1,5 +1,7 @@
 
 
+import 'package:graduation_medical_app/features/auth/data/models/changePassword/change_password_data.dart';
+import 'package:graduation_medical_app/features/auth/data/models/changePassword/change_password_response.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/models/doctor_model/doctor_model.dart';
@@ -16,4 +18,5 @@ abstract class AuthRepository {
   Future<String?> getUserId();
   Future<String?> getRole();
   Future<void> logout();
+  Future<ChangePasswordResponse> changePassword(String oldPassword, String newPassword);
 }

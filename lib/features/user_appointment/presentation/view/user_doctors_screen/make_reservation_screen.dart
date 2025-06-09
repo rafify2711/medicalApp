@@ -164,7 +164,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
               ),
             );
             Navigator.pop(context);
-          } else if (state is CreateReservationError) {
+          } else if (state is CreateReservationFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),

@@ -6,7 +6,6 @@ import 'package:graduation_medical_app/core/di/di.dart';
 import 'package:graduation_medical_app/core/extentions/extentions.dart';
 import 'package:graduation_medical_app/core/models/user_model/user_model.dart';
 import 'package:graduation_medical_app/core/utils/widgets/feature_widget/devider.dart';
-import 'package:graduation_medical_app/features/user_home/presentation/view/widgets/cat_icon_widget.dart';
 import 'package:graduation_medical_app/features/user_home/presentation/view/widgets/cat_icons_row.dart';
 import 'package:graduation_medical_app/features/user_home/presentation/view/widgets/home_app_bar.dart';
 import 'package:graduation_medical_app/features/user_profile/presentation/view_model/user_profile_cubit.dart';
@@ -16,10 +15,8 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_style.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/widgets/feature_widget/features.dart';
-import '../../../auth/presentation/view/widgets/my_app_par.dart';
 import '../../../user_appointment/presentation/view_model/user_appointment_cubit.dart';
 import '../../../user_appointment/presentation/view_model/user_appointment_state.dart';
-import '../../../search/data/search_service.dart';
 import '../../../search/presentation/view_model/search_cubit.dart';
 import '../../../../core/localization/app_localizations.dart';
 

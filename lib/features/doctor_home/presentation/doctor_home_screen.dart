@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_medical_app/core/config/route_names.dart';import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/features/doctor_profile/presentation/view_model/doctor_profile_cubit.dart';
 import 'package:graduation_medical_app/core/localization/app_localizations.dart';
+import 'package:graduation_medical_app/features/reservation/presentation/view/doctor_appointments_screen.dart';
 
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_style.dart';
+
 class DoctorHomeScreen extends StatefulWidget {
   final String userId;
 
@@ -92,16 +95,12 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
         }
         
         return Scaffold(
-          appBar: AppBar(
-            title: Text(AppLocalizations.of(context).doctorHome),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.pushNamed(context, RouteNames.settings);
-                },
-              ),
-            ],
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: DoctorHomeAppBar(
+              doctorName: doctorName,
+              specialty: specialty,
+            ),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -109,53 +108,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Welcome Section
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.primary1, AppColors.primary],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.person, size: 40, color: AppColors.primary1),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${AppLocalizations.of(context).welcomeDr} $doctorName',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                specialty,
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
                   // Quick Actions Section
                   Text(
                     AppLocalizations.of(context).quickActions,
@@ -184,7 +136,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                           icon: Icons.people_outline,
                           title: AppLocalizations.of(context).viewPatients,
                           onTap: () {
-                            Navigator.pushNamed(context, RouteNames.userAppointment);
+                            Navigator.pushNamed(context, RouteNames.viewdoctorpatient);
                           },
                         ),
                       ),
@@ -213,7 +165,12 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                         icon: Icons.calendar_today,
                         title: AppLocalizations.of(context).appointments,
                         onTap: () {
-                          Navigator.pushNamed(context, RouteNames.userAppointment);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DoctorAppointmentsScreen(),
+                            ),
+                          );
                         },
                       ),
                       _buildFeatureCard(
@@ -227,9 +184,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                       _buildFeatureCard(
                         context,
                         icon: Icons.medical_services_outlined,
-                        title: AppLocalizations.of(context).specialty,
+                        title: AppLocalizations.of(context).diagnosis,
                         onTap: () {
-                          // Handle specialty
+                          Navigator.pushNamed(context, RouteNames.diseasePredictionList);
                         },
                       ),
                       _buildFeatureCard(
@@ -332,4 +289,81 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
       ),
     );
   }
+}
+
+class DoctorHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String doctorName;
+  final String specialty;
+
+  const DoctorHomeAppBar({
+    super.key,
+    required this.doctorName,
+    required this.specialty,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: CircleAvatar(
+              backgroundColor: AppColors.fill,
+              child: ImageIcon(AssetImage('lib/assets/icon/notification.png'), size: 15),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.settings);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: CircleAvatar(
+                backgroundColor: AppColors.fill,
+                child: ImageIcon(AssetImage('lib/assets/icon/sittings.png'), size: 15),
+              ),
+            ),
+          ),
+          Spacer(),
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context).welcomeBack,
+                    style: TextStyle(
+                      color: AppColors.primary1,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    doctorName,
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 5),
+          CircleAvatar(
+            backgroundColor: AppColors.primary1,
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

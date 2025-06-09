@@ -21,7 +21,7 @@ class _DoctorLayOutState extends State<DoctorLayOut> {
 
   static  final List<Widget> _screens = <Widget>[
     DoctorHomeScreen(userId: ''),
-    ViewScheduleScreen(),
+    ViewScheduleScreen(doctorId: '',token: '',),
     DoctorProfileScreen(userId: ''),
 
 

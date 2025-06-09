@@ -35,6 +35,32 @@ class _UserAppointmentScreenState extends State<UserAppointmentScreen> {
     }
   }
 
+  List<dynamic> _filterAppointments(List<dynamic> appointments, int tabIndex) {
+    if (appointments.isEmpty) return [];
+    
+    final now = DateTime.now();
+    return appointments.where((appointment) {
+      if (appointment.date == null) return false;
+      
+      final appointmentDate = appointment.date is String 
+          ? DateTime.parse(appointment.date)
+          : appointment.date as DateTime;
+      final isPast = appointmentDate.isBefore(now);
+      final isCancelled = appointment.status.toLowerCase() == 'cancelled';
+
+      switch (tabIndex) {
+        case 0: // Completed
+          return isPast && !isCancelled;
+        case 1: // Upcoming
+          return !isPast && !isCancelled;
+        case 2: // Cancelled
+          return isCancelled;
+        default:
+          return false;
+      }
+    }).toList();
+  }
+
   Widget buildTabs() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
@@ -90,31 +116,77 @@ class _UserAppointmentScreenState extends State<UserAppointmentScreen> {
                 if (state is AppointmentLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is AppointmentLoaded) {
-                  final completed = state.appointments.reservations
-                      .where((a) => a.status.toLowerCase() == "completed")
-                      .toList();
-                  final upcoming = state.appointments.reservations
-                      .where((a) => a.status.toLowerCase() == "confirmed")
-                      .toList();
-                  final cancelled = state.appointments.reservations
-                      .where((a) => a.status.toLowerCase() == "cancelled")
-                      .toList();
+                  final filteredAppointments = _filterAppointments(
+                    state.appointments.reservations,
+                    selectedIndex,
+                  );
 
-                  final lists = [completed, upcoming, cancelled];
-
-                  if (lists[selectedIndex].isEmpty) {
-                    return Center(child: Text(AppLocalizations.of(context).noAppointments));
+                  if (filteredAppointments.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 64,
+                            color: AppColors.primary1.withOpacity(0.5),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            AppLocalizations.of(context).noAppointments,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: AppColors.primary1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   }
 
                   return ListView.builder(
-                    itemCount: lists[selectedIndex].length,
+                    itemCount: filteredAppointments.length,
                     itemBuilder: (context, index) {
-                      final appointment = lists[selectedIndex][index];
+                      final appointment = filteredAppointments[index];
                       return AppointmentCard(appointment: appointment);
                     },
                   );
                 } else if (state is AppointmentError) {
-                  return Center(child: Text(state.message));
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.redAccent,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          state.message,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.redAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (userId != null && token != null) {
+                              context.read<UserAppointmentCubit>()
+                                ..fetchAppointments(userId!, token!);
+                            }
+                          },
+                          child: Text(AppLocalizations.of(context).retry),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary1,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
                 } else {
                   return Center(child: Text(AppLocalizations.of(context).noData));
                 }
