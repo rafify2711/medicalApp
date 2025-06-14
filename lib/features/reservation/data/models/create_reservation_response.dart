@@ -25,7 +25,7 @@ class ReservationModel {
   @JsonKey(name: "_d")
   final String? id;
   @JsonKey(name: "__v")
-  final String? v;
+  final int v;
 
   ReservationModel(
     this.doctor,

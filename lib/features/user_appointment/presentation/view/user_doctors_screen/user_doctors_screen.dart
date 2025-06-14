@@ -81,15 +81,15 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       child: Column(
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width:100,
+            height: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
               image: DecorationImage(
                 image: NetworkImage(
                   (widget.doctor.profilePhoto != null && (widget.doctor.profilePhoto!.startsWith('http://') || widget.doctor.profilePhoto!.startsWith('https://')))
                       ? widget.doctor.profilePhoto!
-                      : 'https://i.imgur.com/3Y1J2TFG.png',
+                      : 'https://t3.ftcdn.net/jpg/05/79/55/26/240_F_579552668_sZD51Sjmi89GhGqyF27pZcrqyi7cEYBH.jpg',
                 ),
                 fit: BoxFit.cover,
               ),
@@ -106,7 +106,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
           const SizedBox(height: 16),
           Text(
             widget.doctor.username ?? '',
-            style: AppStyle.titlesTextStyle.copyWith(fontSize: 24, fontWeight: FontWeight.bold),
+            style: AppStyle.titlesTextStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.primary1),
           ),
           const SizedBox(height: 4),
           Text(
@@ -121,11 +121,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 Icons.medical_services,
                 '${widget.doctor.experience ?? '0'} ${AppLocalizations.of(context).experienceYears}',
               ),
-              const SizedBox(width: 10),
-              _buildInfoChip(
-                Icons.access_time,
-                'Mon-Sat / 9:00AM - 5:00PM', // Placeholder, you might want to fetch this from schedule
-              ),
+
             ],
           ),
         ],
@@ -137,7 +133,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle(AppLocalizations.of(context).focus),
+        _buildSectionTitle(AppLocalizations.of(context).bio),
         const SizedBox(height: 8),
         Text(
           widget.doctor.bio ?? AppLocalizations.of(context).noBioAvailable,
@@ -204,7 +200,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
             maxLines: 1,
           ),
         ),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.white54,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -222,7 +218,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary),
+      style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
     );
   }
 }

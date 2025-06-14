@@ -111,9 +111,30 @@ class _UserAppointmentScreenState extends State<UserAppointmentScreen> {
           SizedBox(height: 10),
           buildTabs(),
           Expanded(
-            child: BlocBuilder<UserAppointmentCubit, UserAppointmentState>(
+            child: BlocConsumer<UserAppointmentCubit, UserAppointmentState>(
+              listener: (context, state) {
+                if (state is CancelReservationSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  // Refresh appointments after successful cancellation
+                  if (userId != null && token != null) {
+                    context.read<UserAppointmentCubit>().fetchAppointments(userId!, token!);
+                  }
+                } else if (state is CancelReservationError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
               builder: (context, state) {
-                if (state is AppointmentLoading) {
+                if (state is AppointmentLoading || state is CancelReservationLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is AppointmentLoaded) {
                   final filteredAppointments = _filterAppointments(

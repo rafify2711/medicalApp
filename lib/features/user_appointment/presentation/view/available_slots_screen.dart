@@ -20,7 +20,7 @@ class AvailableSlotsScreen extends StatelessWidget {
             if (state is AvailableSlotsLoadingState) {
               return Center(child: CircularProgressIndicator());
             } else if (state is AvailableSlotsErrorState) {
-              return Center(child: Text(state.message));
+              return Center(child: Text('There is No Available Slots '));
             } else if (state is AvailableSlotsLoadedState) {
               return ListView.builder(
                 itemCount: state.availableSlots.length,

@@ -235,7 +235,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (state.prediction.isKidneyStone && state.prediction.displayImage != null) ...[
+                        if ((state.prediction.isKidneyStone || state.prediction.isDental) && state.prediction.displayImage != null) ...[
                           Container(
                             width: double.infinity,
                             height: 200,
@@ -267,48 +267,28 @@ class _PredictionScreenState extends State<PredictionScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
-                        ],
-                        Text(
-                          AppLocalizations.of(context).analysisResults,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green[800],
+                        ] else ...[
+                          Text(
+                            AppLocalizations.of(context).analysisResults,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green[800],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 12),
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.green.shade200),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context).prediction + ':',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                state.prediction.predicted_class ?? "Unknown",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green[800],
-                                ),
-                              ),
-                              if (state.prediction.confidence != null) ...[
-                                SizedBox(height: 12),
+                          SizedBox(height: 12),
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.green.shade200),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  AppLocalizations.of(context).confidence + ':',
+                                  AppLocalizations.of(context).prediction + ':',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -317,17 +297,37 @@ class _PredictionScreenState extends State<PredictionScreen> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  '${state.prediction.confidence?.toStringAsFixed(2)}%',
+                                  state.prediction.predicted_class ?? "Unknown",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green[800],
                                   ),
                                 ),
+                                if (state.prediction.confidence != null) ...[
+                                  SizedBox(height: 12),
+                                  Text(
+                                    AppLocalizations.of(context).confidence + ':',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    '${state.prediction.confidence?.toStringAsFixed(2)}%',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green[800],
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   );

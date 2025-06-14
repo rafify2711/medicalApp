@@ -13,6 +13,7 @@ import 'package:graduation_medical_app/features/user_appointment/presentation/vi
 import '../../features/auth/presentation/view/screens/log_in_screen.dart';
 import '../../features/auth/presentation/view/screens/sign_up_screen.dart';
 import '../../features/auth/presentation/view_model/auth_cubit.dart';
+import '../../features/auth/presentation/view_model/forget_reset_password_cubit.dart';
 import '../../features/chat_bot/presentation/view/chatbot_screen.dart';
 import '../../features/chat_bot/presentation/view_model/chat_cubit.dart';
 import '../../features/doctor_home/presentation/doctor_home_screen.dart';
@@ -48,6 +49,7 @@ import '../../features/user_appointment/presentation/view/user_doctors_screen/us
 import '../../features/user_appointment/presentation/view_model/user_appointment_cubit.dart';
 import '../../features/user_home/presentation/view/user_home_screen.dart';
 import '../../features/user_profile/presentation/view/profile_screen.dart';
+import '../../features/user_profile/presentation/view_model/upload_photo_cubit.dart';
 import '../../features/user_profile/presentation/view_model/user_profile_cubit.dart';
 import '../di/di.dart';
 import '../models/doctor_model/doctor_model.dart';
@@ -56,6 +58,9 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/reservation/presentation/view/doctor_appointments_screen.dart';
 import '../../features/auth/presentation/view/screens/change_password_screen.dart';
 import '../../features/user_appointment/presentation/view/specialties_screen.dart';
+import '../../features/auth/presentation/view/screens/forgot_password_screen.dart';
+import '../../features/auth/presentation/view/screens/reset_password_screen.dart';
+import '../../features/reservation/presentation/view/patient_details_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -153,8 +158,15 @@ class RouteGenerator {
       case RouteNames.userAppointment:
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider<UserAppointmentCubit>(
-                create: (context) => getIt<UserAppointmentCubit>(),
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<UserAppointmentCubit>(
+                    create: (context) => getIt<UserAppointmentCubit>(),
+                  ),
+                  BlocProvider<ScheduleCubit>(
+                    create: (context) => getIt<ScheduleCubit>(),
+                  ),
+                ],
                 child: UserAppointmentScreen(),
               ),
         );
@@ -243,8 +255,15 @@ class RouteGenerator {
       case RouteNames.updateProfile:
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider<UpdateUserProfileCubit>(
-                create: (context) => getIt<UpdateUserProfileCubit>(),
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<UpdateUserProfileCubit>(
+                    create: (context) => getIt<UpdateUserProfileCubit>(),
+                  ),
+                  BlocProvider<UploadProfilePhotoCubit>(
+                    create: (context) => getIt<UploadProfilePhotoCubit>(),
+                  ),
+                ],
                 child: UpdateProfileScreen(),
               ),
           settings: settings,
@@ -402,6 +421,31 @@ class RouteGenerator {
       case RouteNames.specialties:
         return MaterialPageRoute(
           builder: (_) => const SpecialtiesScreen(),
+        );
+
+      case RouteNames.forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<ForgotResetPasswordCubit>(
+            create: (context) => getIt<ForgotResetPasswordCubit>(),
+            child: const ForgotPasswordScreen(),
+          ),
+        );
+
+      case RouteNames.resetPassword:
+        final email = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<ForgotResetPasswordCubit>(
+            create: (context) => getIt<ForgotResetPasswordCubit>(),
+            child: ResetPasswordScreen(email: email),
+          ),
+        );
+
+      case RouteNames.patientDetails:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PatientDetailsScreen(
+            patientData: args['patientData'],
+          ),
         );
 
       default:

@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
 import 'di.config.dart';
+import '../theme/theme_provider.dart';
 
 final getIt = GetIt.instance;
 
@@ -11,9 +12,7 @@ final getIt = GetIt.instance;
   asExtension: true, // default
 )
 Future<void>  configureDependencies() async{
-
-  final getIt = GetIt.instance;
+  getIt.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
   await getIt.init();
-
 }
 

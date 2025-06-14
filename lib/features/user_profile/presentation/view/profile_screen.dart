@@ -8,7 +8,11 @@ import 'package:graduation_medical_app/features/edit_profile/presentation/view/u
 import '../../../../core/config/route_names.dart';
 import '../../../../core/di/di.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../auth/presentation/view/privacy_policy_screen.dart';
+import '../view_model/upload_photo_state.dart';
 import '../view_model/user_profile_cubit.dart';
+import '../view_model/upload_photo_cubit.dart';
+import 'medical_record_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String token;
@@ -18,16 +22,34 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<UserProfileCubit>()..fetchUserProfile(token, userId),
-      child: BlocBuilder<UserProfileCubit, UserProfileState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<UserProfileCubit>()..fetchUserProfile(token, userId),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UploadProfilePhotoCubit>(),
+        ),
+      ],
+      child: BlocConsumer<UserProfileCubit, UserProfileState>(
+        listener: (context, state) {
+          if (state is UserProfileError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.grey,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is UserProfileLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is UserProfileLoaded) {
             final userData = state.profile.user;
             return Scaffold(
-              backgroundColor: AppColors.primary1.withOpacity(0.05),
+              backgroundColor: Colors.white,
               body: Column(
                 children: [
                   // Gradient Header
@@ -69,9 +91,10 @@ class ProfileScreen extends StatelessWidget {
                         // Avatar
                         CircleAvatar(
                           radius: 44,
-                          backgroundImage: (userData.profilePhoto != null && (userData.profilePhoto!.startsWith('http://') || userData.profilePhoto!.startsWith('https://')))
-                              ? NetworkImage(userData.profilePhoto!)
-                              : AssetImage("lib/assets/img/default_avatar.png") as ImageProvider,
+                          backgroundImage: (userData.profileImage != null &&
+                            (userData.profileImage!.startsWith('http://') || userData.profileImage!.startsWith('https://')))
+                            ? NetworkImage(userData.profileImage!)
+                            : AssetImage("lib/assets/img/default_avatar.png") as ImageProvider,
                           backgroundColor: Colors.grey[300],
                         ),
                         SizedBox(height: 12),
@@ -85,49 +108,26 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          userData.phone ?? '',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
                           userData.email ?? '',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(0.8),
                             fontSize: 14,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // Menu
                   Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: 24, left: 16, right: 16, bottom: 16),
-                      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
                         children: [
                           _buildMenuItem(
                             context,
                             Icons.person,
                             AppLocalizations.of(context).profile,
-                            () async{
-                              await Navigator.pushNamed(
+                            () async {
+                              final result = await Navigator.pushNamed(
                                 context,
                                 RouteNames.updateProfile,
                                 arguments: {
@@ -137,18 +137,44 @@ class ProfileScreen extends StatelessWidget {
                                   'phone': userData.phone ?? '',
                                   'address': userData.adress,
                                   'medicationHistory': userData.medicationHistory,
+                                  'medicalHistory': userData.medicalHistory,
                                   'dob': userData.dob,
-                                  'profilePhoto': userData.profilePhoto,
+                                  'profilePhoto': userData.profileImage,
                                 },
                               );
-                              context.read<UserProfileCubit>().fetchUserProfile(token, userId);
+                              
+                              if (result == true) {
+                                context.read<UserProfileCubit>().fetchUserProfile(token, userId);
+                              }
                             },
                           ),
-                          _buildMenuItem(context, Icons.favorite, AppLocalizations.of(context).favorites, null),
-                          _buildMenuItem(context, Icons.credit_card, AppLocalizations.of(context).paymentMethod, null),
-                          _buildMenuItem(context, Icons.privacy_tip, AppLocalizations.of(context).privacyPolicy, null),
-                          _buildMenuItem(context, Icons.settings, AppLocalizations.of(context).settings, null),
-                          _buildMenuItem(context, Icons.help, AppLocalizations.of(context).help, null),
+                          _buildMenuItem(
+                            context,
+                            Icons.medical_services,
+                            'Medical Records',
+                            () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MedicalRecordScreen(
+                                    medicalHistory: userData.medicalHistory,
+                                    medicationHistory: userData.medicationHistory,
+                                  ),
+                                ),
+                              );
+                              
+                              if (result == true) {
+                                context.read<UserProfileCubit>().fetchUserProfile(token, userId);
+                              }
+                            },
+                          ),
+                          _buildMenuItem(context, Icons.privacy_tip, AppLocalizations.of(context).privacyPolicy, (){ 
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                            );
+                          }),
+                          _buildMenuItem(context, Icons.settings, AppLocalizations.of(context).settings, (){Navigator.pushNamed(context, RouteNames.settings);}),
                           _buildMenuItem(
                             context,
                             Icons.logout,
@@ -166,7 +192,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             );
           } else if (state is UserProfileError) {
-            return Center(child: Text(AppLocalizations.of(context).error + ": " + state.message));
+            return Center(child: Text("${AppLocalizations.of(context).error}: ${state.message}"));
           }
           return Center(child: Text(AppLocalizations.of(context).noData));
         },
@@ -175,18 +201,28 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildMenuItem(BuildContext context, IconData icon, String title, VoidCallback? onTap) {
-    return ListTile(
-      leading: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.primary1.withOpacity(0.1),
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        leading: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.primary1.withOpacity(0.1),
+          ),
+          padding: EdgeInsets.all(10),
+          child: Icon(icon, color: AppColors.primary1, size: 22),
         ),
-        padding: EdgeInsets.all(10),
-        child: Icon(icon, color: AppColors.primary1, size: 22),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+        trailing: Icon(Icons.chevron_right, color: Colors.grey[400]),
+        onTap: onTap,
       ),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
-      trailing: Icon(Icons.chevron_right, color: Colors.grey[400]),
-      onTap: onTap,
     );
   }
 }

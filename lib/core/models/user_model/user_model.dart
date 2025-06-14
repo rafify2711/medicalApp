@@ -16,7 +16,7 @@ class UserModel {
 
   final DateTime? changePasswordTime;
   final bool? isDeleted;
-  final String? profilePhoto;
+  final String? profileImage;
 
   final List<String>? reservations;
 
@@ -26,7 +26,8 @@ class UserModel {
   @JsonKey(name: 'Adress')
   final String? adress;
 
-  final String? medicationHistory;
+  final List<String>? medicationHistory;
+  final List<String>? medicalHistory;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -44,7 +45,7 @@ class UserModel {
     this.dob,
     this.changePasswordTime,
     this.isDeleted,
-    this.profilePhoto,
+    this.profileImage,
     this.reservations,
     this.id,
     this.adress,
@@ -52,6 +53,7 @@ class UserModel {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.medicalHistory,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

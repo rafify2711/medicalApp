@@ -4,6 +4,7 @@ import 'package:graduation_medical_app/core/models/doctor_model/doctor_model.dar
 import 'package:graduation_medical_app/features/reservation/data/models/create_reservation_response.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/models/api_message_response.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/shared_prefs.dart';
 import '../../domain/repository/reservation_repository.dart';
@@ -53,6 +54,20 @@ class ReservationRepositoryImpl implements ReservationRepository {
     }
   }
 
+  @override
+  Future<ApiMessageResponse> cancelReservation(String reservationId) async{
+    try{
+      final storedToken = await _sharedPrefs.getToken();
+      final token = 'Bearer $storedToken' ;
+      if (token.isEmpty ) {
+        throw Exception("Missing authentication data");
+      }
+      final response = await _apiService.cancelReservation(reservationId, token);
+      return response;
+    }catch(e){
+      throw Exception('Failed to cancel reservation: ${e.toString()}');
+    }
+  }
 
 
 }

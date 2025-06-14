@@ -37,9 +37,9 @@ class PredictionCubit extends Cubit<PredictionState> {
       );
       // Add disease type to the prediction model
       final predictionWithDisease = PredictionModel(
-        predicted_class: result.model.predicted_class,
-        confidence: result.model.confidence,
-        detected_image: result.model.detected_image,
+        predicted_class: result.model!.predicted_class,
+        confidence: result.model!.confidence,
+        detected_image: result.model!.detected_image,
         disease: disease,
       );
       emit(PredictionSuccess(predictionWithDisease));

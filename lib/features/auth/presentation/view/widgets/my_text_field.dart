@@ -14,6 +14,7 @@ class MyTextField extends StatelessWidget {
   final int? maxLines;
   final TextInputType? keyboardType;
   final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
 
   const MyTextField({
     Key? key,
@@ -22,21 +23,27 @@ class MyTextField extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.validator,
-    this.prefixIcon, this.enabled, this.maxLines, this.keyboardType, this.onChanged,
+    this.prefixIcon, 
+    this.enabled, 
+    this.maxLines, 
+    this.keyboardType, 
+    this.onChanged,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: onChanged?? null,
-     keyboardType: keyboardType?? TextInputType.text,
-      enabled: enabled?? true,
-      maxLines: maxLines??1,
+      onChanged: onChanged,
+      onFieldSubmitted: onSubmitted,
+      keyboardType: keyboardType ?? TextInputType.text,
+      enabled: enabled ?? true,
+      maxLines: maxLines ?? 1,
       controller: controller,
       obscureText: obscureText,
       validator: validator,
       decoration: InputDecoration(
-        prefixIcon: Icon(prefixIcon,),
+        prefixIcon: Icon(prefixIcon),
         prefixIconColor: AppColors.primary1,
         filled: true,
         fillColor: const Color(0xFFE9F6FE),

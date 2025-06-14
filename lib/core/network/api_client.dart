@@ -7,13 +7,14 @@ import 'package:graduation_medical_app/features/auth/data/models/signup_model/re
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
 import 'package:graduation_medical_app/features/drug_conflict/data/models/drug_interaction_response.dart';
 import 'package:graduation_medical_app/features/reservation/data/models/create_reservation_response.dart';
+import 'package:graduation_medical_app/features/user_profile/data/models/Profile_image_response.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart'
     show
         Body,
-        Field,
         GET,
         Header,
         MultiPart,
@@ -24,6 +25,7 @@ import 'package:retrofit/retrofit.dart'
         Query,
         RestApi;
 import '../../features/auth/data/models/changePassword/change_password_response.dart';
+import '../../features/auth/data/models/changePassword/reset_password_data.dart';
 import '../../features/auth/data/models/sign_in_model/login_response.dart';
 import '../../features/auth/data/models/sign_in_model/sign_in_model.dart';
 import '../../features/auth/data/models/signup_model/signup_user_model.dart';
@@ -34,12 +36,13 @@ import '../../features/edit_profile/data/models/updated_user_model.dart';
 import '../../features/medical_dignosis/data/models/prdiction_models/prediction_model.dart';
 import '../../features/prescription/data/models/prescription_response.dart';
 import '../../features/reservation/data/models/add_update_schedule_response.dart';
+import '../../features/reservation/data/models/delete_schedule_data.dart';
 import '../../features/user_appointment/data/models/doctor_model/doctor_model.dart';
 import '../../features/user_appointment/data/models/user_get_reservation_response_model.dart';
 import '../../features/user_profile/data/models/user_profile_response.dart';
+import '../models/api_message_response.dart';
 import '../models/appointment_model/reservation_data_model.dart';
 import '../models/doctor_model/doctor_model.dart';
-import '../models/api_message_response.dart';
 import 'package:graduation_medical_app/features/reservation/data/models/schedule_response.dart';
 import '../models/doctor_appointment_model.dart';
 
@@ -61,62 +64,52 @@ abstract class ApiClient {
 
   @GET("user/profile/{userId}")
   Future<UserProfileResponse> getUserProfile(
-    @Header("Authorization") String token,
-    @Path("userId") String userId,
-  );
+      @Header("Authorization") String token,
+      @Path("userId") String userId,);
 
   @GET("doctor/{doctorId}")
   Future<DoctorModel> getDoctorProfile(@Path("doctorId") String userId);
 
   @GET("/user/{userId}/reservations")
   Future<UserGetReservationResponseModel> getUserAppointments(
-    @Path("userId") String userId,
-    @Header("Authorization") String token,
-  );
+      @Path("userId") String userId,
+      @Header("Authorization") String token,);
 
   @GET("/doctor/{doctorId}/available-slots/{date}")
-  Future<List<String>> getAvailableSlots(
-    @Path("doctorId") String doctorId,
-    @Path("date") DateTime date,
-  );
+  Future<List<String>> getAvailableSlots(@Path("doctorId") String doctorId,
+      @Path("date") DateTime date,);
 
   @PUT("doctor/{doctorId}/schedule/add")
   Future<AddUpdateScheduleResponse> addUpdateSchedule(
-    @Path("doctorId") String doctorId,
-    @Header("Authorization") String token,
-    @Body() AddUpdateScheduleData data,
-  );
+      @Path("doctorId") String doctorId,
+      @Header("Authorization") String token,
+      @Body() AddUpdateScheduleData data,);
 
   @PATCH('user/profile')
   Future<UserProfileResponse> updateUserProfile(
-    @Header("Authorization") String token,
-    @Body() UpdateUserModel user,
-  );
+      @Header("Authorization") String token,
+      @Body() UpdateUserModel user,);
 
   @GET("doctor/")
   Future<List<DoctorsModel>> getAllDoctors();
 
   @GET("api/drug-interactions/check")
   Future<DrugInteractionResponse> checkDrugInteraction(
-    @Query("drug1") String drug1,
-    @Query("drug2") String drug2,
-  );
+      @Query("drug1") String drug1,
+      @Query("drug2") String drug2,);
 
   @GET("api/drug-interactions/substitutions")
   Future<DrugInteractionResponse> getDrugSubstitutions(
-    @Query("drug") String drug,
-  );
+      @Query("drug") String drug,);
 
   @POST("reservation")
   Future<CreateReservationResponse> createReservation(
-    @Body() ReservationDataModel data,
-  );
+      @Body() ReservationDataModel data,);
 
   @GET("api/drug-interactions/disease-check")
   Future<DrugInteractionResponse> checkDiseaseDrugInteraction(
-    @Query("drug") String drug,
-    @Query("disease") String disease,
-  );
+      @Query("drug") String drug,
+      @Query("disease") String disease,);
 
   @GET("api/chat/chat-history/")
   Future<List<ChatMessage>> fetchChatHistory(@Query('email') String email);
@@ -129,27 +122,45 @@ abstract class ApiClient {
 
   @PUT("doctor/{doctorId}")
   Future<UpdateDoctorResponse> updateDoctorProfile(
-    @Path("doctorId") String userId,
-    @Body() UpdateDoctorModel model,
-  );
+      @Path("doctorId") String userId,
+      @Body() UpdateDoctorModel model,);
 
   @GET("doctor/{doctorId}/schedule")
   Future<ScheduleResponse> fetchDoctorSchedule(
-    @Path("doctorId") String doctorId,
-    @Header("Authorization") String token,
-  );
+      @Path("doctorId") String doctorId,
+      @Header("Authorization") String token,);
 
   @GET("/doctor/{doctorId}/reservations")
   Future<ReservationResponse> fetchDoctorAppointments(
-    @Path("doctorId") String doctorId,
-    @Header("Authorization") String token,
-  );
+      @Path("doctorId") String doctorId,
+      @Header("Authorization") String token,);
+
   @GET("/user/profile/password")
   Future<ChangePasswordResponse> changePassword(
-    @Header("Authorization") String token,
-    @Body() ChangePasswordData data,
-  );
+      @Header("Authorization") String token,
+      @Body() ChangePasswordData data,);
 
+  @PATCH("user/profile/image")
+  @MultiPart()
+  Future<ProfileImageResponse> updateProfileImage(
+      @Header("Authorization") String token,
+      @Part(name: "profileImage") File? profileImage,);
+
+  @POST("/auth/forgot-password")
+  Future<ApiMessageResponse> forgetPassword(@Body() Email email,);
+
+  @PATCH("/auth/reset-password")
+  Future<ApiMessageResponse> resetPassword(@Body() ResetPasswordData data,);
+
+  @PUT("/reservation/cancel/{reservationId}")
+  Future<ApiMessageResponse> cancelReservation(
+      @Path("reservationId") String reservationId,
+      @Header("Authorization") String token,);
+
+  @DELETE("doctor/{doctorId}/delete-schedule")
+  Future<ApiMessageResponse> deleteSchedule(@Path("doctorId") String doctorId,
+      @Header("Authorization") String token,
+      @Body()    DeleteScheduleData data, );
 }
 
 @RestApi(baseUrl: "https://medicalapp-sku9qeo9.b4a.run/api/")
@@ -162,7 +173,7 @@ abstract class ApiClientPrediction {
     @Part(name: "file") File? imagePath,
   );
 
-  @POST("/brain-tumor/predict?")
+  @POST("/braintumor/predict?")
   Future<PredictionResponse> predictBrainTumor(
     @Part(name: "file") File? imagePath,
   );
@@ -172,7 +183,7 @@ abstract class ApiClientPrediction {
     @Part(name: "file") File? imagePath,
   );
 
-  @POST("/skin-cancer/predict")
+  @POST("/skincancer/predict")
   Future<PredictionResponse> predictSkinCancer(
     @Part(name: "file") File? imagePath,
   );
@@ -182,10 +193,6 @@ abstract class ApiClientPrediction {
     @Part(name: "file") File? imagePath,
   );
 
-  @POST("/bone-fracture/predict")
-  Future<PredictionResponse> predictBoneFracture(
-    @Part(name: "file") File? imagePath,
-  );
 
   @POST("/eye-diseases/predict")
   Future<PredictionResponse> predictEyeDiseases(
@@ -206,3 +213,25 @@ abstract class ReadPerceptionClint {
     @Part(name: "file") File? imagePath,
   );
 }
+
+@RestApi(baseUrl: "http://192.168.1.3:8000/predict")
+abstract class ApiClientLocalPrediction{
+  factory ApiClientLocalPrediction(Dio dio, {String baseUrl}) = _ApiClientLocalPrediction;
+  @POST("/dental/")
+  Future<PredictionResponse> predictDental(
+      @Part(name: "file") File? imagePath,
+      );
+  @POST("/colon-diseases/")
+  Future<PredictionResponse> predictColon(
+      @Part(name: "file") File? imagePath,
+      );
+
+  @POST("/oral-diseases/")
+  Future<PredictionResponse> predictOral(
+      @Part(name: "file") File? imagePath,
+      );
+
+}
+
+
+

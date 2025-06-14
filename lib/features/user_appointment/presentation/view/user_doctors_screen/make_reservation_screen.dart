@@ -63,7 +63,8 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
 
   void _fetchAvailableSlots() {
     if (widget.doctorId != null && widget.selectedDate != null) {
-      final formattedDate = "${widget.selectedDate!.year}-${widget.selectedDate!.month.toString().padLeft(2, '0')}-${widget.selectedDate!.day.toString().padLeft(2, '0')}";
+      final formattedDate =
+          "${widget.selectedDate!.year}-${widget.selectedDate!.month.toString().padLeft(2, '0')}-${widget.selectedDate!.day.toString().padLeft(2, '0')}";
       context.read<AvailableSlotsCubit>().loadAvailableSlots(
         DateTime.parse(formattedDate),
         widget.doctorId!,
@@ -96,7 +97,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
 
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('userId');
-    
+
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -107,7 +108,8 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
       return;
     }
 
-    final formattedDate = "${widget.selectedDate!.year}-${widget.selectedDate!.month.toString().padLeft(2, '0')}-${widget.selectedDate!.day.toString().padLeft(2, '0')}";
+    final formattedDate =
+        "${widget.selectedDate!.year}-${widget.selectedDate!.month.toString().padLeft(2, '0')}-${widget.selectedDate!.day.toString().padLeft(2, '0')}";
 
     final reservationData = ReservationDataModel(
       doctorId: widget.doctorId!,
@@ -121,8 +123,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     });
 
     try {
-      await context.read<CreateReservationCubit>().createReservation(reservationData);
-      
+      await context.read<CreateReservationCubit>().createReservation(
+        reservationData,
+      );
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -130,7 +134,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context, true); // Return true to indicate successful reservation
+        Navigator.pop(
+          context,
+          true,
+        ); // Return true to indicate successful reservation
       }
     } catch (e) {
       if (mounted) {
@@ -138,10 +145,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
           _isNavigating = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
         );
       }
     }
@@ -175,7 +179,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
         },
         builder: (context, state) {
           final isLoading = state is CreateReservationLoading || _isNavigating;
-          
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -185,7 +189,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 // Selected Date
                 Text(
                   AppLocalizations.of(context).selectedDate,
-                  style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
+                  style: AppStyle.titlesTextStyle.copyWith(
+                    fontSize: 16,
+                    color: AppColors.primary1,
+                  ),
                 ),
                 SizedBox(height: 6),
                 Container(
@@ -198,14 +205,20 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     widget.selectedDate != null
                         ? "${widget.selectedDate!.toLocal().toString().split(' ')[0]}"
                         : AppLocalizations.of(context).noDateSelected,
-                    style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.primary1),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary1,
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
                 // Available Time
                 Text(
                   AppLocalizations.of(context).availableTime,
-                  style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
+                  style: AppStyle.titlesTextStyle.copyWith(
+                    fontSize: 16,
+                    color: AppColors.primary1,
+                  ),
                 ),
                 SizedBox(height: 10),
                 BlocBuilder<AvailableSlotsCubit, AvailableSlotsState>(
@@ -223,9 +236,8 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                            state.message,
-                            style: TextStyle(color: Colors.red),
+                          child:
+                            Center(child: Text('There is No Available Slots '),
                           ),
                         ),
                       );
@@ -244,31 +256,44 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       return Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children: state.availableSlots.map((slot) {
-                          final isSelected = _selectedTimeSlot == slot;
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedTimeSlot = slot;
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: isSelected ? AppStyle.gradient : null,
-                                color: isSelected ? null : AppColors.primary1.withOpacity(0.08),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Text(
-                                slot,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: isSelected ? Colors.white : AppColors.primary1,
+                        children:
+                            state.availableSlots.map((slot) {
+                              final isSelected = _selectedTimeSlot == slot;
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedTimeSlot = slot;
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient:
+                                        isSelected ? AppStyle.gradient : null,
+                                    color:
+                                        isSelected
+                                            ? null
+                                            : AppColors.primary1.withOpacity(
+                                              0.08,
+                                            ),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  child: Text(
+                                    slot,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          isSelected
+                                              ? Colors.white
+                                              : AppColors.primary1,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                              );
+                            }).toList(),
                       );
                     }
                     return Center(
@@ -286,48 +311,90 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 // Patient Details
                 Text(
                   AppLocalizations.of(context).patientDetails,
-                  style: AppStyle.titlesTextStyle.copyWith(fontSize: 16, color: AppColors.primary1),
+                  style: AppStyle.titlesTextStyle.copyWith(
+                    fontSize: 16,
+                    color: AppColors.primary1,
+                  ),
                 ),
                 SizedBox(height: 10),
                 Row(
                   children: [
-                    _buildToggleButton(AppLocalizations.of(context).yourself, _patientType == 'Yourself', () {
-                      setState(() => _patientType = 'Yourself');
-                    }),
+                    _buildToggleButton(
+                      AppLocalizations.of(context).yourself,
+                      _patientType == 'Yourself',
+                      () {
+                        setState(() => _patientType = 'Yourself');
+                      },
+                    ),
                     SizedBox(width: 10),
-                    _buildToggleButton(AppLocalizations.of(context).anotherPerson, _patientType == 'Another Person', () {
-                      setState(() => _patientType = 'Another Person');
-                    }),
+                    _buildToggleButton(
+                      AppLocalizations.of(context).anotherPerson,
+                      _patientType == 'Another Person',
+                      () {
+                        setState(() => _patientType = 'Another Person');
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(height: 16),
                 // Full Name
-                _buildTextField(_nameController, AppLocalizations.of(context).fullName),
+                _buildTextField(
+                  _nameController,
+                  AppLocalizations.of(context).fullName,
+                ),
                 SizedBox(height: 12),
                 // Age
-                _buildTextField(_ageController, AppLocalizations.of(context).age, keyboardType: TextInputType.number),
+                _buildTextField(
+                  _ageController,
+                  AppLocalizations.of(context).age,
+                  keyboardType: TextInputType.number,
+                ),
                 SizedBox(height: 12),
                 // Gender
-                Text(AppLocalizations.of(context).gender, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
+                Text(
+                  AppLocalizations.of(context).gender,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary1,
+                  ),
+                ),
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    _buildToggleButton(AppLocalizations.of(context).male, _gender == 'Male', () {
-                      setState(() => _gender = 'Male');
-                    }),
+                    _buildToggleButton(
+                      AppLocalizations.of(context).male,
+                      _gender == 'Male',
+                      () {
+                        setState(() => _gender = 'Male');
+                      },
+                    ),
                     SizedBox(width: 10),
-                    _buildToggleButton(AppLocalizations.of(context).female, _gender == 'Female', () {
-                      setState(() => _gender = 'Female');
-                    }),
+                    _buildToggleButton(
+                      AppLocalizations.of(context).female,
+                      _gender == 'Female',
+                      () {
+                        setState(() => _gender = 'Female');
+                      },
+                    ),
                     SizedBox(width: 10),
-                    _buildToggleButton(AppLocalizations.of(context).other, _gender == 'Other', () {
-                      setState(() => _gender = 'Other');
-                    }),
+                    _buildToggleButton(
+                      AppLocalizations.of(context).other,
+                      _gender == 'Other',
+                      () {
+                        setState(() => _gender = 'Other');
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(height: 18),
                 // Problem Description
-                Text(AppLocalizations.of(context).describeProblem, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
+                Text(
+                  AppLocalizations.of(context).describeProblem,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary1,
+                  ),
+                ),
                 SizedBox(height: 8),
                 Container(
                   decoration: BoxDecoration(
@@ -341,7 +408,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).enterProblem,
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                     ),
                   ),
                 ),
@@ -358,16 +428,17 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                            AppLocalizations.of(context).confirmReservation,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                    child:
+                        isLoading
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                              AppLocalizations.of(context).confirmReservation,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
                   ),
                 ),
               ],
@@ -378,11 +449,21 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, {TextInputType? keyboardType}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label, {
+    TextInputType? keyboardType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primary1)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: AppColors.primary1,
+          ),
+        ),
         SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
@@ -394,7 +475,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
             keyboardType: keyboardType,
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
             ),
           ),
         ),

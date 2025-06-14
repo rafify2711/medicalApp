@@ -19,14 +19,17 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           ? null
           : DateTime.parse(json['changePasswordTime'] as String),
   isDeleted: json['isDeleted'] as bool?,
-  profilePhoto: json['profilePhoto'] as String?,
+  profileImage: json['profileImage'] as String?,
   reservations:
       (json['reservations'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
   id: json['_id'] as String?,
   adress: json['Adress'] as String?,
-  medicationHistory: json['medicationHistory'] as String?,
+  medicationHistory:
+      (json['medicationHistory'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   createdAt:
       json['createdAt'] == null
           ? null
@@ -36,6 +39,10 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
   v: (json['__v'] as num?)?.toInt(),
+  medicalHistory:
+      (json['medicalHistory'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
 );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -48,11 +55,12 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'DOB': instance.dob?.toIso8601String(),
   'changePasswordTime': instance.changePasswordTime?.toIso8601String(),
   'isDeleted': instance.isDeleted,
-  'profilePhoto': instance.profilePhoto,
+  'profileImage': instance.profileImage,
   'reservations': instance.reservations,
   '_id': instance.id,
   'Adress': instance.adress,
   'medicationHistory': instance.medicationHistory,
+  'medicalHistory': instance.medicalHistory,
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
   '__v': instance.v,

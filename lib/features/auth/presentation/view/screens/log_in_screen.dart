@@ -25,8 +25,8 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(text:'ranimafify@gmail.com');
-  final TextEditingController _passwordController = TextEditingController(text: '123456789Rr#');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
   final LocalAuthentication _localAuth = LocalAuthentication();
   bool _isBiometricAvailable = false;
@@ -150,9 +150,15 @@ class _LogInScreenState extends State<LogInScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        // Handle forgot password
+                        Navigator.pushNamed(context, RouteNames.forgotPassword);
                       },
-                      child: Text(AppLocalizations.of(context).forgotPassword),
+                      child: Text(AppLocalizations.of(context).forgotPassword,
+                          style: AppStyle.bodyCyanTextStyle.copyWith(
+                            fontSize: 14,
+                            color: AppColors.primary1,
+                            fontWeight: FontWeight.w500,
+                          ),)
+                        ,
                     ),
                   ),
                   const SizedBox(height: 24),

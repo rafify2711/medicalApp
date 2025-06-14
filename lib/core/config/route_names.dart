@@ -34,6 +34,9 @@ class RouteNames {
   static const viewdoctorpatient = '/viewdoctorpatient';
   static const String changePassword = '/change-password';
   static const String specialties = '/specialties';
+  static const String forgotPassword = '/forgot-password';
+  static const String resetPassword = '/reset-password';
+  static const String patientDetails = '/patient-details';
 
   static const String onboarding = '/onboarding';
 }

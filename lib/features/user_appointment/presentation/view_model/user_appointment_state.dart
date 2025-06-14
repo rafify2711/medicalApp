@@ -19,3 +19,16 @@ class AppointmentError extends UserAppointmentState {
 
   AppointmentError(this.message);
 }
+
+class CancelReservationLoading extends UserAppointmentState {}
+
+class CancelReservationSuccess extends UserAppointmentState {
+  final String message;
+  CancelReservationSuccess(this.message);
+}
+
+class CancelReservationError extends UserAppointmentState {
+  final String message;
+  CancelReservationError(this.message);
+}
+

@@ -21,9 +21,10 @@ class PredictionModel {
   Map<String, dynamic> toJson() => _$PredictionModelToJson(this);
 
   bool get isKidneyStone => disease?.toLowerCase() == 'kidney-stone';
+  bool get isDental => disease?.toLowerCase() == 'dental';
 
   String? get displayImage {
-    if (isKidneyStone) {
+    if (isKidneyStone|| isDental) {
       return detected_image;
     }
     return null;
@@ -33,15 +34,35 @@ class PredictionModel {
 @JsonSerializable()
 class PredictionResponse {
   final bool success;
+
   @JsonKey(name: "prediction")
-  final PredictionModel model;
+  final PredictionModel? model;
 
   PredictionResponse({
-    required this.model,
     required this.success,
+    this.model,
   });
 
-  factory PredictionResponse.fromJson(Map<String, dynamic> json) => _$PredictionResponseFromJson(json);
+  factory PredictionResponse.fromJson(Map<String, dynamic> json) {
+    // ✅ الحالة 2 أو 3: flat structure
+    if (!json.containsKey('success') && (json.containsKey('predicted_class') || json.containsKey('detected_image'))) {
+      return PredictionResponse(
+        success: true,
+        model: PredictionModel.fromJson(json),
+      );
+    }
+
+    // ✅ الحالة 1: nested structure
+    if (json.containsKey('success') && json['success'] == true) {
+      return _$PredictionResponseFromJson(json);
+    }
+
+    // ❌ أي شيء آخر يُعتبر فشل (مثلاً error)
+    return PredictionResponse(success: false);
+  }
 
   Map<String, dynamic> toJson() => _$PredictionResponseToJson(this);
 }
+
+
+

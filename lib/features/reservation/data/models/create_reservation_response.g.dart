@@ -28,7 +28,7 @@ ReservationModel _$ReservationModelFromJson(Map<String, dynamic> json) =>
       json['timeSlot'] as String?,
       json['status'] as String?,
       json['_d'] as String?,
-      json['__v'] as String?,
+      (json['__v'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ReservationModelToJson(ReservationModel instance) =>

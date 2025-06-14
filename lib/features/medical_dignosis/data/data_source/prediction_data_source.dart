@@ -11,8 +11,9 @@ abstract class PredictionDataSource {
 @LazySingleton(as: PredictionDataSource)
 class PredictionDataSourceImpl implements PredictionDataSource {
   final ApiClientPrediction apiClientPrediction;
+  final ApiClientLocalPrediction apiClientLocalPrediction;
 
-  PredictionDataSourceImpl(this.apiClientPrediction);
+  PredictionDataSourceImpl(this.apiClientPrediction, this.apiClientLocalPrediction);
 
   @override
   Future<PredictionResponse> predictDisease(String disease, File imageFile) async {
@@ -33,13 +34,19 @@ class PredictionDataSourceImpl implements PredictionDataSource {
         return apiClientPrediction.predictSkinCancer(imagePath);
       case "tuberculosis":
         return apiClientPrediction.predictTuberculosis(imagePath);
-      case "bone-fracture":
-        return apiClientPrediction.predictBoneFracture(imagePath);
+
       case "eye-diseases":
         return apiClientPrediction.predictEyeDiseases(imagePath);
 
       case "alzheimer":
         return apiClientPrediction.predictAlzheimer(imagePath);
+
+      case "dental":
+        return apiClientLocalPrediction.predictDental(imagePath);
+      case "colon-diseases":
+        return apiClientLocalPrediction.predictColon(imagePath);
+      case "oral-diseases":
+        return apiClientLocalPrediction.predictOral(imagePath);
 
       default:
         throw Exception("Unknown disease type: $disease");

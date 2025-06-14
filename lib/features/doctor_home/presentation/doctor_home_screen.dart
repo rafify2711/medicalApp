@@ -197,6 +197,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                           Navigator.pushNamed(context, RouteNames.settings);
                         },
                       ),
+
                     ],
                   ),
                 ],

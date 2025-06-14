@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graduation_medical_app/core/config/route_names.dart';
-import 'package:graduation_medical_app/features/auth/presentation/view/screens/log_in_screen.dart';
-import 'package:graduation_medical_app/features/doctor_home/presentation/doctor_home_screen.dart';
-import 'package:graduation_medical_app/features/auth/presentation/view/terms_of_use_screen.dart';
+import 'package:graduation_medical_app/core/config/route_names.dart';import 'package:graduation_medical_app/features/auth/presentation/view/terms_of_use_screen.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/privacy_policy_screen.dart';
 import 'package:graduation_medical_app/core/localization/app_localizations.dart';
-
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_style.dart';
 import '../../../data/models/signup_model/signup_doctor_model.dart';

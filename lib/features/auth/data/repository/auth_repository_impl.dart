@@ -5,6 +5,7 @@ import 'package:graduation_medical_app/features/auth/data/models/changePassword/
 import 'package:graduation_medical_app/features/auth/data/models/signup_model/signup_doctor_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/models/api_message_response.dart';
 import '../../../../core/models/doctor_model/doctor_model.dart';
 import '../../../../core/models/user_model/user_model.dart';
 import '../../../../core/utils/shared_prefs.dart';
@@ -12,6 +13,7 @@ import '../../domain/repository/auth_repository.dart';
 import '../data_source/auth_local_data_source.dart';
 import '../data_source/auth_remote_data_source__impl.dart';
 import '../models/changePassword/change_password_data.dart';
+import '../models/changePassword/reset_password_data.dart';
 import '../models/sign_in_model/sign_in_model.dart';
 import '../models/signup_model/signup_user_model.dart';
 
@@ -34,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.prefs, this._sharedPrefs,
       {required this.remoteDataSource, required this.localDataSource,required this.apiClient});
 
-  @override
+
   @override
   Future<UserModel> signupUser(SignupUserModel signupModel) async {
     try {
@@ -63,14 +65,14 @@ class AuthRepositoryImpl implements AuthRepository {
       }
 
       // ✅ تخزين البيانات في SharedPreferences بعد تسجيل الدخول
-      await prefs.setString('token', loginResponse.token!);
-      await prefs.setString('userId', loginResponse.userId!);
-      await prefs.setString('role', loginResponse.role!);
-      return loginResponse.token!;
+      await prefs.setString('token', loginResponse.token);
+      await prefs.setString('userId', loginResponse.userId);
+      await prefs.setString('role', loginResponse.role);
+      return loginResponse.token;
     } on DioException catch (e) {
       throw AuthException(_handleDioError(e)).message; // ✅ الآن يُمرر نص وليس Exception
     } catch (e) {
-      print("error");
+
       throw AuthException("$e").message;
     }
   }
@@ -90,16 +92,54 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<ChangePasswordResponse> changePassword(String oldPassword, String newPassword) {
-    try{
-      final changePasswordData = ChangePasswordData(oldPassword: oldPassword, newPassword: newPassword,confirmPassword: newPassword);
+  Future<ChangePasswordResponse> changePassword(String oldPassword, String newPassword) async {
+    try {
+      final changePasswordData = ChangePasswordData(
+        oldPassword: oldPassword, 
+        newPassword: newPassword,
+        confirmPassword: newPassword
+      );
       final token = _sharedPrefs.getToken();
-      return apiClient.changePassword(  'Bearer $token', changePasswordData);
+      return await apiClient.changePassword('Bearer $token', changePasswordData);
     } on DioException catch (e) {
-      throw AuthException(_handleDioError(e)).message; // ✅ الآن يُمرر نص وليس Exception
+      final errorMessage = _handleDioError(e);
+      throw errorMessage;
+    } catch (e) {
+      throw e.toString();
     }
-
   }
+
+  @override
+  Future<ApiMessageResponse> forgotPassword(String email) async {
+    try {
+      return await apiClient.forgetPassword(Email(email: email));
+    } on DioException catch (e) {
+      final errorMessage = _handleDioError(e);
+      throw errorMessage;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  @override
+  Future<ApiMessageResponse> resetPassword(String email, String otp, String newPassword) async {
+    try {
+      return await apiClient.resetPassword(
+        ResetPasswordData(
+          email: email, 
+          otp: otp, 
+          newPassword: newPassword
+        )
+      );
+    } on DioException catch (e) {
+      final errorMessage = _handleDioError(e);
+      throw errorMessage;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+
 
 
   String _handleDioError(DioException e) {

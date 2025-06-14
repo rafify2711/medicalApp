@@ -18,7 +18,31 @@ class ViewScheduleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<ScheduleCubit>()..fetchSchedule(doctorId, token),
-      child: BlocBuilder<ScheduleCubit, ScheduleState>(
+      child: BlocConsumer<ScheduleCubit, ScheduleState>(
+        listener: (context, state) {
+          if (state is ScheduleDeleteSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+            context.read<ScheduleCubit>().fetchSchedule(doctorId, token);
+          } else if (state is ScheduleDeleteError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }else if (state is ScheduleDeleteLoading){
+             Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary1),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: MyAppPar(title: AppLocalizations.of(context).mySchedule),
@@ -103,7 +127,11 @@ class ViewScheduleScreen extends StatelessWidget {
       if (schedule.isEmpty) {
         return _buildEmptyState(context);
       }
-      return _buildScheduleList(context, schedule);
+      final futureSchedules = _filterFutureSchedules(schedule);
+      if (futureSchedules.isEmpty) {
+        return _buildEmptyState(context);
+      }
+      return _buildScheduleList(context, futureSchedules);
     }
 
     return const Center(child: Text('Unknown state'));
@@ -198,19 +226,34 @@ class ViewScheduleScreen extends StatelessWidget {
                         ),
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.calendar_today,
-                            color: AppColors.primary1,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                color: AppColors.primary1,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _formatDate(scheduleItem.date!),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary1,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _formatDate(scheduleItem.date!),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary1,
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
                             ),
+                            onPressed: () {
+                              final cubit = context.read<ScheduleCubit>();
+                              _showDeleteConfirmationDialog(context, scheduleItem.date!, cubit);
+                            },
                           ),
                         ],
                       ),
@@ -276,7 +319,49 @@ class ViewScheduleScreen extends StatelessWidget {
     );
   }
 
+  void _showDeleteConfirmationDialog(BuildContext context, DateTime date, ScheduleCubit cubit) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).deleteSchedule),
+          content: Text(AppLocalizations.of(context).deleteScheduleConfirmation),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                cubit.deleteSchedule(date);
+              },
+              child: Text(
+                AppLocalizations.of(context).delete,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
+  }
+
+  List<dynamic> _filterFutureSchedules(List<dynamic> schedules) {
+    final now = DateTime.now();
+    return schedules.where((schedule) {
+      if (schedule.date == null) return false;
+      final scheduleDate = schedule.date as DateTime;
+      // Compare only the date part (year, month, day)
+      return scheduleDate.year > now.year || 
+             (scheduleDate.year == now.year && scheduleDate.month > now.month) ||
+             (scheduleDate.year == now.year && scheduleDate.month == now.month && scheduleDate.day >= now.day);
+    }).toList();
   }
 } 

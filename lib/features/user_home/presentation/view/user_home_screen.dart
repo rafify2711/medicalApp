@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:graduation_medical_app/core/config/route_names.dart';
 import 'package:graduation_medical_app/core/di/di.dart';
-import 'package:graduation_medical_app/core/extentions/extentions.dart';
+import 'package:graduation_medical_app/core/utils/extentions.dart';
 import 'package:graduation_medical_app/core/models/user_model/user_model.dart';
 import 'package:graduation_medical_app/core/utils/widgets/feature_widget/devider.dart';
 import 'package:graduation_medical_app/features/user_home/presentation/view/widgets/cat_icons_row.dart';

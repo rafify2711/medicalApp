@@ -135,8 +135,8 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 80,
-                                height: 80,
+                                width: 60,
+                                height: 60,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(40),
                                   boxShadow: [
@@ -152,7 +152,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                                           (doctor.profilePhoto!.startsWith('http://') ||
                                               doctor.profilePhoto!.startsWith('https://')))
                                           ? doctor.profilePhoto!
-                                          : 'https://i.imgur.com/3Y1J2TFG.png',
+                                          :"https://t3.ftcdn.net/jpg/05/79/55/26/240_F_579552668_sZD51Sjmi89GhGqyF27pZcrqyi7cEYBH.jpg",
                                     ),
                                     fit: BoxFit.cover,
                                   ),
@@ -189,30 +189,14 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                               SizedBox(width: 16),
                               Align(
                                 alignment: Alignment.center,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      RouteNames.doctorDetails,
-                                      arguments: {'doctor': doctor},
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.primary,
-                                    foregroundColor: Colors.white,
-                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    elevation: 0,
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(context).viewProfile,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                                child: Center(
+                                  child: Button(width: 100,height: 40,
+                                      text:
+                                  'View Profile', onClick: (){Navigator.pushNamed(
+                                    context,
+                                    RouteNames.doctorDetails,
+                                    arguments: {'doctor': doctor},
+                                  );}),
                                 ),
                               ),
                             ],

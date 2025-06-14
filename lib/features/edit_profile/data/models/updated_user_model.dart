@@ -5,10 +5,12 @@ class UpdateUserModel {
   final String? phone;
   final DateTime? dob;
   final String? address;
-  final String? medicationHistory;
+  final List<String>? medicationHistory;
+  final List<String>? medicalHistory;
   final Gender? gender;
 
   UpdateUserModel({
+    this.medicalHistory,
     this.username,
     this.phone,
     this.dob,
@@ -26,6 +28,9 @@ class UpdateUserModel {
     if (address != null && address!.isNotEmpty) data['Adress'] = address;
     if (medicationHistory != null && medicationHistory!.isNotEmpty) {
       data['medicationHistory'] = medicationHistory;
+    }
+    if (medicalHistory != null && medicalHistory!.isNotEmpty) {
+      data['medicalHistory'] = medicalHistory;
     }
 
     return data;

@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/shared_prefs.dart';
 import '../../domain/repository/user_profile_repository.dart';
+
+
+import '../models/Profile_image_response.dart';
 import '../models/user_profile_response.dart';
 
 @LazySingleton(as: UserRepository)
@@ -47,6 +52,16 @@ class UserRepositoryImpl implements UserRepository {
       throw Exception("Failed to logout: ${e.toString()}");
     }
   }
+
+  @override
+  Future<ProfileImageResponse> updateProfileImage(File? imagePath) async{
+    try{
+      final storedToken= await _sharedPrefs.getToken();
+    return _apiService.updateProfileImage("Bearer $storedToken", imagePath);
+
+  }catch(e){
+      throw Exception("Failed to update profile image: ${e.toString()}");
+    }}
 }
 
 

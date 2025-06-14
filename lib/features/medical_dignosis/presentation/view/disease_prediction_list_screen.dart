@@ -7,57 +7,70 @@ import 'package:graduation_medical_app/features/medical_dignosis/presentation/vi
 import '../../../../core/localization/app_localizations.dart';
 
 class DiseasePredictionListScreen extends StatelessWidget {
-  DiseasePredictionListScreen({super.key});
+  const DiseasePredictionListScreen({super.key});
 
   List<Map<String, dynamic>> getDiseases(BuildContext context) => [
     {
       "name": "covid19",
       "displayName": AppLocalizations.of(context).covid19,
-      "icon": Icons.coronavirus,
+      "icon": 'lib/assets/icon/covid-19.png',
       "description": AppLocalizations.of(context).covid19Description,
     },
     {
       "name": "brain-tumor",
       "displayName": AppLocalizations.of(context).brainTumor,
-      "icon": Icons.psychology,
+      "icon": 'lib/assets/icon/brain.png',
       "description": AppLocalizations.of(context).brainTumorDescription,
     },
     {
       "name": "kidney-stone",
       "displayName": AppLocalizations.of(context).kidneyStone,
-      "icon": Icons.medical_services,
+      "icon": 'lib/assets/icon/kidney.png',
       "description": AppLocalizations.of(context).kidneyStoneDescription,
     },
     {
       "name": "skin-cancer",
       "displayName": AppLocalizations.of(context).skinCancer,
-      "icon": Icons.add,
+      "icon": 'lib/assets/icon/skin-cancer.png',
       "description": AppLocalizations.of(context).skinCancerDescription,
     },
     {
       "name": "tuberculosis",
       "displayName": AppLocalizations.of(context).tuberculosis,
-      "icon": Icons.air,
+      "icon": 'lib/assets/icon/tuberculosis.png',
       "description": AppLocalizations.of(context).tuberculosisDescription,
     },
-    {
-      "name": "bone-fracture",
-      "displayName": AppLocalizations.of(context).boneFracture,
-      "icon": Icons.add,
-      "description": AppLocalizations.of(context).boneFractureDescription,
-    },
+
     {
       "name": "Alzheimer",
       "displayName": AppLocalizations.of(context).alzheimer,
-      "icon": Icons.psychology_alt,
+      "icon": 'lib/assets/icon/alzheimer.png',
       "description": AppLocalizations.of(context).alzheimerDescription,
     },
     {
       "name": "eye-diseases",
       "displayName": AppLocalizations.of(context).eyeDiseases,
-      "icon": Icons.visibility,
+      "icon": 'lib/assets/icon/injuries.png',
       "description": AppLocalizations.of(context).eyeDiseasesDescription,
     },
+    {
+      "name": "oral-diseases",
+      "displayName": AppLocalizations.of(context).oralDiseases,
+      "icon": 'lib/assets/icon/oral.png',
+      "description": AppLocalizations.of(context).oralDiseasesDescription,
+    },
+    {
+      "name": "dental",
+      "displayName": AppLocalizations.of(context).dental,
+      "icon": 'lib/assets/icon/tooth.png',
+      "description": AppLocalizations.of(context).dentalDescription,
+    },
+    {
+      "name": "colon-diseases",
+      "displayName": AppLocalizations.of(context).colonDiseases,
+      "icon": 'lib/assets/icon/colon.png',
+      "description": AppLocalizations.of(context).colonDescription,
+    }
   ];
 
   @override
@@ -66,22 +79,19 @@ class DiseasePredictionListScreen extends StatelessWidget {
     
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).diseasePrediction),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.history),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PredictionHistoryScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar:MyAppPar(title: AppLocalizations.of(context).diseasePrediction,  action: [
+        IconButton(
+          icon: Icon(Icons.history),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PredictionHistoryScreen(),
+              ),
+            );
+          },
+        ),
+      ],),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -91,7 +101,7 @@ class DiseasePredictionListScreen extends StatelessWidget {
               AppLocalizations.of(context).selectDisease,
               style: AppStyle.titlesTextStyle.copyWith(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,color: AppColors.primary1,
               ),
             ),
             const SizedBox(height: 8),
@@ -137,10 +147,11 @@ class DiseasePredictionListScreen extends StatelessWidget {
                                 color: AppColors.primary1.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Icon(
-                                disease["icon"] as IconData,
+                              child: Image.asset(
+                                disease["icon"] as String,
+                                width: 24,
+                                height: 24,
                                 color: AppColors.primary1,
-                                size: 24,
                               ),
                             ),
                             const SizedBox(width: 16),

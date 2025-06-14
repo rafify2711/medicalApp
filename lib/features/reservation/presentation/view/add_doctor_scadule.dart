@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_medical_app/core/utils/app_colors.dart';
 import 'package:graduation_medical_app/features/auth/presentation/view/widgets/my_app_par.dart';
 import 'package:graduation_medical_app/features/reservation/data/models/add_update_schedule_response.dart';
+import '../../../../core/utils/app_style.dart';
 import '../../../auth/presentation/view/widgets/button.dart';
 import '../view_model/add_update_schedule_cubit.dart';
 import '../view_model/add_update_schedule_state.dart';
@@ -271,32 +272,30 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> with Single
                           spacing: 8,
                           runSpacing: 8,
                           children: availableTimeSlots.map((timeSlot) {
-                      final isSelected = selectedTimeSlots.contains(timeSlot);
-                      return InkWell(
-                        onTap: () => _toggleTimeSlot(timeSlot),
-                        child: Container(
+                            final isSelected = selectedTimeSlots.contains(timeSlot);
+                            return GestureDetector(
+                              onTap: () => _toggleTimeSlot(timeSlot),
+                              child: Container(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
+                                  horizontal: 16,
                                   vertical: 8,
                                 ),
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primary : Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: isSelected ? AppColors.primary : Colors.grey[300]!,
-                            ),
-                          ),
-                            child: Text(
-                              timeSlot,
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black87,
-                                fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      );
+                                decoration: BoxDecoration(
+                                  gradient: isSelected ? AppStyle.gradient : null,
+                                  color: isSelected ? null : AppColors.primary1.withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  timeSlot,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: isSelected ? Colors.white : AppColors.primary1,
+                                  ),
+                                ),
+                              ),
+                            );
                           }).toList(),
-                ),
+                        ),
                         SizedBox(height: 24),
                         Button(
                         onClick: _addSchedule,

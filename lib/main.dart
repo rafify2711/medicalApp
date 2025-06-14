@@ -11,9 +11,14 @@ import 'features/medical_dignosis/presentation/view_model/prediction_cubit.dart'
 import 'core/localization/app_localizations.dart';
 import 'features/reservation/presentation/view_model/add_update_schedule_cubit.dart';
 import 'features/user_appointment/presentation/view_model/make_reservation_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'core/theme/app_theme.dart';
+import 'core/theme/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   await getIt.init();
   configureDependencies();
   runApp(const MyApp());
@@ -47,7 +52,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void changeLanguage(Locale locale) {
+  void changeLanguage(Locale locale) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', locale.languageCode);
     setState(() {
       _locale = locale;
     });
@@ -61,23 +68,31 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => getIt<ScheduleCubit>()),
         BlocProvider(create: (context) => getIt<DoctorAppointmentCubit>()),
         BlocProvider(create: (context) => getIt<CreateReservationCubit>()),
+        BlocProvider(create: (context) => ThemeCubit()),
       ],
-      child: MaterialApp(
-        key: MyApp.appStateKey,
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: RouteNames.splash,
-        locale: _locale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'), // English
-          Locale('ar'), // Arabic
-        ],
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp(
+            key: MyApp.appStateKey,
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: RouteGenerator.generateRoute,
+            initialRoute: RouteNames.splash,
+            locale: _locale,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeMode,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'), // English
+              Locale('ar'), // Arabic
+            ],
+          );
+        },
       ),
     );
   }

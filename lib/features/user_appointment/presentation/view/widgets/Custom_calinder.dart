@@ -78,7 +78,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.primary,
+                  color: AppColors.primary1,
                 ),
               ),
               PopupMenuButton<int>(
@@ -88,10 +88,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
                       _months[_currentMonth.month - 1],
                       style: TextStyle(
                         fontSize: 16,
-                        color: AppColors.primary,
+                        color: AppColors.primary1,
                       ),
                     ),
-                    Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                    Icon(Icons.arrow_drop_down, color: AppColors.primary1),
                   ],
                 ),
                 onSelected: (int month) {
@@ -118,7 +118,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
               child: Text(
                 day,
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: AppColors.primary1,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                 ),
@@ -156,7 +156,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 child: Container(
                   margin: EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.transparent,
+                    color: isSelected ? AppColors.primary1 : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
